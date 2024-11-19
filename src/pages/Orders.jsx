@@ -1,14 +1,18 @@
-import React from 'react'
+import React from "react";
 
 // Components
 import Text from "../components/Text";
 
 function Orders() {
-  return (
-    <div className="navMargin">
-        <Text type={"h2"} bold>Orders</Text>
-    </div>
-  )
+    return (
+        <div className="navMargin">
+            <div className="container">
+                <Text type={"h2"} bold>
+                    Orders
+                </Text>
+            </div>
+        </div>
+    );
 }
 
-export default Orders
+export default Orders;

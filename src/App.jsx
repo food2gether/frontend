@@ -10,7 +10,11 @@ function App() {
                 <Text type="h1" bold center clazzName={"mr-5"}>
                     Hello World
                 </Text>
-                <img src="assets/hand.png" alt="placeholder" className="w-10 h-10" />
+                <img
+                    src="assets/hand.png"
+                    alt="placeholder"
+                    className="w-10 h-10"
+                />
             </div>
         </div>
     );

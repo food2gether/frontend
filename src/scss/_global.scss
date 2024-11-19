@@ -4,6 +4,7 @@
 
 #root {
     height: 100vh;
+    overflow: hidden;
 }
 
 html {
@@ -49,6 +50,27 @@ $breakpoint-xs: 320px;
 
     &-nav{
         background: none;
+        width: 72%;
+
+        @media screen and (max-width: $breakpoint-xl) {
+            width: 82%;
+        }
+    
+        @media screen and (max-width: $breakpoint-lg) {
+            width: 82%;
+        }
+    
+        @media screen and (max-width: $breakpoint-md) {
+            width: 89%;
+        }
+    
+        @media screen and (max-width: $breakpoint-sm) {
+            width: 95%;
+        }
+    
+        @media screen and (max-width: $breakpoint-xs) {
+            width: 97%;
+        }
     }
 
     @media screen and (max-width: $breakpoint-xl) {
