@@ -3,12 +3,12 @@ import React from 'react'
 // Components
 import Text from "../components/Text";
 
-function Profile() {
+function History() {
   return (
     <div className="navMargin">
-        <Text type={"h2"} bold>Profil</Text>
+        <Text type={"h2"} bold>History</Text>
     </div>
   )
 }
 
-export default Profile
+export default History

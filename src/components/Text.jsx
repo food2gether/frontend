@@ -4,7 +4,7 @@ function Text({ children, type, bold, center, light, clazzName }) {
     const textClass = `
     ${bold ? "font-bold" : ""}
     ${center ? "text-center" : "text-left"}
-    ${light ? "text-white-light" : "text-white"}
+    ${light ? "text-white" : "text-black"}
     ${
         type === "h0"
             ? "text-[50px] md:text-[80px] font-bold"

@@ -3,12 +3,12 @@ import React from 'react'
 // Components
 import Text from "../components/Text";
 
-function Profile() {
+function Orders() {
   return (
     <div className="navMargin">
-        <Text type={"h2"} bold>Profil</Text>
+        <Text type={"h2"} bold>Orders</Text>
     </div>
   )
 }
 
-export default Profile
+export default Orders
