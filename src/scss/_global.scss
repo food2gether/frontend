@@ -1,0 +1,24 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
+
+#root {
+    height: 100vh;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    height: 100vh;
+    background: #3c3c3c;
+    color: white;
+    font-family: "Inter", sans-serif;
+}
+
+.btn {
+    padding: 15px 25px;
+    cursor: pointer;
+    font-size: 20px;
+    transition: 0.3s;
+    position: relative;
+}

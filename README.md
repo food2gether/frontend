@@ -1,7 +1,18 @@
-# frontend
+# Food2Gether Frontend
 
-Stack:
+## Stack
 
-React
-TailwindCSS
-Vite
+- React
+- Tailwind
+
+## Components
+
+- Header
+- Footer
+- Home
+- Orders
+- Payments
+- Friends
+- Login
+- Register
+- Profile
