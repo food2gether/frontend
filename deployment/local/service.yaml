@@ -5,11 +5,6 @@ metadata:
   name: frontend
   namespace: default
 spec:
-  selector:
-    app: frontend
-  type: ClusterIP
-  ports:
-  - name: frontend
-    protocol: TCP
-    port: 80
-    targetPort: 8080
+  type: ExternalName
+  externalName: host.minikube.internal
+
