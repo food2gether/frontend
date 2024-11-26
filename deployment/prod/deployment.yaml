@@ -27,6 +27,7 @@ spec:
       - name: frontend
         image: busybox:latest # ghcr.io/food2gether/frontend:0.0.1
         imagePullPolicy: IfNotPresent
+        command: ["sh", "-c", "while true; do sleep 600; done"]
         resources:
           requests:
             cpu: 100m
