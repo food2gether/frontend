@@ -28,7 +28,7 @@ function Button({
     };
 
     const buttonClasses = `
-    btn group inline-flex items-center gap-2 transition-all duration-200
+    btn group inline-flex items-center gap-2 transition-all duration-200 mb-2
     ${round ? "rounded-full" : "rounded-[12px]"}
     ${
         type === "primary"
