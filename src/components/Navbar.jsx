@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 // Icons
@@ -11,12 +11,24 @@ function Navbar() {
     const [menu, setMenu] = useState(false);
     const [activeTab, setActivetab] = useState(0);
 
+    // get current route
+    const currentRoute = window.location.pathname;
+
     const navItems = [
         { name: "Home", to: "/" },
         { name: "Bestellungen", to: "/orders" },
         { name: "History", to: "/history" },
         { name: "Profil", to: "/profile" },
     ];
+
+    useEffect(() => {
+        const activeIndex = navItems.findIndex(
+            (item) => item.to === currentRoute,
+        );
+        if (activeIndex !== -1) {
+            setActivetab(activeIndex);
+        }
+    }, [currentRoute]);
 
     const handleMenu = () => {
         setMenu(!menu);
@@ -34,15 +46,16 @@ function Navbar() {
 
                 <ul className="hidden md:flex items-center gap-10">
                     {navItems.map((item, index) => (
-                        <button onClick={ () => setActivetab(index)} className={` ${ activeTab === index ? 'border-b-2 bg-red-500' : 'bg-green-500' }"`}>
-                        <Link
+                        <button
+                            onClick={() => setActivetab(index)}
+                            className={` ${activeTab === index ? "border-b-2 bg-red-500" : "bg-green-500"}"`}
                             key={index}
-                            to={item.to}
                         >
-                            <Text type={"p"} light>
-                                {item.name}
-                            </Text>
-                        </Link>
+                            <Link key={index} to={item.to}>
+                                <Text type={"p"} light>
+                                    {item.name}
+                                </Text>
+                            </Link>
                         </button>
                     ))}
                 </ul>
