@@ -25,9 +25,8 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: busybox:latest # ghcr.io/food2gether/frontend:0.0.1
+        image: docker.io/kicbase/echo-server:1.0 # ghcr.io/food2gether/frontend:0.0.1
         imagePullPolicy: IfNotPresent
-        command: ["sh", "-c", "while true; do sleep 600; done"]
         resources:
           requests:
             cpu: 100m
@@ -35,26 +34,9 @@ spec:
           limits:
             cpu: 100m
             memory: 100Mi
-        livenessProbe:
-          tcpSocket:
-            port: 80
-          initialDelaySeconds: 5
-          timeoutSeconds: 5
-          successThreshold: 1
-          failureThreshold: 3
-          periodSeconds: 10
-        readinessProbe:
-          httpGet:
-            path: /_status/healthz
-            port: 80
-          initialDelaySeconds: 5
-          timeoutSeconds: 2
-          successThreshold: 1
-          failureThreshold: 3
-          periodSeconds: 10
         env: []
         ports:
-        - containerPort: 80
+        - containerPort: 8080
           name: frontend
       restartPolicy: Always
 
