@@ -1,0 +1,16 @@
+name: Verify commit
+
+on:
+  push:
+    ignore-branches:
+      - main
+    branches:
+      - '*'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    uses: food2gether/workflows/.github/workflows/frontend-lint.yaml@main

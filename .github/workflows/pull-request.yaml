@@ -1,0 +1,21 @@
+name: Verify Pull Request
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  sonar:
+    uses: food2gether/workflows/.github/workflows/frontend-scan.yaml@main
+    with:
+      sonar_project_key: food2gether_frontend
+      additional_args: >-
+        -Dsonar.pullrequest.key=${{ github.event.pull_request.number }}
+        -Dsonar.pullrequest.branch=${{ github.head_ref }}
+        -Dsonar.pullrequest.base=${{ github.base_ref }}
+    secrets:
+      sonar_token: ${{ secrets.SONAR_TOKEN }}

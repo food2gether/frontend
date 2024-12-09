@@ -1,0 +1,21 @@
+name: Verify push to protected branch
+
+on:
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    uses: food2gether/workflows/.github/workflows/frontend-lint.yaml@main
+  sonar:
+    uses: food2gether/workflows/.github/workflows/frontend-scan.yaml@main
+    with:
+      sonar_project_key: food2gether_frontend
+      # Branch analysis parameters should not be needed for intregated CIs (like GitHub Actions)
+    secrets:
+      sonar_token: ${{ secrets.SONAR_TOKEN }}
