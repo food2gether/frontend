@@ -41,7 +41,7 @@ function Navbar() {
         >
             <div className="flex items-center justify-between gap-10 px-4 container-nav">
                 <Text type={"h2"} bold light>
-                    Food<p className="text-primary-dark inline">2</p>Gether
+                    Food<Text clazzName="text-primary-dark inline" type="h2">2</Text>Gether
                 </Text>
 
                 <ul className="hidden md:flex items-center gap-10">

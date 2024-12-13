@@ -12,6 +12,7 @@ function Button({
     externalLink,
     round,
     slide,
+    noAnimation,
     arrow = <FaArrowRight />,
 }) {
     const renderArrow = () => {
@@ -36,7 +37,7 @@ function Button({
             : type === "secondary"
               ? "bg-secondary text-white"
               : type === "tertiary"
-                ? "bg-white-lighter text-white border-2 border-white-lighter hover:border-white-light"
+                ? "bg-white text-primary border-2 border-white"
                 : "bg-primary text-white"
     }
     ${clazzName}

@@ -46,10 +46,11 @@ function Orders() {
     const [selectedOrder, setSelectedOrder] = useState(null);
 
     return (
-        <div className="navMargin">
+        <>
+            <div className="navMargin"></div>
             <div className="container">
                 <Text type={"h2"} bold clazzName={"mb-4"}>
-                    Deine Bestellungen ({ orders.length })
+                    Deine Bestellungen ({orders.length})
                 </Text>
                 <div className="relative flex flex-row gap-4 h-[500px]">
                     {/* Scrollable Orders List */}
@@ -71,7 +72,9 @@ function Orders() {
                     <div className="w-[50%] h-full p-4 text-white overflow-y-auto">
                         {selectedOrder ? (
                             <div className="text-black">
-                                <h3 className="text-2xl font-bold mb-2">{selectedOrder.title}</h3>
+                                <h3 className="text-2xl font-bold mb-2">
+                                    {selectedOrder.title}
+                                </h3>
                                 <p className="mb-4">{selectedOrder.details}</p>
                                 <img
                                     src={selectedOrder.img}
@@ -80,12 +83,14 @@ function Orders() {
                                 />
                             </div>
                         ) : (
-                            <p className="text-xl text-black">Wähle eine Order aus, um Details anzuzeigen.</p>
+                            <p className="text-xl text-black">
+                                Wähle eine Order aus, um Details anzuzeigen.
+                            </p>
                         )}
                     </div>
                 </div>
             </div>
-        </div>
+        </>
     );
 }
 

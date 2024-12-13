@@ -4,26 +4,41 @@ import React from "react";
 import Text from "./Text";
 import Button from "./Button";
 
-function Box({ children, title, details, img, button, room, onClick }) {
+function Box({ children, title, details, img, button, room, onClick, row }) {
     return (
         <div
-            className="bg-white rounded-lg p-4 mb-2 border border-primary max-w-[500px] h-[150px] cursor-pointer"
+            className="bg-white rounded-lg p-4 mb-2 border border-primary w-full min-w-[500px] max-w-[600px] h-auto cursor-pointer"
             onClick={onClick}
         >
-            <div className="relative">
-                <div>
-                    <Text type={"h3"} bold>
-                        {title}
-                    </Text>
-                    <Text>{details}</Text>
+            {!row && (
+                <div className="relative">
+                    <div>
+                        <Text type={"h3"} bold>
+                            {title}
+                        </Text>
+                        <Text>{details}</Text>
+                    </div>
+                    <Button slide clazzName={"mt-2"}>
+                        <Text light>{button}</Text>
+                    </Button>
+                    <div className="absolute top-0 right-0 text-black">
+                        <Text>{room}</Text>
+                    </div>
                 </div>
-                <Button slide clazzName={"mt-2"}>
-                    <Text light>{button}</Text>
-                </Button>
-                <div className="absolute top-0 right-0 text-black">
-                    <Text>{room}</Text>
+            )}
+            {row && (
+                <div className="flex flex-row items-center justify-between">
+                    <div>
+                        <Text type={"h3"} bold>
+                            {title}
+                        </Text>
+                        <Text>{details}</Text>
+                    </div>
+                    <Button slide clazzName={"mt-2"}>
+                        <Text light>{button}</Text>
+                    </Button>
                 </div>
-            </div>
+            )}
         </div>
     );
 }

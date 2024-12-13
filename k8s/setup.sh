@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [ "$#" -ne 1 ]; then
-    echo "Usage: $0 <github_pat>"
+    echo "Usage: $0 <github-path>"
     exit 1
 fi
 
