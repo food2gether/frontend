@@ -21,7 +21,7 @@ function Room() {
 
     const [restaurantID, setRestaurantID] = useState(restoID);
     const restaurant = restaurants.find((restaurant) => restaurant.id === restaurantID);
-    const products = restaurant?.menu?.map((product) => product.item) || [];
+    const products = restaurant?.menu?.map((product) => product) || [];
 
     const { order, setOrder } = useUser();
 
@@ -37,27 +37,27 @@ function Room() {
         // Update selectedOrder State
         setSelectedOrder((prev) => ({
             ...prev,
-            [product]: newQuantity,
+            [product.item]: { quantity: newQuantity, price: product.price }, // Produkt und Preis speichern
         }));
 
         // Update die globale Bestellung
         setOrder((prevOrder) => {
             if (newQuantity === 0) {
                 // Produkt aus der Bestellung entfernen
-                const { [product]: _, ...rest } = prevOrder;
+                const { [product.item]: _, ...rest } = prevOrder;
                 return rest;
             }
 
             // Produkt zur Bestellung hinzufügen oder aktualisieren
             return {
                 ...prevOrder,
-                [product]: newQuantity,
+                [product.item]: { quantity: newQuantity, price: product.price }, // Produkt mit Preis hinzufügen
             };
         });
     };
 
     // Anzahl der Artikel im Warenkorb
-    const itemCount = Object.values(selectedOrder).reduce((acc, curr) => acc + curr, 0);
+    const itemCount = Object.values(selectedOrder).reduce((acc, curr) => acc + curr.quantity, 0);
 
     return (
         <>
@@ -71,14 +71,19 @@ function Room() {
                                 key={index}
                                 className="flex justify-between items-center bg-white w-full p-4 mb-3 rounded shadow"
                             >
-                                <Text type="p">{product}</Text>
+                                <div>
+                                    <Text type="p">{product.item}</Text>
+                                    <Text type="p" clazzName="text-primary">
+                                        {product.price} €
+                                    </Text>
+                                </div>
                                 <div className="flex flex-row items-center justify-center gap-4">
                                     <Text type="p">Anzahl:</Text>
                                     <input
                                         type="number"
                                         min="0"
                                         className="w-16 p-2 border rounded text-center text-black"
-                                        value={selectedOrder[product] || "0"}
+                                        value={selectedOrder[product.item]?.quantity || "0"}
                                         onChange={(e) =>
                                             handleQuantityChange(
                                                 product,
@@ -92,7 +97,8 @@ function Room() {
                                             onClick={() =>
                                                 handleQuantityChange(
                                                     product,
-                                                    (selectedOrder[product] || 0) + 1, // Anzahl um 1 erhöhen
+                                                    (selectedOrder[product.item]?.quantity || 0) +
+                                                        1, // Anzahl um 1 erhöhen
                                                 )
                                             }
                                         >
@@ -103,7 +109,8 @@ function Room() {
                                             onClick={() =>
                                                 handleQuantityChange(
                                                     product,
-                                                    (selectedOrder[product] || 0) - 1, // Anzahl um 1 verringern
+                                                    (selectedOrder[product.item]?.quantity || 0) -
+                                                        1, // Anzahl um 1 verringern
                                                 )
                                             }
                                         >
@@ -117,7 +124,11 @@ function Room() {
                             {itemCount} Artikel im Warenkorb
                         </Text>
                         <Link to="/order" className="mt-5">
-                            <Button type="tertiary" clazzName="mt-5" onClick={() => console.log(order)}>
+                            <Button
+                                type="tertiary"
+                                clazzName="mt-5"
+                                onClick={() => console.log(order)}
+                            >
                                 Bestellung abschicken
                             </Button>
                         </Link>
