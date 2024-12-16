@@ -1,9 +1,14 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import Box from "./components/Box";
 
-function App() {
-    const rooms = ["robin", "marvin", "kaan", "nicola", "jo"];
+// Components
+import Box from "../components/Box";
+
+// Hooks
+import { useFood } from "../hooks/useFood";
+
+function Home() {
+    const { rooms } = useFood();
 
     return (
         <>
@@ -21,4 +26,4 @@ function App() {
     );
 }
 
-export default App;
+export default Home;

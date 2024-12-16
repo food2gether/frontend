@@ -72,9 +72,7 @@ function Orders() {
                     <div className="w-[50%] h-full p-4 text-white overflow-y-auto">
                         {selectedOrder ? (
                             <div className="text-black">
-                                <h3 className="text-2xl font-bold mb-2">
-                                    {selectedOrder.title}
-                                </h3>
+                                <h3 className="text-2xl font-bold mb-2">{selectedOrder.title}</h3>
                                 <p className="mb-4">{selectedOrder.details}</p>
                                 <img
                                     src={selectedOrder.img}

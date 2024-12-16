@@ -19,12 +19,9 @@ function Button({
         if (!arrow) return null;
 
         return cloneElement(arrow, {
-            className:
-                `${arrow.props.className || ""} h-5 w-5 transition-transform duration-200 ${
-                    slide
-                        ? "group-hover:translate-x-1"
-                        : "group-hover:-translate-y-1"
-                }`.trim(),
+            className: `${arrow.props.className || ""} h-5 w-5 transition-transform duration-200 ${
+                slide ? "group-hover:translate-x-1" : "group-hover:-translate-y-1"
+            }`.trim(),
         });
     };
 
@@ -54,12 +51,7 @@ function Button({
             {renderArrow()}
         </a>
     ) : externalLink ? (
-        <a
-            href={externalLink}
-            className={buttonClasses}
-            target="_blank"
-            rel="noopener noreferrer"
-        >
+        <a href={externalLink} className={buttonClasses} target="_blank" rel="noopener noreferrer">
             <span className={childrenClasses}>{children}</span>
             {renderArrow()}
         </a>

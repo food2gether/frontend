@@ -49,7 +49,7 @@ function History() {
         <div className="navMargin">
             <div className="container">
                 <Text type={"h2"} bold clazzName={"mb-4"}>
-                    Dein Bestellungsverlauf ({ orders.length })
+                    Dein Bestellungsverlauf ({orders.length})
                 </Text>
                 <div className="relative flex flex-row gap-4 h-[500px]">
                     <div className="flex flex-col w-[50%] gap-1 overflow-y-auto pr-2">

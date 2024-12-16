@@ -22,9 +22,7 @@ function Navbar() {
     ];
 
     useEffect(() => {
-        const activeIndex = navItems.findIndex(
-            (item) => item.to === currentRoute,
-        );
+        const activeIndex = navItems.findIndex((item) => item.to === currentRoute);
         if (activeIndex !== -1) {
             setActivetab(activeIndex);
         }
@@ -41,7 +39,11 @@ function Navbar() {
         >
             <div className="flex items-center justify-between gap-10 px-4 container-nav">
                 <Text type={"h2"} bold light>
-                    Food<Text clazzName="text-primary-dark inline" type="h2">2</Text>Gether
+                    Food
+                    <Text clazzName="text-primary-dark inline" type="h2">
+                        2
+                    </Text>
+                    Gether
                 </Text>
 
                 <ul className="hidden md:flex items-center gap-10">
@@ -61,10 +63,7 @@ function Navbar() {
                 </ul>
 
                 <div className="flex items-center md:hidden">
-                    <button
-                        className="h-full w-full cursor-pointer mr-0"
-                        onClick={handleMenu}
-                    >
+                    <button className="h-full w-full cursor-pointer mr-0" onClick={handleMenu}>
                         <HiMiniBars3BottomLeft size={30} />
                     </button>
                 </div>
