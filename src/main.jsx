@@ -15,6 +15,7 @@ import History from "./pages/History.jsx";
 import Profile from "./pages/Profile.jsx";
 import Room from "./pages/Room.jsx";
 import NotFound from "./pages/NotFound.jsx";
+import Payment from "./pages/Payment.jsx";
 
 // Providers
 import { FoodProvider } from "./hooks/useFood.jsx";
@@ -31,6 +32,7 @@ createRoot(document.getElementById("root")).render(
                         <Route path="/" element={<Home />} />
                         <Route path="/order" element={<Order />} />
                         <Route path="/orders" element={<Orders />} />
+                        <Route path="/payment" element={<Payment />} />
                         <Route path="/history" element={<History />} />
                         <Route path="/profile" element={<Profile />} />
                         <Route path="/room/:roomId" element={<Room />} />

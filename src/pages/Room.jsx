@@ -1,13 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, Link, useLocation } from "react-router-dom";
-
-// Components
 import Text from "../components/Text";
 import Button from "../components/Button";
-import Box from "../components/Box";
 import NotFound from "./NotFound";
-
-// Hooks
 import { useFood } from "../hooks/useFood";
 import { useUser } from "../hooks/useUser";
 
@@ -15,49 +10,48 @@ function Room() {
     const [selectedOrder, setSelectedOrder] = useState({});
     const { roomId } = useParams();
     const { validRooms, restaurants } = useFood();
-
     const location = useLocation();
     const { restoID } = location.state || {};
+    const { order, setOrder, moneyToPay, setMoneyToPay } = useUser();
 
-    const [restaurantID, setRestaurantID] = useState(restoID);
-    const restaurant = restaurants.find((restaurant) => restaurant.id === restaurantID);
-    const products = restaurant?.menu?.map((product) => product) || [];
+    const restaurant = restaurants.find((restaurant) => restaurant.id === restoID);
+    const products = restaurant?.menu || [];
 
-    const { order, setOrder } = useUser();
+    useEffect(() => {
+        const total = Object.values(order || {}).reduce(
+            (sum, { quantity, price }) => sum + quantity * price,
+            0
+        );
+        setMoneyToPay(total);
+    }, [order, setMoneyToPay]);
 
-    // Prüfen, ob der Raum existiert ansonsten NotFound anzeigen
     if (!validRooms.includes(roomId)) {
         return <NotFound />;
     }
 
-    // Anzahl für ein bestimmtes Produkt aktualisieren
     const handleQuantityChange = (product, quantity) => {
-        const newQuantity = Math.max(0, quantity); // Sicherstellen, dass die Anzahl nicht negativ wird
-
-        // Update selectedOrder State
+        const newQuantity = Math.max(0, quantity);
         setSelectedOrder((prev) => ({
             ...prev,
-            [product.item]: { quantity: newQuantity, price: product.price }, // Produkt und Preis speichern
+            [product.item]: { quantity: newQuantity, price: product.price },
         }));
 
-        // Update die globale Bestellung
         setOrder((prevOrder) => {
             if (newQuantity === 0) {
-                // Produkt aus der Bestellung entfernen
                 const { [product.item]: _, ...rest } = prevOrder;
                 return rest;
             }
-
-            // Produkt zur Bestellung hinzufügen oder aktualisieren
             return {
                 ...prevOrder,
-                [product.item]: { quantity: newQuantity, price: product.price }, // Produkt mit Preis hinzufügen
+                [product.item]: { quantity: newQuantity, price: product.price },
             };
         });
     };
 
-    // Anzahl der Artikel im Warenkorb
-    const itemCount = Object.values(selectedOrder).reduce((acc, curr) => acc + curr.quantity, 0);
+    const itemCount = Object.values(order || {}).reduce(
+        (acc, { quantity }) => acc + quantity,
+        0
+    );
 
     return (
         <>
@@ -65,7 +59,7 @@ function Room() {
             <div className="container">
                 <div className="flex flex-col items-center mt-10">
                     <Text type="h1">Willkommen im Raum von {roomId}</Text>
-                    <div className="flex flex-col items-center w-full h-auto bg-primary rounded-md p-5 mt-10">
+                    <div className="flex flex-col items-center w-full h-auto bg-primary rounded-md p-5 my-10">
                         {products.map((product, index) => (
                             <div
                                 key={index}
@@ -77,7 +71,7 @@ function Room() {
                                         {product.price} €
                                     </Text>
                                 </div>
-                                <div className="flex flex-row items-center justify-center gap-4">
+                                <div className="flex items-center gap-4">
                                     <Text type="p">Anzahl:</Text>
                                     <input
                                         type="number"
@@ -87,7 +81,7 @@ function Room() {
                                         onChange={(e) =>
                                             handleQuantityChange(
                                                 product,
-                                                parseInt(e.target.value) || 0,
+                                                parseInt(e.target.value) || 0
                                             )
                                         }
                                     />
@@ -97,8 +91,7 @@ function Room() {
                                             onClick={() =>
                                                 handleQuantityChange(
                                                     product,
-                                                    (selectedOrder[product.item]?.quantity || 0) +
-                                                        1, // Anzahl um 1 erhöhen
+                                                    (selectedOrder[product.item]?.quantity || 0) + 1
                                                 )
                                             }
                                         >
@@ -109,8 +102,7 @@ function Room() {
                                             onClick={() =>
                                                 handleQuantityChange(
                                                     product,
-                                                    (selectedOrder[product.item]?.quantity || 0) -
-                                                        1, // Anzahl um 1 verringern
+                                                    (selectedOrder[product.item]?.quantity || 0) - 1
                                                 )
                                             }
                                         >
@@ -121,7 +113,7 @@ function Room() {
                             </div>
                         ))}
                         <Text type="p" clazzName="mt-2" light>
-                            {itemCount} Artikel im Warenkorb
+                            {itemCount} Artikel im Warenkorb für {moneyToPay.toFixed(2)} €
                         </Text>
                         <Link to="/order" className="mt-5">
                             <Button

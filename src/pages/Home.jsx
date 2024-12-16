@@ -6,9 +6,11 @@ import Box from "../components/Box";
 
 // Hooks
 import { useFood } from "../hooks/useFood";
+import { useUser } from "../hooks/useUser";
 
 function Home() {
     const { rooms, restaurants } = useFood();
+    const { order, setOrder} = useUser();
 
     return (
         <>

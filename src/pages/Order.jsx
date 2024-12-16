@@ -1,21 +1,15 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 // Components
 import Text from "../components/Text";
+import Button from "../components/Button";
 
 // Hooks
 import { useUser } from "../hooks/useUser";
-import Button from "../components/Button";
 
 function Order() {
-    const { order, setOrder } = useUser();
-
-    // Berechnung des Gesamtpreises
-    const totalPrice = Object.keys(order).reduce((acc, product) => {
-        const { quantity, price } = order[product];
-        return acc + quantity * price;
-    }, 0);
-
+    const { order, setOrder, moneyToPay } = useUser();
     return (
         <div className="navMargin">
             <div className="container">
@@ -44,9 +38,16 @@ function Order() {
                 <div className="w-full flex justify-end items-center">
                     <div className="flex flex-col items-end gap-4">
                         <Text type={"p"} bold clazzName={"mt-6"}>
-                            Gesamt: {totalPrice}€
+                            Gesamt: {moneyToPay}€
                         </Text>
-                        <Button type={"button"}>Bestellen</Button>
+                        <Link to="/payment" className="mt-5">
+                            <Button
+                                type="primary"
+                                clazzName="mt-5"
+                            >
+                                Bezahlen
+                            </Button>
+                        </Link>
                     </div>
                 </div>
             </div>
