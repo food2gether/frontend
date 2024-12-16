@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 // Components
 import Text from "../components/Text";
@@ -7,29 +8,25 @@ import Button from "../components/Button";
 import Box from "../components/Box";
 import NotFound from "./NotFound";
 
+// Hooks
+import { useFood } from "../hooks/useFood";
+
 function Room() {
     const [selectedOrder, setSelectedOrder] = useState({});
     const { roomId } = useParams();
+    const { validRooms, restaurants } = useFood();
 
-    const validRooms = ["robin", "marvin", "kaan", "nicola", "jo"];
+    const location = useLocation();
+    const { restoID } = location.state || {};
 
+    const [restaurantID, setRestaurantID] = useState(restoID);
+    const restaurant = restaurants.find((restaurant) => restaurant.id === restaurantID);
+    const products = restaurant?.menu?.map((product) => product.item) || [];
+
+    // Prüfen, ob der Raum existiert ansonsten NotFound anzeigen
     if (!validRooms.includes(roomId)) {
         return <NotFound />;
     }
-
-    // Liste der Essensprodukte
-    const products = [
-        "Pizza Margherita",
-        "Spaghetti Bolognese",
-        "Caesar Salad",
-        "Sushi Set",
-        "Veggie Burger",
-        "Chicken Wings",
-        "Pad Thai",
-        "Tacos",
-        "Ramen",
-        "Chocolate Cake",
-    ];
 
     // Anzahl für ein bestimmtes Produkt aktualisieren
     const handleQuantityChange = (product, quantity) => {
