@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
-import { useLocation } from "react-router-dom";
+import { useParams, Link, useLocation } from "react-router-dom";
 
 // Components
 import Text from "../components/Text";
@@ -10,6 +9,7 @@ import NotFound from "./NotFound";
 
 // Hooks
 import { useFood } from "../hooks/useFood";
+import { useUser } from "../hooks/useUser";
 
 function Room() {
     const [selectedOrder, setSelectedOrder] = useState({});
@@ -23,6 +23,8 @@ function Room() {
     const restaurant = restaurants.find((restaurant) => restaurant.id === restaurantID);
     const products = restaurant?.menu?.map((product) => product.item) || [];
 
+    const { order, setOrder } = useUser();
+
     // Prüfen, ob der Raum existiert ansonsten NotFound anzeigen
     if (!validRooms.includes(roomId)) {
         return <NotFound />;
@@ -30,10 +32,28 @@ function Room() {
 
     // Anzahl für ein bestimmtes Produkt aktualisieren
     const handleQuantityChange = (product, quantity) => {
+        const newQuantity = Math.max(0, quantity); // Sicherstellen, dass die Anzahl nicht negativ wird
+
+        // Update selectedOrder State
         setSelectedOrder((prev) => ({
             ...prev,
-            [product]: Math.max(0, quantity), // Sicherstellen, dass die Anzahl nicht negativ wird
+            [product]: newQuantity,
         }));
+
+        // Update die globale Bestellung
+        setOrder((prevOrder) => {
+            if (newQuantity === 0) {
+                // Produkt aus der Bestellung entfernen
+                const { [product]: _, ...rest } = prevOrder;
+                return rest;
+            }
+
+            // Produkt zur Bestellung hinzufügen oder aktualisieren
+            return {
+                ...prevOrder,
+                [product]: newQuantity,
+            };
+        });
     };
 
     // Anzahl der Artikel im Warenkorb
@@ -72,7 +92,7 @@ function Room() {
                                             onClick={() =>
                                                 handleQuantityChange(
                                                     product,
-                                                    (selectedOrder[product] || 0) + 1,
+                                                    (selectedOrder[product] || 0) + 1, // Anzahl um 1 erhöhen
                                                 )
                                             }
                                         >
@@ -83,7 +103,7 @@ function Room() {
                                             onClick={() =>
                                                 handleQuantityChange(
                                                     product,
-                                                    (selectedOrder[product] || 0) - 1,
+                                                    (selectedOrder[product] || 0) - 1, // Anzahl um 1 verringern
                                                 )
                                             }
                                         >
@@ -96,9 +116,11 @@ function Room() {
                         <Text type="p" clazzName="mt-2" light>
                             {itemCount} Artikel im Warenkorb
                         </Text>
-                        <Button type="tertiary" clazzName="mt-5">
-                            Bestellung abschicken
-                        </Button>
+                        <Link to="/order" className="mt-5">
+                            <Button type="tertiary" clazzName="mt-5" onClick={() => console.log(order)}>
+                                Bestellung abschicken
+                            </Button>
+                        </Link>
                     </div>
                 </div>
             </div>
