@@ -25,7 +25,7 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: docker.io/kicbase/echo-server:1.0 # ghcr.io/food2gether/frontend:0.0.1
+        image: ghcr.io/food2gether/frontend:0.0.1
         imagePullPolicy: IfNotPresent
         resources:
           requests:
