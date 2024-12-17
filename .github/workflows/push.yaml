@@ -2,10 +2,8 @@ name: Verify commit
 
 on:
   push:
-    ignore-branches:
+    branches-ignore:
       - main
-    branches:
-      - '*'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
