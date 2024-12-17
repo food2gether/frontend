@@ -8,10 +8,11 @@ import Text from "../components/Text";
 import { useUser } from "../hooks/useUser";
 
 function Payment() {
-    const { moneyToPay } = useUser();
+    const { moneyToPay, state } = useUser();
 
     // QR-Code generieren
     useEffect(() => {
+        console.log(state);
         var typeNumber = 4;
         var errorCorrectionLevel = "L";
         var cellSize = 14;

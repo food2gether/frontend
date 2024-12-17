@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams, Link, useLocation } from "react-router-dom";
+import { useParams, Link, useLocation, useNavigate } from "react-router-dom";
 import Text from "../components/Text";
 import Button from "../components/Button";
 import NotFound from "./NotFound";
@@ -9,6 +9,7 @@ import { useUser } from "../hooks/useUser";
 function Room() {
     const [selectedOrder, setSelectedOrder] = useState({});
     const { roomId } = useParams();
+    const navigate = useNavigate();
     const { validRooms, restaurants } = useFood();
     const location = useLocation();
     const { restoID } = location.state || {};
@@ -25,9 +26,12 @@ function Room() {
         setMoneyToPay(total);
     }, [order, setMoneyToPay]);
 
-    if (!validRooms.includes(roomId)) {
-        return <NotFound />;
-    }
+    useEffect(() => {
+        if (!validRooms.includes(roomId)) {
+            navigate("/notfound");
+        }
+    }, [roomId, validRooms, navigate]);
+
 
     const handleQuantityChange = (product, quantity) => {
         const newQuantity = Math.max(0, quantity);

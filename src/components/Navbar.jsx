@@ -38,13 +38,15 @@ function Navbar() {
             style={{ zIndex: 999 }}
         >
             <div className="flex items-center justify-between gap-10 px-4 container-nav">
-                <Text type={"h2"} bold light>
-                    Food
-                    <Text clazzName="text-primary-dark inline" type="h2">
-                        2
+                <Link to="/">
+                    <Text type={"h2"} bold light>
+                        Food
+                        <Text clazzName="text-primary-dark inline" type="h2">
+                            2
+                        </Text>
+                        Gether
                     </Text>
-                    Gether
-                </Text>
+                </Link>
 
                 <ul className="hidden md:flex items-center gap-10">
                     {navItems.map((item, index) => (

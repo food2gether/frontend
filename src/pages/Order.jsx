@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 
 // Components
@@ -9,7 +9,12 @@ import Button from "../components/Button";
 import { useUser } from "../hooks/useUser";
 
 function Order() {
-    const { order, setOrder, moneyToPay } = useUser();
+    const { order, setOrder, moneyToPay, setState } = useUser();
+
+    useEffect(() => {
+        setState("order");
+    }, [setState]);
+
     return (
         <div className="navMargin">
             <div className="container">
@@ -41,10 +46,7 @@ function Order() {
                             Gesamt: {moneyToPay}€
                         </Text>
                         <Link to="/payment" className="mt-5">
-                            <Button
-                                type="primary"
-                                clazzName="mt-5"
-                            >
+                            <Button type="primary" clazzName="mt-5">
                                 Bezahlen
                             </Button>
                         </Link>

@@ -6,12 +6,15 @@ const userContext = createContext({});
 const useUserContext = () => {
     const [order, setOrder] = useState({});
     const [moneyToPay, setMoneyToPay] = useState(0);
+    const [state, setState] = useState("home");
 
     return {
         order,
         setOrder,
         moneyToPay,
         setMoneyToPay,
+        state,
+        setState,
     };
 };
 
