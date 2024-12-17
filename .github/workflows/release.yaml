@@ -16,5 +16,6 @@ jobs:
     uses: food2gether/workflows/.github/workflows/frontend-publish.yaml@main
     with:
       version: ${{ github.event.release.tag_name }}
+      latest: ${{ !github.event.release.prerelease }}
     secrets:
       gh_token: ${{ secrets.GITHUB_TOKEN }}
