@@ -7,8 +7,8 @@ RUN addgroup --system --gid 1001 httpd \
 
 USER httpd
 
-EXPOSE 80
-ENV PORT=80
+EXPOSE 8080
+ENV PORT=8080
 ENV HOSTNAME="0.0.0.0"
 
 COPY --chown=root:root --chmod=755 ./dist /app
