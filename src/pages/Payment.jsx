@@ -12,7 +12,6 @@ function Payment() {
 
     // QR-Code generieren
     useEffect(() => {
-        console.log(state);
         var typeNumber = 4;
         var errorCorrectionLevel = "L";
         var cellSize = 14;

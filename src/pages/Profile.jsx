@@ -4,7 +4,13 @@ import React from "react";
 import Text from "../components/Text";
 import Button from "../components/Button";
 
+// Hooks
+import { useUser } from "../hooks/useUser";
+
 function Profile() {
+
+    const { user } = useUser();
+
     return (
         <div className="navMargin">
             <div className="container">
@@ -15,15 +21,15 @@ function Profile() {
                     Hier kannst du dein Profil bearbeiten.
                 </Text>
                 <img
-                    src="https://pbs.twimg.com/ext_tw_video_thumb/1846130111277309952/pu/img/SKyz6N_ky7cZbwfd?format=jpg&name=large"
+                    src={user.profilePic}
                     alt=""
                     className="w-[200px] h-[200px] rounded-full mb-3"
                 />
                 <Text type={"h3"} bold clazzName={"mt-6"}>
-                    Veni whehnie
+                    {user.name}
                 </Text>
                 <Text type={"p"} clazzName={"mb-6"}>
-                    @venicraft
+                    {user.email}
                 </Text>
                 <div className="flex flex-col w-[250px]">
                     <Button type={"button"}>Change Password</Button>

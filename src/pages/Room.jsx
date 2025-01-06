@@ -10,7 +10,7 @@ function Room() {
     const [selectedOrder, setSelectedOrder] = useState({});
     const { roomId } = useParams();
     const navigate = useNavigate();
-    const { validRooms, restaurants } = useFood();
+    const { validRooms, restaurants, setCurrentRoom } = useFood();
     const location = useLocation();
     const { restoID } = location.state || {};
     const { order, setOrder, moneyToPay, setMoneyToPay } = useUser();
@@ -32,6 +32,7 @@ function Room() {
         }
     }, [roomId, validRooms, navigate]);
 
+    setCurrentRoom(roomId);
 
     const handleQuantityChange = (product, quantity) => {
         const newQuantity = Math.max(0, quantity);

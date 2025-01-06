@@ -5,6 +5,7 @@ const foodContext = createContext({});
 
 const useFoodContext = () => {
     const [rooms, setRooms] = useState(fetchAllRooms());
+    const [currentRoom, setCurrentRoom] = useState("");
     const [validRooms, setValidRooms] = useState(rooms.map((room) => room.name));
     const [restaurants, setRestaurants] = useState(fetchAllRestaurants());
 
@@ -95,6 +96,8 @@ const useFoodContext = () => {
         setValidRooms,
         restaurants,
         setRestaurants,
+        currentRoom,
+        setCurrentRoom,
     };
 };
 

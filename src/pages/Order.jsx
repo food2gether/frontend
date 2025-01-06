@@ -7,13 +7,19 @@ import Button from "../components/Button";
 
 // Hooks
 import { useUser } from "../hooks/useUser";
+import { useFood } from "../hooks/useFood";
 
 function Order() {
-    const { order, setOrder, moneyToPay, setState } = useUser();
+    const { order, setOrder, orders, setOrders, moneyToPay, setState } = useUser();
+    const { currentRoom } = useFood();
 
     useEffect(() => {
         setState("order");
     }, [setState]);
+
+    const handleOrders = () => {
+        setOrders([...orders, {id: currentRoom, order: order}]);
+    };
 
     return (
         <div className="navMargin">
@@ -46,7 +52,7 @@ function Order() {
                             Gesamt: {moneyToPay}€
                         </Text>
                         <Link to="/payment" className="mt-5">
-                            <Button type="primary" clazzName="mt-5">
+                            <Button type="primary" clazzName="mt-5" onClick={handleOrders}>
                                 Bezahlen
                             </Button>
                         </Link>
