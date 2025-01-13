@@ -8,9 +8,11 @@ const useUserContext = () => {
     const [orders, setOrders] = useState([]);
     const [userOrders, setUserOrders] = useState([
         {
+            id: 1,
             name: "Robin Ahn",
             profilePic: "https://robin-ahn.de/assets/avatar.svg",
             totalPrice: 69.69,
+            isPaid: false,
             order: [
                 {
                     id: 1,
@@ -31,10 +33,12 @@ const useUserContext = () => {
             ],
         },
         {
-            name: "Kaan Güven",
+            id: 2,
+            name: "Lennart",
             profilePic:
                 "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRyIOsebFecOQ9G8y-YB9r5dnEd1HytZXQ4Yg&s",
             totalPrice: 420,
+            isPaid: false,
             order: [
                 {
                     id: 1,
