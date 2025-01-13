@@ -23,6 +23,7 @@ function Home() {
                             key={index}
                             state={{ restoID: room.restoID }}
                             className="mb-4"
+                            onClick={() => setOrder({})}
                         >
                             <Box title={`Raum von ${room.name}`} button={"ansehen"} row />
                         </Link>

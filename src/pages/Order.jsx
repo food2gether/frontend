@@ -18,7 +18,7 @@ function Order() {
     }, [setState]);
 
     const handleOrders = () => {
-        setOrders([...orders, {id: currentRoom, order: order}]);
+        setOrders([...orders, {id: currentRoom, status: 1, price: moneyToPay, order: order}]);
     };
 
     return (
