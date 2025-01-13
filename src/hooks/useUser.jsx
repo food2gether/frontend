@@ -32,7 +32,8 @@ const useUserContext = () => {
         },
         {
             name: "Kaan Güven",
-            profilePic: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRyIOsebFecOQ9G8y-YB9r5dnEd1HytZXQ4Yg&s",
+            profilePic:
+                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRyIOsebFecOQ9G8y-YB9r5dnEd1HytZXQ4Yg&s",
             totalPrice: 420,
             order: [
                 {
@@ -52,7 +53,7 @@ const useUserContext = () => {
                     ],
                 },
             ],
-        }
+        },
     ]);
     const [moneyToPay, setMoneyToPay] = useState(0);
     const [state, setState] = useState("home");

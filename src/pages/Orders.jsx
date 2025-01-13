@@ -49,13 +49,15 @@ function Orders() {
                                                             {product[1].price}
                                                         </div>
                                                     </div>
-                                                )
+                                                ),
                                             )}
                                         </Text>
                                     </div>
                                 </div>
 
-                                <Text>Details: {orderItem.details || "Keine Details verfügbar"}</Text>
+                                <Text>
+                                    Details: {orderItem.details || "Keine Details verfügbar"}
+                                </Text>
                                 <div className="w-full mt-6 mb-6 relative flex items-center flex-col gap-2">
                                     <div className="w-[95%] h-3 bg-gray-300 rounded-full relative">
                                         <div
@@ -65,17 +67,23 @@ function Orders() {
                                         <div className="w-full relative -mt-4 -ml-2">
                                             <div
                                                 className={`rounded-full left-0 w-5 h-5 absolute top-0 ${
-                                                    orderItem.status >= 0 ? "bg-primary" : "bg-gray-300"
+                                                    orderItem.status >= 0
+                                                        ? "bg-primary"
+                                                        : "bg-gray-300"
                                                 }`}
                                             ></div>
                                             <div
                                                 className={`rounded-full left-[50%] w-5 h-5 absolute top-0 ${
-                                                    orderItem.status >= 1 ? "bg-primary" : "bg-gray-300"
+                                                    orderItem.status >= 1
+                                                        ? "bg-primary"
+                                                        : "bg-gray-300"
                                                 }`}
                                             ></div>
                                             <div
                                                 className={`rounded-full left-[100%] w-5 h-5 absolute top-0 ${
-                                                    orderItem.status >= 2 ? "bg-primary" : "bg-gray-300"
+                                                    orderItem.status >= 2
+                                                        ? "bg-primary"
+                                                        : "bg-gray-300"
                                                 }`}
                                             ></div>
                                         </div>
@@ -84,21 +92,27 @@ function Orders() {
                                     <div className="w-full flex justify-between mt-3">
                                         <Text
                                             clazzName={`${
-                                                orderItem.status >= 0 ? "text-primary" : "text-black"
+                                                orderItem.status >= 0
+                                                    ? "text-primary"
+                                                    : "text-black"
                                             }`}
                                         >
                                             Bestellt
                                         </Text>
                                         <Text
                                             clazzName={`${
-                                                orderItem.status >= 1 ? "text-primary" : "text-black"
+                                                orderItem.status >= 1
+                                                    ? "text-primary"
+                                                    : "text-black"
                                             }`}
                                         >
                                             In Bearbeitung
                                         </Text>
                                         <Text
                                             clazzName={`${
-                                                orderItem.status >= 2 ? "text-primary" : "text-black"
+                                                orderItem.status >= 2
+                                                    ? "text-primary"
+                                                    : "text-black"
                                             }`}
                                         >
                                             Bestätigt

@@ -11,13 +11,13 @@ import { useUser } from "../hooks/useUser";
 
 function Home() {
     const { rooms, restaurants } = useFood();
-    const { order, setOrder} = useUser();
+    const { order, setOrder } = useUser();
 
     return (
         <>
             <div className="navMargin"></div>
             <div className="container">
-            <Text type="h2">Home</Text>
+                <Text type="h2">Home</Text>
                 <Text type={"p"} clazzName={"mb-6"}>
                     Hier kannst du die Räume der Restaurants sehen.
                 </Text>

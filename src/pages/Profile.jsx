@@ -8,7 +8,6 @@ import Button from "../components/Button";
 import { useUser } from "../hooks/useUser";
 
 function Profile() {
-
     const { user } = useUser();
 
     return (

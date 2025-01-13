@@ -23,8 +23,8 @@ import { FoodProvider } from "./hooks/useFood.jsx";
 import useUser, { UserProvider } from "./hooks/useUser.jsx";
 
 const App = () => {
-    const { state } = useUser(); 
-    
+    const { state } = useUser();
+
     return (
         <Router>
             <FoodProvider>
@@ -59,5 +59,5 @@ createRoot(document.getElementById("root")).render(
         <UserProvider>
             <App />
         </UserProvider>
-    </StrictMode>
+    </StrictMode>,
 );

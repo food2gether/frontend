@@ -21,7 +21,7 @@ function Room() {
     useEffect(() => {
         const total = Object.values(order || {}).reduce(
             (sum, { quantity, price }) => sum + quantity * price,
-            0
+            0,
         );
         setMoneyToPay(total);
     }, [order, setMoneyToPay]);
@@ -53,10 +53,7 @@ function Room() {
         });
     };
 
-    const itemCount = Object.values(order || {}).reduce(
-        (acc, { quantity }) => acc + quantity,
-        0
-    );
+    const itemCount = Object.values(order || {}).reduce((acc, { quantity }) => acc + quantity, 0);
 
     return (
         <>
@@ -86,7 +83,7 @@ function Room() {
                                         onChange={(e) =>
                                             handleQuantityChange(
                                                 product,
-                                                parseInt(e.target.value) || 0
+                                                parseInt(e.target.value) || 0,
                                             )
                                         }
                                     />
@@ -96,7 +93,8 @@ function Room() {
                                             onClick={() =>
                                                 handleQuantityChange(
                                                     product,
-                                                    (selectedOrder[product.item]?.quantity || 0) + 1
+                                                    (selectedOrder[product.item]?.quantity || 0) +
+                                                        1,
                                                 )
                                             }
                                         >
@@ -107,7 +105,8 @@ function Room() {
                                             onClick={() =>
                                                 handleQuantityChange(
                                                     product,
-                                                    (selectedOrder[product.item]?.quantity || 0) - 1
+                                                    (selectedOrder[product.item]?.quantity || 0) -
+                                                        1,
                                                 )
                                             }
                                         >

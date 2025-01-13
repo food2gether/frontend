@@ -23,14 +23,24 @@ function Requests() {
                     <div className="border border-gray-200 p-4 rounded-lg mb-4">
                         <div className="flex items-center justify-between">
                             <div className="flex items-center gap-10">
-                            <img src={userOrder.profilePic} alt={userOrder.name} className="w-20 h-20 rounded-full border border-gray-200" />
-                            <Text type="h2">{userOrder.name}</Text>
+                                <img
+                                    src={userOrder.profilePic}
+                                    alt={userOrder.name}
+                                    className="w-20 h-20 rounded-full border border-gray-200"
+                                />
+                                <Text type="h2">{userOrder.name}</Text>
                             </div>
-                            <Text type="h2" clazzName={"mr-4"}>{userOrder.totalPrice} €</Text>
+                            <Text type="h2" clazzName={"mr-4"}>
+                                {userOrder.totalPrice} €
+                            </Text>
                         </div>
                         <div className="border border-gray-200 p-4 rounded-lg mt-4">
-                            <Button type={"primary"} arrow={false} clazzName={"!bg-red-500 mr-2"}>ablehnen</Button>
-                            <Button type={"primary"} arrow={false} clazzName={"!bg-green-500"}>bezahlt</Button>
+                            <Button type={"primary"} arrow={false} clazzName={"!bg-red-500 mr-2"}>
+                                ablehnen
+                            </Button>
+                            <Button type={"primary"} arrow={false} clazzName={"!bg-green-500"}>
+                                bezahlt
+                            </Button>
                             {/* <Text type="h3">Order:</Text>
                             {userOrder.order.map((order) => (
                                 <div className="border border-gray-200 p-4 rounded-lg mt-4">
