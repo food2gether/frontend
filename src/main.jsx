@@ -11,7 +11,7 @@ import ScrollToTop from "./components/ScrollToTop.jsx";
 import Home from "./pages/Home.jsx";
 import Orders from "./pages/Orders.jsx";
 import Order from "./pages/Order.jsx";
-import History from "./pages/History.jsx";
+import Requests from "./pages/Requests.jsx";
 import Profile from "./pages/Profile.jsx";
 import Room from "./pages/Room.jsx";
 import NotFound from "./pages/NotFound.jsx";
@@ -43,7 +43,7 @@ const App = () => {
                         }
                     />
                     <Route path="/profile" element={<Profile />} />
-                    <Route path="/history" element={<History />} />
+                    <Route path="/requests" element={<Requests />} />
                     <Route path="/room/:roomId" element={<Room />} />
                     <Route path="*" element={<NotFound />} />
                     <Route path="/notfound" element={<NotFound />} />
