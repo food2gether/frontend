@@ -6,6 +6,7 @@ import { FaArrowRight } from "react-icons/fa6";
 function Button({
     children,
     clazzName,
+    childrenClassess,
     onClick,
     type,
     link,
@@ -40,8 +41,7 @@ function Button({
     ${clazzName}
   `;
 
-    const childrenClasses = `
-    transition-transform duration-200
+    const childrenClasses = `${childrenClassess} transition-transform duration-200
     ${!slide ? "group-hover:-translate-y-1" : ""}
   `;
 

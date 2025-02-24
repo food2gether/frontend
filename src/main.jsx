@@ -21,6 +21,8 @@ import ProtectedRouteWrapper from "./pages/ProtectedRouteWrapper.jsx";
 // Providers
 import { FoodProvider } from "./hooks/useFood.jsx";
 import useUser, { UserProvider } from "./hooks/useUser.jsx";
+import Login from "./pages/Login.jsx";
+import Logout from "./pages/Logout.jsx";
 
 const App = () => {
     const { state } = useUser();
@@ -47,6 +49,8 @@ const App = () => {
                     <Route path="/room/:roomId" element={<Room />} />
                     <Route path="*" element={<NotFound />} />
                     <Route path="/notfound" element={<NotFound />} />
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/logout" element={<Logout />} />
                 </Routes>
             </FoodProvider>
         </Router>

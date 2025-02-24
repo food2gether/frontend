@@ -1,15 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
+// Hooks
+import { useUser } from "../hooks/useUser";
+
 // Icons
 import { HiMiniBars3BottomLeft } from "react-icons/hi2";
 
 // Components
 import Text from "./Text";
+import Button from "./Button";
 
 function Navbar() {
     const [menu, setMenu] = useState(false);
     const [activeTab, setActivetab] = useState(0);
+
+    const { loggedIn, setLoggedIn } = useUser();
 
     // get current route
     const currentRoute = window.location.pathname;
@@ -30,6 +36,10 @@ function Navbar() {
 
     const handleMenu = () => {
         setMenu(!menu);
+    };
+
+    const handleLogout = () => {
+        setLoggedIn(false);
     };
 
     return (
@@ -62,6 +72,20 @@ function Navbar() {
                             </Link>
                         </button>
                     ))}
+                    {!loggedIn && (
+                        <Link to={"/login"} className="bg-white px-5 py-2 rounded-xl">
+                            <Text type={"p"} clazzName={"text-primary"}>
+                                Login
+                            </Text>
+                        </Link>
+                    )}
+                    {loggedIn && (
+                        <Link to={"/logout"} onClick={handleLogout} className="bg-white px-5 py-2 rounded-xl">
+                            <Text type={"p"} clazzName={"text-primary"}>
+                                Logout
+                            </Text>
+                        </Link>
+                    )}
                 </ul>
 
                 <div className="flex items-center md:hidden">

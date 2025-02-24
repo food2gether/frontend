@@ -4,6 +4,7 @@ import { createContext, useContext } from "react";
 const userContext = createContext({});
 
 const useUserContext = () => {
+    const [loggedIn, setLoggedIn] = useState(true);
     const [order, setOrder] = useState({});
     const [orders, setOrders] = useState([]);
     const [userOrders, setUserOrders] = useState([
@@ -11,7 +12,7 @@ const useUserContext = () => {
             id: 1,
             name: "Robin Ahn",
             profilePic: "https://robin-ahn.de/assets/avatar.svg",
-            totalPrice: 69.69,
+            totalPrice: 34,
             isPaid: false,
             order: [
                 {
@@ -37,7 +38,7 @@ const useUserContext = () => {
             name: "Lennart",
             profilePic:
                 "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRyIOsebFecOQ9G8y-YB9r5dnEd1HytZXQ4Yg&s",
-            totalPrice: 420,
+            totalPrice: 20,
             isPaid: false,
             order: [
                 {
@@ -62,13 +63,16 @@ const useUserContext = () => {
     const [moneyToPay, setMoneyToPay] = useState(0);
     const [state, setState] = useState("home");
     const [user, setUser] = useState({
-        name: "Robin",
+        name: "Robin Ahn",
         age: 20,
         email: "robin.ahn99@gmail.com",
+        phone: "+49 151 234 56 789",
         profilePic: "https://robin-ahn.de/assets/avatar.svg",
     });
 
     return {
+        loggedIn,
+        setLoggedIn,
         order,
         setOrder,
         orders,
