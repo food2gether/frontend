@@ -10,37 +10,26 @@ import { useUser } from "../hooks/useUser";
 function Profile() {
     const { user } = useUser();
 
-    
-    const request = async (url, options) => {
-        const res = await fetch(url, {
-            method: options?.method || "GET",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${user.token}`,
-            },
-            body: JSON.stringify(options?.body),
-        });
-
-        if (!res.ok) {
-            throw new Error("Network response was not ok");
-        }
-
-        return await res.json();
-    }
-
     const getProfile = async () => {
         try {
-            const res = await request("http://localhost/api/v1/profiles");
-            return res;
-        } catch (e) {
-            console.log(e);
+            const res = await fetch("/api/v1/profiles/", {
+                method: "GET",
+            });
+
+            if (!res.ok) {
+                throw new Error(`An error occurred: ${res.statusText}`);
+            }
+            
+            const data = await res.json();
+            console.log(data);
+        } catch (error) {
+            console.error("Error fetching profile:", error);
         }
     };
 
     useEffect(() => {
         getProfile();
-    }
-    , []);
+    }, []);
 
     return (
         <div className="navMargin">
