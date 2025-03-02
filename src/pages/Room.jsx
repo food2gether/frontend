@@ -7,6 +7,29 @@ import { useFood } from "../hooks/useFood";
 import { useUser } from "../hooks/useUser";
 
 function Room() {
+
+    const fetchAllRooms = async () => {
+        try {
+            const res = await fetch("/api/v1/restaurants", {
+                method: "GET",
+            });
+
+            if (!res.ok) {
+                throw new Error(`An error occurred: ${res.statusText}`);
+            }
+            
+            const data = await res.json();
+            console.log(data);
+        } catch (error) {
+            console.error("Error fetching profile:", error);
+        }
+    };
+
+    useEffect(() => {
+        fetchAllRooms();
+    }
+    , []);
+
     const [selectedOrder, setSelectedOrder] = useState({});
     const { roomId } = useParams();
     const navigate = useNavigate();

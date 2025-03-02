@@ -7,6 +7,7 @@ export default defineConfig({
         proxy: {
             "/api": {
                 target: "http://192.168.129.71", // Dein Backend-Server
+                //target: "http://192.168.130.137", // Dein Backend-Server
                 changeOrigin: true,
                 secure: false, // Falls du HTTPS nutzt und selbstsignierte Zertifikate hast
             },

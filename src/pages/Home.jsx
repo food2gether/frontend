@@ -24,9 +24,9 @@ function Home() {
                 <div className="flex flex-col w-full">
                     {rooms.map((room, index) => (
                         <Link
-                            to={`/room/${room.name.toLowerCase()}`}
+                            to={`/room/${room.displayname.toLowerCase()}`}
                             key={index}
-                            state={{ restoID: room.restoID }}
+                            state={{ restoID: room.id }}
                             className="mb-4"
                             onClick={() => setOrder({})}
                         >

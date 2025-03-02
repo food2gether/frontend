@@ -10,27 +10,6 @@ import { useUser } from "../hooks/useUser";
 function Profile() {
     const { user } = useUser();
 
-    const getProfile = async () => {
-        try {
-            const res = await fetch("/api/v1/profiles/", {
-                method: "GET",
-            });
-
-            if (!res.ok) {
-                throw new Error(`An error occurred: ${res.statusText}`);
-            }
-            
-            const data = await res.json();
-            console.log(data);
-        } catch (error) {
-            console.error("Error fetching profile:", error);
-        }
-    };
-
-    useEffect(() => {
-        getProfile();
-    }, []);
-
     return (
         <div className="navMargin">
             <div className="container">
