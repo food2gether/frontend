@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 // Components
@@ -10,7 +10,7 @@ import { useFood } from "../hooks/useFood";
 import { useUser } from "../hooks/useUser";
 
 function Home() {
-    const { rooms, restaurants } = useFood();
+    const { rooms } = useFood();
     const { order, setOrder } = useUser();
 
     return (
@@ -22,15 +22,15 @@ function Home() {
                     Hier kannst du die Räume der Restaurants sehen.
                 </Text>
                 <div className="flex flex-col w-full">
-                    {rooms.map((room, index) => (
+                    {rooms?.map((room, index) => (
                         <Link
-                            to={`/room/${room.displayname.toLowerCase()}`}
+                            to={`/room/${room.id}`}
                             key={index}
-                            state={{ restoID: room.id }}
+                            state={{ roomId: room.id }}
                             className="mb-4"
                             onClick={() => setOrder({})}
                         >
-                            <Box title={`Raum von ${room.name}`} button={"ansehen"} row />
+                            <Box title={`Raum Nummer: ${room.id}`} button={"ansehen"} row />
                         </Link>
                     ))}
                 </div>

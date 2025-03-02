@@ -1,18 +1,15 @@
-import React, { useEffect, useState } from "react";
-import { createContext, useContext } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
 const foodContext = createContext({});
 
 const useFoodContext = () => {
-    const [rooms, setRooms] = useState([]);
-    const [currentRoom, setCurrentRoom] = useState("");
-    const [validRooms, setValidRooms] = useState(rooms.map((room) => room.name));
-    const [restaurants, setRestaurants] = useState([]);
 
+    const [rooms, setRooms] = useState([]);
+    const [user , setUser] = useState({});
 
     const fetchAllRooms = async () => {
         try {
-            const res = await fetch("/api/v1/profiles", {
+            const res = await fetch("/api/v1/sessions", {
                 method: "GET",
             });
 
@@ -21,16 +18,16 @@ const useFoodContext = () => {
             }
             
             const data = await res.json();
-            console.log(data);
             setRooms(data.data);
+            return data.data;
         } catch (error) {
             console.error("Error fetching profile:", error);
         }
     };
 
-    const fetchAllRestaurants = async () => {
+    const fetchRestaurant = async (restaurantId) => {
         try {
-            const res = await fetch("/api/v1/restaurants", {
+            const res = await fetch(`/api/v1/restaurants/${restaurantId}`, {
                 method: "GET",
             });
 
@@ -39,38 +36,44 @@ const useFoodContext = () => {
             }
             
             const data = await res.json();
-            console.log("Restaurants", data);
-            setRestaurants(data.data);
+            return data.data;
         } catch (error) {
             console.error("Error fetching profile:", error);
         }
-            // {
-            //     name: "McDonald's",
-            //     id: "mcdonalds",
-            //     menu: [
-            //         { item: "Big Mac", price: 5.99 },
-            //         { item: "Chicken Nuggets (6 pcs)", price: 4.49 },
-            //         { item: "Fries", price: 2.99 },
-            //         { item: "Coke", price: 1.99 },
-            //     ],
-            // },
+    }
+
+    const fetchUser = async (userId) => {
+        try {
+            const res = await fetch(`/api/v1/profiles/${userId}`, {
+                method: "GET",
+            });
+
+            if (!res.ok) {
+                throw new Error(`An error occurred: ${res.statusText}`);
+            }
+            
+            const data = await res.json();
+            setUser(data.data);
+            return data.data;
+        } catch (error) {
+            console.error("Error fetching profile:", error);
+        }
     }
 
     useEffect(() => {
         fetchAllRooms();
-        fetchAllRestaurants();
-    }, []);
-
+        fetchUser("1731095302112");
+    }
+    , []);
 
     return {
         rooms,
+        user,
+        setUser,
         setRooms,
-        validRooms,
-        setValidRooms,
-        restaurants,
-        setRestaurants,
-        currentRoom,
-        setCurrentRoom,
+        fetchAllRooms,
+        fetchRestaurant,
+        fetchUser,
     };
 };
 

@@ -8,38 +8,11 @@ import { useUser } from "../hooks/useUser";
 
 function Room() {
 
-    const fetchAllRooms = async () => {
-        try {
-            const res = await fetch("/api/v1/restaurants", {
-                method: "GET",
-            });
-
-            if (!res.ok) {
-                throw new Error(`An error occurred: ${res.statusText}`);
-            }
-            
-            const data = await res.json();
-            console.log(data);
-        } catch (error) {
-            console.error("Error fetching profile:", error);
-        }
-    };
-
-    useEffect(() => {
-        fetchAllRooms();
-    }
-    , []);
-
     const [selectedOrder, setSelectedOrder] = useState({});
     const { roomId } = useParams();
     const navigate = useNavigate();
-    const { validRooms, restaurants, setCurrentRoom } = useFood();
-    const location = useLocation();
-    const { restoID } = location.state || {};
+    const { rooms, fetchRestaurant } = useFood();
     const { order, setOrder, moneyToPay, setMoneyToPay } = useUser();
-
-    const restaurant = restaurants.find((restaurant) => restaurant.id === restoID);
-    const products = restaurant?.menu || [];
 
     useEffect(() => {
         const total = Object.values(order || {}).reduce(
@@ -50,13 +23,12 @@ function Room() {
     }, [order, setMoneyToPay]);
 
     useEffect(() => {
-        if (!validRooms.includes(roomId)) {
+        console.log("Räume: ", rooms);
+        if (!rooms.find((room) => room.id === parseInt(roomId))) {
             navigate("/notfound");
         }
-    }, [roomId, validRooms, navigate]);
-
-    setCurrentRoom(roomId);
-
+    }, [roomId, rooms, navigate]);
+    
     const handleQuantityChange = (product, quantity) => {
         const newQuantity = Math.max(0, quantity);
         setSelectedOrder((prev) => ({
@@ -78,6 +50,7 @@ function Room() {
 
     const itemCount = Object.values(order || {}).reduce((acc, { quantity }) => acc + quantity, 0);
 
+    return;
     return (
         <>
             <div className="navMargin"></div>

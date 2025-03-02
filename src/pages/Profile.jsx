@@ -1,15 +1,16 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 // Components
 import Text from "../components/Text";
 import Button from "../components/Button";
 
 // Hooks
-import { useUser } from "../hooks/useUser";
+import useFood from "../hooks/useFood";
 
 function Profile() {
-    const { user } = useUser();
+    const { fetchUser, user } = useFood();
 
+    console.log(user);
     return (
         <div className="navMargin">
             <div className="container">
@@ -22,17 +23,16 @@ function Profile() {
                 <img
                     src={user.profilePic}
                     alt=""
-                    className="w-[200px] h-[200px] rounded-full mb-3"
+                    className="w-[200px] h-[200px] rounded-full mb-3 bg-gray-600"
                 />
                 <Text type={"h3"} bold clazzName={"mt-6 mb-2"}>
-                    {user.name}
+                    {user.displayname}
                 </Text>
-                <Text type={"p"} clazzName={"mb-2"}>
-                   <strong> E-Mail: </strong> <br />{user.email}
-                </Text>
-                <Text type={"p"} clazzName={"mb-1"}>
-                    <strong> Telefonnummer: </strong> <br />{user.phone}
-                </Text>
+                {user?.contact?.map((contact, index) => (
+                    <Text type={"p"} key={index} clazzName={"mb-2"}>
+                        <span className="font-bold">{contact.displayname}</span>: {contact.value}
+                    </Text>
+                ))}
             </div>
         </div>
     );
