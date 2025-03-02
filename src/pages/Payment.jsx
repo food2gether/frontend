@@ -3,12 +3,15 @@ import qrcode from "qrcode-generator";
 
 // Components
 import Text from "../components/Text";
-
-// Hooks
-import { useUser } from "../hooks/useUser";
+import { useLocation } from "react-router-dom";
 
 function Payment() {
-    const { moneyToPay, state } = useUser();
+    const location = useLocation();
+    const order = location.state?.robin;
+
+    const moneyToPay = order && Object.keys(order).length > 0
+        ? `${Object.values(order).reduce((acc, item) => acc + item.price * item.quantity, 0)}`
+        : 0.00;
 
     // QR-Code generieren
     useEffect(() => {
@@ -22,17 +25,16 @@ function Payment() {
         var qr = qrcode(typeNumber, errorCorrectionLevel);
         qr.addData(data);
         qr.make();
-
+ 
         document.getElementById("qrcode").innerHTML = qr.createSvgTag(cellSize, margin);
-    }),
-        [];
+    }, []);
 
     return (
         <div className="navMargin">
             <div className="container">
                 <div className="w-full h-full flex flex-col items-center justify-center mt-10">
                     <Text type="h1" clazzName="mb-10">
-                        Du musst {moneyToPay} € zahlen!
+                        Du musst {parseFloat(moneyToPay)?.toFixed(2)} € zahlen!
                     </Text>
                     <a
                         href={`https://www.paypal.com/paypalme/robinahnn/${moneyToPay}EUR`}

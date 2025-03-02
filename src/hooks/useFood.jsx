@@ -6,6 +6,8 @@ const useFoodContext = () => {
 
     const [rooms, setRooms] = useState([]);
     const [user , setUser] = useState({});
+    const [restaurant , setRestaurant] = useState({});
+    const [menu , setMenu] = useState({});
 
     const fetchAllRooms = async () => {
         try {
@@ -36,6 +38,7 @@ const useFoodContext = () => {
             }
             
             const data = await res.json();
+            setRestaurant(data.data);
             return data.data;
         } catch (error) {
             console.error("Error fetching profile:", error);
@@ -60,15 +63,44 @@ const useFoodContext = () => {
         }
     }
 
+    const fetchMenu = async (restaurantId) => {
+        try {
+            const res = await fetch(`/api/v1/restaurants/${restaurantId}/menu`, {
+                method: "GET",
+            });
+
+            if (!res.ok) {
+                throw new Error(`An error occurred: ${res.statusText}`);
+            }
+            
+            const data = await res.json();
+            setMenu(data.data);
+            return data.data;
+        } catch (error) {
+            console.error("Error fetching profile:", error);
+        }
+    }
+
     useEffect(() => {
         fetchAllRooms();
         fetchUser("1731095302112");
     }
     , []);
+    
+    useEffect(() => {
+        if (!user) return;
+        fetchRestaurant(user?.restaurantId || "1");
+        fetchMenu(user?.restaurantId || "1");
+    }
+    , [user]);
 
     return {
         rooms,
         user,
+        restaurant,
+        menu,
+        setMenu,
+        setRestaurant,
         setUser,
         setRooms,
         fetchAllRooms,

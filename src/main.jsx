@@ -36,14 +36,7 @@ const App = () => {
                     <Route path="/" element={<Home />} />
                     <Route path="/order" element={<Order />} />
                     <Route path="/orders" element={<Orders />} />
-                    <Route
-                        path="/payment"
-                        element={
-                            <ProtectedRouteWrapper allowedState={state === "order"}>
-                                <Payment />
-                            </ProtectedRouteWrapper>
-                        }
-                    />
+                    <Route path="/payment" element={<Payment />} />
                     <Route path="/profile" element={<Profile />} />
                     <Route path="/requests" element={<Requests />} />
                     <Route path="/room/:roomId" element={<Room />} />

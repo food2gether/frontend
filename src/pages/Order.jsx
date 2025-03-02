@@ -1,25 +1,14 @@
 import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams, useLocation } from "react-router-dom";
 
 // Components
 import Text from "../components/Text";
 import Button from "../components/Button";
 
-// Hooks
-import { useUser } from "../hooks/useUser";
-import { useFood } from "../hooks/useFood";
-
 function Order() {
-    const { order, setOrder, orders, setOrders, moneyToPay, setState } = useUser();
-    const { currentRoom } = useFood();
 
-    useEffect(() => {
-        setState("order");
-    }, [setState]);
-
-    const handleOrders = () => {
-        setOrders([...orders, { id: currentRoom, status: 1, price: moneyToPay, order: order }]);
-    };
+    const location = useLocation();
+    const order = location.state?.robin;
 
     return (
         <div className="navMargin">
@@ -49,10 +38,12 @@ function Order() {
                 <div className="w-full flex justify-end items-center">
                     <div className="flex flex-col items-end gap-4">
                         <Text type={"p"} bold clazzName={"mt-6"}>
-                            Gesamt: {moneyToPay}€
+                            Gesamt: {order && Object.keys(order).length > 0 
+                                ? `${(Object.values(order).reduce((acc, item) => acc + item.price * item.quantity, 0)).toFixed(2)} €`
+                                : "0 €"}
                         </Text>
-                        <Link to="/payment" className="mt-5">
-                            <Button type="primary" clazzName="mt-5" onClick={handleOrders}>
+                        <Link to="/payment" className="mt-5" state={{ robin: order }}>
+                            <Button type="primary" clazzName="mt-5" onClick={() => console.log(order)}>
                                 Bezahlen
                             </Button>
                         </Link>
