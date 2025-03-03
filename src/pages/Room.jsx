@@ -14,7 +14,6 @@ function Room() {
     const [totalPrice, setTotalPrice] = useState(0);
 
     useEffect(() => {
-        console.log("Räume: ", rooms);
         if (!rooms.find((room) => room.id === parseInt(roomId))) {
             navigate("/notfound");
         }
@@ -42,7 +41,6 @@ function Room() {
         }));
     }
     useEffect(() => {
-        console.log("Bestellung: ", order);
         const total = Object.values(order).reduce((acc, item) => {
             return acc + item.quantity * item.price;
         }, 0);
@@ -55,12 +53,11 @@ function Room() {
             <div className="container">
                 <div className="flex flex-col items-center mt-10">
                     <Text type="h1">Willkommen im Raum von {roomId}</Text>
-                    <Text type="h2">Restaurant: {restaurant.displayName}</Text>
-                    {console.log("Menu: ", menu)}
+                    <Text type="h2" clazzName={"mb-14 text-primary font-normal"}>Restaurant: {restaurant.displayName}</Text>
                     {menu?.map((product, index) => (
                         <div
                             key={index}
-                            className="flex justify-between items-center bg-white w-full p-4 mb-3 rounded shadow"
+                            className="flex justify-between items-center bg-white w-full p-4 mb-3 rounded-2xl border-primary border"
                         >
                             <div>
                                 <Text type="p">{product.name}</Text>
@@ -71,9 +68,9 @@ function Room() {
                             <div className="flex items-center gap-4">
                                 <Text type="p">Anzahl:</Text>
                                 <input
-                                    type="number"
+                                    type="text"
                                     min="0"
-                                    className="w-16 p-2 border rounded text-center text-black"
+                                    className="w-8 text-black outline-none border-none"
                                     value={order[product.name]?.quantity || "0"}
                                     onChange={(e) =>
                                         setOrder((prev) => ({
@@ -102,13 +99,13 @@ function Room() {
                             </div>
                         </div>
                     ))}
-                    <Text type="p" clazzName="mt-2">
+                    <Text type="h2" bold clazzName="mt-10">
                         {order && Object.keys(order).length > 0
                             ? `Gesamtpreis: ${totalPrice.toFixed(2)} €`
                             : "Bitte wähle etwas aus!"}
                     </Text>
                     <Link to="/order" state={{ robin: order }}>
-                        <Button type="primary" clazzName="mt-5" onClick={() => console.log(order)}>
+                        <Button type="primary" clazzName="mt-10" onClick={() => console.log(order)}>
                             Bestellung abschicken
                         </Button>
                     </Link>

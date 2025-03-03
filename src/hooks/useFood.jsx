@@ -83,7 +83,7 @@ const useFoodContext = () => {
 
     useEffect(() => {
         fetchAllRooms();
-        fetchUser("1731095302112");
+        fetchUser("3");
     }
     , []);
     

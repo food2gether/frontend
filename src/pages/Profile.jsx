@@ -18,21 +18,24 @@ function Profile() {
                     Profil
                 </Text>
                 <Text type={"p"} clazzName={"mb-6"}>
-                    Hier kannst du dein Profil bearbeiten.
+                    Hier kannst du dein Profil sehen.
                 </Text>
                 <img
-                    src={user.profilePic}
+                    src={user.profilePictureUrl}
                     alt=""
-                    className="w-[200px] h-[200px] rounded-full mb-3 bg-gray-600"
+                    className="w-[200px] h-[200px] object-cover rounded-full mb-3 bg-gray-600"
                 />
-                <Text type={"h3"} bold clazzName={"mt-6 mb-2"}>
-                    {user.displayname}
+                <Text type={"h2"} bold clazzName={"mt-8 mb-2 text-primary"}>
+                    {user.name}
                 </Text>
-                {user?.contact?.map((contact, index) => (
-                    <Text type={"p"} key={index} clazzName={"mb-2"}>
-                        <span className="font-bold">{contact.displayname}</span>: {contact.value}
+                <Text type={"p"} clazzName={"mt-0 mb-2"}>
+                    <strong>Benutzername:</strong> {user.displayName}
+                </Text>
+                {user.primaryEmail && (
+                    <Text type={"p"} clazzName={"mb-6"}>
+                        <strong>Email:</strong> {user.primaryEmail}
                     </Text>
-                ))}
+                )}
             </div>
         </div>
     );
