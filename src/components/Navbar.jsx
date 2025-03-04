@@ -73,7 +73,12 @@ function Navbar() {
                         </button>
                     ))}
                     {loggedIn && (
-                        <Link reloadDocument to={"/oauth2/sign_out"} onClick={handleLogout} className="bg-white px-5 py-2 rounded-xl">
+                        <Link
+                            reloadDocument
+                            to={"/oauth2/sign_out"}
+                            onClick={handleLogout}
+                            className="bg-white px-5 py-2 rounded-xl"
+                        >
                             <Text type={"p"} clazzName={"text-primary"}>
                                 Logout
                             </Text>

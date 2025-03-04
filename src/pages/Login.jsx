@@ -15,7 +15,7 @@ function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const { loggedIn, setLoggedIn } = useUser();
-    const [ location, setLocation ] = useLocation();
+    const [location, setLocation] = useLocation();
 
     const handleEmailChange = (e) => {
         setEmail(e.target.value);
@@ -27,7 +27,7 @@ function Login() {
 
     const handleLogin = () => {
         setLoggedIn(true);
-    }
+    };
 
     return (
         <div className="flex flex-col items-center mt-20 h-full">
@@ -48,7 +48,9 @@ function Login() {
                 onChange={handlePasswordChange}
             /> */}
             <Link to={"/oauth2/start" + location.search} className="mt-5" onClick={handleLogin}>
-                <Button type="primary" childrenClassess={"text-center px-5 py-1"} arrow={false}>Login with SSO</Button>
+                <Button type="primary" childrenClassess={"text-center px-5 py-1"} arrow={false}>
+                    Login with SSO
+                </Button>
             </Link>
         </div>
     );

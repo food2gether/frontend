@@ -58,8 +58,7 @@ function Room() {
             setMenu(menuData);
         };
         fetchData();
-    }
-    , [fetchRestaurant, restaurantId]);
+    }, [fetchRestaurant, restaurantId]);
 
     return (
         <>

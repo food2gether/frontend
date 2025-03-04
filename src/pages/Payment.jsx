@@ -9,9 +9,10 @@ function Payment() {
     const location = useLocation();
     const order = location.state?.robin;
 
-    const moneyToPay = order && Object.keys(order).length > 0
-        ? `${Object.values(order).reduce((acc, item) => acc + item.price * item.quantity, 0)}`
-        : 0.00;
+    const moneyToPay =
+        order && Object.keys(order).length > 0
+            ? `${Object.values(order).reduce((acc, item) => acc + item.price * item.quantity, 0)}`
+            : 0.0;
 
     // QR-Code generieren
     useEffect(() => {
@@ -25,7 +26,7 @@ function Payment() {
         var qr = qrcode(typeNumber, errorCorrectionLevel);
         qr.addData(data);
         qr.make();
- 
+
         document.getElementById("qrcode").innerHTML = qr.createSvgTag(cellSize, margin);
     }, []);
 
