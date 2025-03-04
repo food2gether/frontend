@@ -1,16 +1,10 @@
-FROM busybox:1.37.0
+FROM nginx:1.26-alpine
 
 WORKDIR /app
 
-RUN addgroup --system --gid 1001 httpd \
-    && adduser --system --uid 1001 -G httpd httpd
-
-USER httpd
+COPY --chown=root:root --chmod=644 ./nginx.conf /etc/nginx/conf.d/default.conf
+COPY --chown=root:root --chmod=755 ./dist /usr/share/nginx/html
 
 EXPOSE 8080
-ENV PORT=8080
-ENV HOSTNAME="0.0.0.0"
 
-COPY --chown=root:root --chmod=755 ./dist /app
-
-CMD ["/bin/sh", "-c", "httpd -f -p \"$HOSTNAME:$PORT\" -h /app -vv"]
+CMD ["nginx", "-g", "daemon off;"]

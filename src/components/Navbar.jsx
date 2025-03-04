@@ -48,7 +48,7 @@ function Navbar() {
             style={{ zIndex: 999 }}
         >
             <div className="flex items-center justify-between gap-10 px-4 container-nav">
-                <Link to="/">
+                <Link reloadDocument to="/">
                     <Text type={"h2"} bold light>
                         Food
                         <Text clazzName="text-primary-dark inline" type="h2">
@@ -65,22 +65,15 @@ function Navbar() {
                             className={` ${activeTab === index ? "border-b-2 bg-red-500" : "bg-green-500"}"`}
                             key={index}
                         >
-                            <Link key={index} to={item.to}>
+                            <Link reloadDocument key={index} to={item.to}>
                                 <Text type={"p"} light>
                                     {item.name}
                                 </Text>
                             </Link>
                         </button>
                     ))}
-                    {!loggedIn && (
-                        <Link to={"/login"} className="bg-white px-5 py-2 rounded-xl">
-                            <Text type={"p"} clazzName={"text-primary"}>
-                                Login
-                            </Text>
-                        </Link>
-                    )}
                     {loggedIn && (
-                        <Link to={"/logout"} onClick={handleLogout} className="bg-white px-5 py-2 rounded-xl">
+                        <Link reloadDocument to={"/oauth2/sign_out"} onClick={handleLogout} className="bg-white px-5 py-2 rounded-xl">
                             <Text type={"p"} clazzName={"text-primary"}>
                                 Logout
                             </Text>
@@ -98,7 +91,7 @@ function Navbar() {
                     className={`absolute top-[120px] left-0 w-full h-[83.4vh] py-32 bg-primary-dark flex flex-col items-center justify-between gap-5 md:hidden transition-all ${menu ? "opacity-100" : "opacity-0 pointer-events-none"}`}
                 >
                     {navItems.map((item, index) => (
-                        <Link key={index} to={item.to}>
+                        <Link reloadDocument key={index} to={item.to}>
                             <Text type={"p"} light>
                                 {item.name}
                             </Text>

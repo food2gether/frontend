@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 // Hooks
 import { useUser } from "../hooks/useUser";
@@ -15,6 +15,7 @@ function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const { loggedIn, setLoggedIn } = useUser();
+    const [ location, setLocation ] = useLocation();
 
     const handleEmailChange = (e) => {
         setEmail(e.target.value);
@@ -29,7 +30,7 @@ function Login() {
     }
 
     return (
-        <div className="flex flex-col items-center mt-20">
+        <div className="flex flex-col items-center mt-20 h-full">
             <div className="navMargin"></div>
             <Text type="h1">Login Page</Text>
             {/* <input
@@ -46,8 +47,8 @@ function Login() {
                 value={password}
                 onChange={handlePasswordChange}
             /> */}
-            <Link to="/profile" className="mt-10" onClick={handleLogin}>
-                <Button type="primary" childrenClassess={"text-center px-5 py-1 flex items-center"} arrow={false}>Login mit GitHub <FaGithub className="ml-2" /></Button>
+            <Link to={"/oauth2/start" + location.search} className="mt-5" onClick={handleLogin}>
+                <Button type="primary" childrenClassess={"text-center px-5 py-1"} arrow={false}>Login with SSO</Button>
             </Link>
         </div>
     );

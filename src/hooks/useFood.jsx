@@ -3,7 +3,6 @@ import { createContext, useContext, useEffect, useState } from "react";
 const foodContext = createContext({});
 
 const useFoodContext = () => {
-
     const [rooms, setRooms] = useState([]);
     const [users , setUsers] = useState([]);
     const [restaurants , setRestaurants] = useState([]);
@@ -13,12 +12,13 @@ const useFoodContext = () => {
         try {
             const res = await fetch("/api/v1/sessions", {
                 method: "GET",
+                credentials: "same-origin",
             });
 
             if (!res.ok) {
                 throw new Error(`An error occurred: ${res.statusText}`);
             }
-            
+
             const data = await res.json();
             setRooms(data.data);
             return data.data;
@@ -31,48 +31,51 @@ const useFoodContext = () => {
         try {
             const res = await fetch(`/api/v1/restaurants/`, {
                 method: "GET",
+                credentials: "same-origin",
             });
 
             if (!res.ok) {
                 throw new Error(`An error occurred: ${res.statusText}`);
             }
-            
+
             const data = await res.json();
             setRestaurants(data.data);
             return data.data;
         } catch (error) {
             console.error("Error fetching profile:", error);
         }
-    }
+    };
 
     const fetchAllUsers = async () => {
         try {
             const res = await fetch(`/api/v1/profiles/`, {
                 method: "GET",
+                credentials: "same-origin",
             });
 
             if (!res.ok) {
                 throw new Error(`An error occurred: ${res.statusText}`);
             }
-            
+
             const data = await res.json();
             setUsers(data.data);
             return data.data;
         } catch (error) {
             console.error("Error fetching profile:", error);
         }
-    }
+    };
 
     const fetchMenu = async (restaurantId) => {
         try {
             const res = await fetch(`/api/v1/restaurants/${restaurantId}/menu`, {
                 method: "GET",
+                credentials: "same-origin",
             });
 
             if (!res.ok) {
                 throw new Error(`An error occurred: ${res.statusText}`);
             }
-            
+
             const data = await res.json();
             setMenu(data.data);
             return data.data;
