@@ -10,7 +10,6 @@ import useFood from "../hooks/useFood";
 function Profile() {
     const { fetchUser, user } = useFood();
 
-    console.log(user);
     return (
         <div className="navMargin">
             <div className="container">

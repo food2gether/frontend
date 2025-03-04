@@ -18,7 +18,6 @@ function Orders() {
                 <Text type={"p"} clazzName={"mb-6"}>
                     Hier siehst du deine aktiven Bestellungen.
                 </Text>
-                {/* <Button onClick={() => console.log(orders)}>Getall</Button> */}
                 {orders && orders.length === 0 ? (
                     <Text type={"p"} clazzName={"text-gray-500"}>
                         Keine aktiven Bestellungen vorhanden.
