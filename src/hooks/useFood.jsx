@@ -5,9 +5,9 @@ const foodContext = createContext({});
 const useFoodContext = () => {
 
     const [rooms, setRooms] = useState([]);
-    const [user , setUser] = useState({});
-    const [restaurant , setRestaurant] = useState({});
-    const [menu , setMenu] = useState({});
+    const [users , setUsers] = useState([]);
+    const [restaurants , setRestaurants] = useState([]);
+    const [menu , setMenu] = useState([]);
 
     const fetchAllRooms = async () => {
         try {
@@ -27,9 +27,9 @@ const useFoodContext = () => {
         }
     };
 
-    const fetchRestaurant = async (restaurantId) => {
+    const fetchAllRestaurants = async () => {
         try {
-            const res = await fetch(`/api/v1/restaurants/${restaurantId}`, {
+            const res = await fetch(`/api/v1/restaurants/`, {
                 method: "GET",
             });
 
@@ -38,16 +38,16 @@ const useFoodContext = () => {
             }
             
             const data = await res.json();
-            setRestaurant(data.data);
+            setRestaurants(data.data);
             return data.data;
         } catch (error) {
             console.error("Error fetching profile:", error);
         }
     }
 
-    const fetchUser = async (userId) => {
+    const fetchAllUsers = async () => {
         try {
-            const res = await fetch(`/api/v1/profiles/${userId}`, {
+            const res = await fetch(`/api/v1/profiles/`, {
                 method: "GET",
             });
 
@@ -56,7 +56,7 @@ const useFoodContext = () => {
             }
             
             const data = await res.json();
-            setUser(data.data);
+            setUsers(data.data);
             return data.data;
         } catch (error) {
             console.error("Error fetching profile:", error);
@@ -80,31 +80,23 @@ const useFoodContext = () => {
             console.error("Error fetching profile:", error);
         }
     }
-
     useEffect(() => {
         fetchAllRooms();
-        fetchUser("1");
-    }
-    , []);
-    
-    useEffect(() => {
-        if (!user) return;
-        fetchRestaurant(user?.restaurantId || "1");
-        fetchMenu(user?.restaurantId || "1");
-    }
-    , [user]);
+        fetchAllRestaurants();
+        fetchAllUsers();
+    }, []);
 
     return {
         rooms,
-        user,
-        restaurant,
+        users,
+        restaurants,
         menu,
         setMenu,
-        setRestaurant,
-        setUser,
+        setRestaurants,
+        setUsers,
         setRooms,
         fetchAllRooms,
-        fetchRestaurant,
+        fetchAllRestaurants,
         fetchUser,
     };
 };

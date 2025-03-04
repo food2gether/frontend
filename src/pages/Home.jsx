@@ -10,8 +10,21 @@ import { useFood } from "../hooks/useFood";
 import { useUser } from "../hooks/useUser";
 
 function Home() {
-    const { rooms } = useFood();
+    const { rooms, fetchUser } = useFood();
     const { order, setOrder } = useUser();
+    const [userData, setUserData] = useState({});
+
+    useEffect(() => {
+        if (rooms?.length) {
+            rooms.forEach(async (room) => {
+                const data = await fetchUser(room.id);
+                setUserData((prev) => ({
+                    ...prev,
+                    [room.id]: data, // Speichert die Daten pro Raum
+                }));
+            });
+        }
+    }, [rooms]); // Wird nur ausgeführt, wenn sich `rooms` ändert
 
     return (
         <>
@@ -22,15 +35,19 @@ function Home() {
                     Hier kannst du die Räume der Restaurants sehen.
                 </Text>
                 <div className="flex flex-col w-full">
-                    {rooms?.map((room, index) => (
+                    {rooms?.map((room) => (
                         <Link
                             to={`/room/${room.id}`}
-                            key={index}
+                            key={room.id}
                             state={{ roomId: room.id }}
                             className="mb-4"
                             onClick={() => setOrder({})}
                         >
-                            <Box title={`Raum Nummer: ${room.id}`} button={"ansehen"} row />
+                            <Box
+                                title={`Raum von ${room.id} ${userData[room.id]?.name || ""}`}
+                                button={"ansehen"}
+                                row
+                            />
                         </Link>
                     ))}
                 </div>

@@ -8,6 +8,9 @@ import { useUser } from "../hooks/useUser";
 import Text from "../components/Text";
 import Button from "../components/Button";
 
+// Icons
+import { FaGithub } from "react-icons/fa";
+
 function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -29,7 +32,7 @@ function Login() {
         <div className="flex flex-col items-center mt-20">
             <div className="navMargin"></div>
             <Text type="h1">Login Page</Text>
-            <input
+            {/* <input
                 type="text"
                 placeholder="Email"
                 className="border border-gray-300 px-5 py-[10px] rounded-xl text-black w-[20%] text-lg mt-8"
@@ -42,9 +45,9 @@ function Login() {
                 className="border border-gray-300 px-5 py-[10px] rounded-xl mt-1 text-black w-[20%] text-lg"
                 value={password}
                 onChange={handlePasswordChange}
-            />
-            <Link to="/profile" className="mt-5" onClick={handleLogin}>
-                <Button type="primary" childrenClassess={"text-center px-5 py-1"} arrow={false}>Login</Button>
+            /> */}
+            <Link to="/profile" className="mt-10" onClick={handleLogin}>
+                <Button type="primary" childrenClassess={"text-center px-5 py-1 flex items-center"} arrow={false}>Login mit GitHub <FaGithub className="ml-2" /></Button>
             </Link>
         </div>
     );

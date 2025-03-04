@@ -8,7 +8,7 @@ import Button from "../components/Button";
 import useFood from "../hooks/useFood";
 
 function Profile() {
-    const { fetchUser, user } = useFood();
+    const { user } = useFood();
 
     return (
         <div className="navMargin">
