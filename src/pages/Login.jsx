@@ -1,33 +1,27 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link, useLocation } from "react-router-dom";
-
-// Hooks
-import { useUser } from "../hooks/useUser";
 
 // Components
 import Text from "../components/Text";
 import Button from "../components/Button";
 
-// Icons
-import { FaGithub } from "react-icons/fa";
-
 function Login() {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const { loggedIn, setLoggedIn } = useUser();
-    const [location, setLocation] = useLocation();
+    // const [email, setEmail] = useState("");
+    // const [password, setPassword] = useState("");
+    // const { loggedIn, setLoggedIn } = useUser();
+    const location = useLocation();
 
-    const handleEmailChange = (e) => {
-        setEmail(e.target.value);
-    };
-
-    const handlePasswordChange = (e) => {
-        setPassword(e.target.value);
-    };
-
-    const handleLogin = () => {
-        setLoggedIn(true);
-    };
+    // const handleEmailChange = (e) => {
+    //     setEmail(e.target.value);
+    // };
+    //
+    // const handlePasswordChange = (e) => {
+    //     setPassword(e.target.value);
+    // };
+    //
+    // const handleLogin = () => {
+    //     setLoggedIn(true);
+    // };
 
     return (
         <div className="flex flex-col items-center mt-20 h-full">

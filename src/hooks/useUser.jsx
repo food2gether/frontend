@@ -4,7 +4,11 @@ import { createContext, useContext } from "react";
 const userContext = createContext({});
 
 const useUserContext = () => {
-    const [loggedIn, setLoggedIn] = useState(true);
+    const loggedIn = () => {
+       return document.cookie.includes("_oauth2_proxy");
+    }
+    // check if cookie is set
+    // const [loggedIn, setLoggedIn] = useState(document.cookie.includes("loggedIn=true"));
     const [order, setOrder] = useState({});
     const [orders, setOrders] = useState([]);
     const [userOrders, setUserOrders] = useState([
@@ -72,7 +76,6 @@ const useUserContext = () => {
 
     return {
         loggedIn,
-        setLoggedIn,
         order,
         setOrder,
         orders,

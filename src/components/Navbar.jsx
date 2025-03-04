@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 // Hooks
@@ -9,13 +9,12 @@ import { HiMiniBars3BottomLeft } from "react-icons/hi2";
 
 // Components
 import Text from "./Text";
-import Button from "./Button";
 
 function Navbar() {
     const [menu, setMenu] = useState(false);
     const [activeTab, setActivetab] = useState(0);
 
-    const { loggedIn, setLoggedIn } = useUser();
+    const { loggedIn } = useUser();
 
     // get current route
     const currentRoute = window.location.pathname;
@@ -36,10 +35,6 @@ function Navbar() {
 
     const handleMenu = () => {
         setMenu(!menu);
-    };
-
-    const handleLogout = () => {
-        setLoggedIn(false);
     };
 
     return (
@@ -76,7 +71,6 @@ function Navbar() {
                         <Link
                             reloadDocument
                             to={"/oauth2/sign_out"}
-                            onClick={handleLogout}
                             className="bg-white px-5 py-2 rounded-xl"
                         >
                             <Text type={"p"} clazzName={"text-primary"}>
