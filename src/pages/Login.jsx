@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 // Hooks
 import { useUser } from "../hooks/useUser";
@@ -12,6 +12,7 @@ function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const { loggedIn, setLoggedIn } = useUser();
+    const [ location, setLocation ] = useLocation();
 
     const handleEmailChange = (e) => {
         setEmail(e.target.value);
@@ -26,25 +27,11 @@ function Login() {
     }
 
     return (
-        <div className="flex flex-col items-center mt-20">
+        <div className="flex flex-col items-center mt-20 h-full">
             <div className="navMargin"></div>
             <Text type="h1">Login Page</Text>
-            <input
-                type="text"
-                placeholder="Email"
-                className="border border-gray-300 px-5 py-[10px] rounded-xl text-black w-[20%] text-lg mt-8"
-                value={email}
-                onChange={handleEmailChange}
-            />
-            <input
-                type="password"
-                placeholder="Password"
-                className="border border-gray-300 px-5 py-[10px] rounded-xl mt-1 text-black w-[20%] text-lg"
-                value={password}
-                onChange={handlePasswordChange}
-            />
-            <Link to="/profile" className="mt-5" onClick={handleLogin}>
-                <Button type="primary" childrenClassess={"text-center px-5 py-1"} arrow={false}>Login</Button>
+            <Link to={"/oauth2/start" + location.search} className="mt-5" onClick={handleLogin}>
+                <Button type="primary" childrenClassess={"text-center px-5 py-1"} arrow={false}>Login with SSO</Button>
             </Link>
         </div>
     );
