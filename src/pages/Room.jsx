@@ -7,11 +7,14 @@ import { useFood } from "../hooks/useFood";
 import { useUser } from "../hooks/useUser";
 
 function Room() {
-    const { roomId } = useParams();
+    const location = useLocation();
+    const { roomId, userName, restaurantId } = location.state || {};
     const navigate = useNavigate();
-    const { rooms, restaurant, menu } = useFood();
+    const { rooms, fetchRestaurant, fetchMenu } = useFood();
     const [order, setOrder] = useState({});
     const [totalPrice, setTotalPrice] = useState(0);
+    const [restaurant, setRestaurant] = useState({});
+    const [menu, setMenu] = useState([]);
 
     useEffect(() => {
         if (!rooms.find((room) => room.id === parseInt(roomId))) {
@@ -25,10 +28,10 @@ function Room() {
             [product.name]: {
                 ...prev[product.name],
                 quantity: (prev[product.name]?.quantity || 0) + 1,
-                price: (product.price/100).toFixed(2),
+                price: (product.price / 100).toFixed(2),
             },
         }));
-    }
+    };
 
     const handleQuantityChangeMinus = (product) => {
         setOrder((prev) => ({
@@ -36,10 +39,10 @@ function Room() {
             [product.name]: {
                 ...prev[product.name],
                 quantity: Math.max((prev[product.name]?.quantity || 0) - 1, 0),
-                price: (product.price/100).toFixed(2),
+                price: (product.price / 100).toFixed(2),
             },
         }));
-    }
+    };
     useEffect(() => {
         const total = Object.values(order).reduce((acc, item) => {
             return acc + item.quantity * item.price;
@@ -47,13 +50,26 @@ function Room() {
         setTotalPrice(total);
     }, [order]);
 
+    useEffect(() => {
+        const fetchData = async () => {
+            const restaurantData = await fetchRestaurant(restaurantId);
+            setRestaurant(restaurantData);
+            const menuData = await fetchMenu(restaurantId);
+            setMenu(menuData);
+        };
+        fetchData();
+    }
+    , [fetchRestaurant, restaurantId]);
+
     return (
         <>
             <div className="navMargin"></div>
             <div className="container">
                 <div className="flex flex-col items-center mt-10">
-                    <Text type="h1">Willkommen im Raum von {roomId}</Text>
-                    <Text type="h2" clazzName={"mb-14 text-primary font-normal"}>Restaurant: {restaurant.displayName}</Text>
+                    <Text type="h1">Willkommen im Raum von {userName}</Text>
+                    <Text type="h2" clazzName={"mb-14 text-primary font-normal"}>
+                        Restaurant: {restaurant.displayName}
+                    </Text>
                     {menu?.map((product, index) => (
                         <div
                             key={index}
@@ -62,7 +78,7 @@ function Room() {
                             <div>
                                 <Text type="p">{product.name}</Text>
                                 <Text type="p" clazzName="text-primary">
-                                    {(product.price/100).toFixed(2)} €
+                                    {(product.price / 100).toFixed(2)} €
                                 </Text>
                             </div>
                             <div className="flex items-center gap-4">

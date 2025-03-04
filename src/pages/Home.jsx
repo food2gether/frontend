@@ -8,23 +8,11 @@ import Text from "../components/Text";
 // Hooks
 import { useFood } from "../hooks/useFood";
 import { useUser } from "../hooks/useUser";
+import { use } from "react";
 
 function Home() {
-    const { rooms, fetchUser } = useFood();
+    const { rooms, users } = useFood();
     const { order, setOrder } = useUser();
-    const [userData, setUserData] = useState({});
-
-    useEffect(() => {
-        if (rooms?.length) {
-            rooms.forEach(async (room) => {
-                const data = await fetchUser(room.id);
-                setUserData((prev) => ({
-                    ...prev,
-                    [room.id]: data, // Speichert die Daten pro Raum
-                }));
-            });
-        }
-    }, [rooms]); // Wird nur ausgeführt, wenn sich `rooms` ändert
 
     return (
         <>
@@ -35,20 +23,21 @@ function Home() {
                     Hier kannst du die Räume der Restaurants sehen.
                 </Text>
                 <div className="flex flex-col w-full">
-                    {rooms?.map((room) => (
+                    {rooms?.map((room, index) => (
+                        (console.log("adsf", room.restaurantId),
                         <Link
                             to={`/room/${room.id}`}
                             key={room.id}
-                            state={{ roomId: room.id }}
+                            state={{ roomId: room.id, userName: users[index]?.name, restaurantId: room.restaurantId }}
                             className="mb-4"
                             onClick={() => setOrder({})}
                         >
                             <Box
-                                title={`Raum von ${room.id} ${userData[room.id]?.name || ""}`}
+                                title={`Raum von ${users[index]?.name || ""}`}
                                 button={"ansehen"}
                                 row
                             />
-                        </Link>
+                        </Link>)
                     ))}
                 </div>
             </div>
