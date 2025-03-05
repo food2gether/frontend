@@ -23,7 +23,7 @@ function Requests() {
         setUserOrders((prevUserOrders) =>
             prevUserOrders.filter((userOrder) => userOrder.id !== id),
         );
-    }
+    };
 
     return (
         <div className="navMargin">
@@ -51,7 +51,10 @@ function Requests() {
                                     )}
                                 </Text>
                             </div>
-                            <Text type="h2" clazzName={`mr-4 ${userOrder.isPaid ? 'text-green-500' : 'text-red-500'}`}>
+                            <Text
+                                type="h2"
+                                clazzName={`mr-4 ${userOrder.isPaid ? "text-green-500" : "text-red-500"}`}
+                            >
                                 {userOrder.totalPrice} €
                             </Text>
                         </div>

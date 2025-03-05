@@ -1,35 +1,16 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 // Components
 import Text from "../components/Text";
 import Button from "../components/Button";
 
 // Hooks
-import { useUser } from "../hooks/useUser";
+import useFood from "../hooks/useFood";
+import { use } from "react";
 
 function Profile() {
-    const { user } = useUser();
-
-    const getProfile = async () => {
-        try {
-            const res = await fetch("/api/v1/profiles/", {
-                method: "GET",
-            });
-
-            if (!res.ok) {
-                throw new Error(`An error occurred: ${res.statusText}`);
-            }
-            
-            const data = await res.json();
-            console.log(data);
-        } catch (error) {
-            console.error("Error fetching profile:", error);
-        }
-    };
-
-    useEffect(() => {
-        getProfile();
-    }, []);
+    const { users } = useFood();
+    const [userId, setUserId] = useState(0);
 
     return (
         <div className="navMargin">
@@ -38,22 +19,24 @@ function Profile() {
                     Profil
                 </Text>
                 <Text type={"p"} clazzName={"mb-6"}>
-                    Hier kannst du dein Profil bearbeiten.
+                    Hier kannst du dein Profil sehen.
                 </Text>
                 <img
-                    src={user.profilePic}
+                    src={users[userId]?.profilePictureUrl}
                     alt=""
-                    className="w-[200px] h-[200px] rounded-full mb-3"
+                    className="w-[200px] h-[200px] object-cover rounded-full mb-3 bg-primary border-4 border-primary"
                 />
-                <Text type={"h3"} bold clazzName={"mt-6 mb-2"}>
-                    {user.name}
+                <Text type={"h2"} bold clazzName={"mt-8 mb-2 text-primary"}>
+                    {users[userId]?.name}
                 </Text>
-                <Text type={"p"} clazzName={"mb-2"}>
-                   <strong> E-Mail: </strong> <br />{user.email}
+                <Text type={"p"} clazzName={"mt-0 mb-2"}>
+                    <strong>Benutzername:</strong> {users[userId]?.displayName}
                 </Text>
-                <Text type={"p"} clazzName={"mb-1"}>
-                    <strong> Telefonnummer: </strong> <br />{user.phone}
-                </Text>
+                {users[userId]?.primaryEmail && (
+                    <Text type={"p"} clazzName={"mb-6"}>
+                        <strong>Email:</strong> {users[userId]?.primaryEmail}
+                    </Text>
+                )}
             </div>
         </div>
     );
