@@ -1,0 +1,21 @@
+{
+  "name": "Food2gether",
+  "short_name": "F2G",
+  "icons": [
+    {
+      "src": "/assets/web-app-manifest-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/assets/web-app-manifest-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "theme_color": "#6e9d10",
+  "background_color": "#6e9d10",
+  "display": "standalone"
+}
