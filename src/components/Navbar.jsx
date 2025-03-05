@@ -53,38 +53,44 @@ function Navbar() {
                     </Text>
                 </Link>
 
-                <ul className="hidden md:flex items-center gap-10">
-                    {navItems.map((item, index) => (
-                        <button
-                            onClick={() => setActivetab(index)}
-                            className={` ${activeTab === index ? "border-b-2 bg-red-500" : "bg-green-500"}"`}
-                            key={index}
-                        >
-                            <Link reloadDocument key={index} to={item.to}>
-                                <Text type={"p"} light>
-                                    {item.name}
+                {loggedIn && (
+                    <>
+                        <ul className="hidden md:flex items-center gap-10">
+                            {navItems.map((item, index) => (
+                                <button
+                                    onClick={() => setActivetab(index)}
+                                    className={` ${activeTab === index ? "border-b-2 bg-red-500" : "bg-green-500"}"`}
+                                    key={index}
+                                >
+                                    <Link reloadDocument key={index} to={item.to}>
+                                        <Text type={"p"} light>
+                                            {item.name}
+                                        </Text>
+                                    </Link>
+                                </button>
+                            ))}
+
+                            <Link
+                                reloadDocument
+                                to={"/oauth2/sign_out"}
+                                className="bg-white px-5 py-2 rounded-xl"
+                            >
+                                <Text type={"p"} clazzName={"text-primary"}>
+                                    Logout
                                 </Text>
                             </Link>
-                        </button>
-                    ))}
-                    {loggedIn && (
-                        <Link
-                            reloadDocument
-                            to={"/oauth2/sign_out"}
-                            className="bg-white px-5 py-2 rounded-xl"
-                        >
-                            <Text type={"p"} clazzName={"text-primary"}>
-                                Logout
-                            </Text>
-                        </Link>
-                    )}
-                </ul>
+                        </ul>
 
-                <div className="flex items-center md:hidden">
-                    <button className="h-full w-full cursor-pointer mr-0" onClick={handleMenu}>
-                        <HiMiniBars3BottomLeft size={30} />
-                    </button>
-                </div>
+                        <div className="flex items-center md:hidden">
+                            <button
+                                className="h-full w-full cursor-pointer mr-0"
+                                onClick={handleMenu}
+                            >
+                                <HiMiniBars3BottomLeft size={30} />
+                            </button>
+                        </div>
+                    </>
+                )}
 
                 <ul
                     className={`absolute top-[120px] left-0 w-full h-[83.4vh] py-32 bg-primary-dark flex flex-col items-center justify-between gap-5 md:hidden transition-all ${menu ? "opacity-100" : "opacity-0 pointer-events-none"}`}
