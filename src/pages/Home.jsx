@@ -9,7 +9,24 @@ import Text from "../components/Text";
 import { useFood } from "../hooks/useFood";
 
 function Home() {
-    const { rooms, users } = useFood();
+    const { rooms, fetchUser } = useFood();
+    const [ fetchedRooms, setFetchedRooms ] = useState([]);
+
+    useEffect(() => {
+      const fetchOrganizers = async () => {
+        const roomsWithOrganizers = await Promise.all(
+            rooms.map(async (room) => {
+              const organizer = await fetchUser(room.organizerId);
+              return { room, organizer };
+            })
+        );
+        setFetchedRooms(roomsWithOrganizers);
+      };
+
+      if (rooms) {
+        fetchOrganizers();
+      }
+    }, [rooms]);
 
     return (
         <>
@@ -20,19 +37,19 @@ function Home() {
                     Hier kannst du die Räume der Restaurants sehen.
                 </Text>
                 <div className="flex flex-col w-full">
-                    {rooms?.map((room, index) => (
+                    {fetchedRooms.map(({ room, organizer }) => (
                         <Link
                             to={`/room/${room.id}`}
                             key={room.id}
                             state={{
                                 roomId: room.id,
-                                userName: users[index]?.name,
+                                userName: organizer?.displayName,
                                 restaurantId: room.restaurantId,
                             }}
                             className="mb-4"
                         >
                             <Box
-                                title={`Raum von ${users[index]?.name || ""}`}
+                                title={`Raum von ${organizer?.displayName || ""}`}
                                 button={"ansehen"}
                                 row
                             />

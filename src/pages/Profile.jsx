@@ -9,7 +9,7 @@ import useFood from "../hooks/useFood";
 import { use } from "react";
 
 function Profile() {
-    const { users } = useFood();
+    const { self } = useFood();
     const [userId, setUserId] = useState(0);
 
     return (
@@ -21,20 +21,26 @@ function Profile() {
                 <Text type={"p"} clazzName={"mb-6"}>
                     Hier kannst du dein Profil sehen.
                 </Text>
-                <img
-                    src={users[userId]?.profilePictureUrl}
-                    alt=""
-                    className="w-[200px] h-[200px] object-cover rounded-full mb-3 bg-primary border-4 border-primary"
-                />
+                {self?.profilePictureUrl ? (
+                    <img
+                        src={self.profilePictureUrl}
+                        alt=""
+                        className="w-[200px] h-[200px] object-cover rounded-full mb-3 bg-primary border-4 border-primary"
+                    />
+                ) : (
+                    <div className="w-[200px] h-[200px] flex items-center justify-center rounded-full mb-3 bg-primary border-4 border-primary">
+                        <p className={"text-9xl font-bold"}>?</p>
+                    </div>
+                )}
                 <Text type={"h2"} bold clazzName={"mt-8 mb-2 text-primary"}>
-                    {users[userId]?.name}
+                    {self?.displayName}
                 </Text>
                 <Text type={"p"} clazzName={"mt-0 mb-2"}>
-                    <strong>Benutzername:</strong> {users[userId]?.displayName}
+                    <strong>Benutzername:</strong> {self?.name}
                 </Text>
-                {users[userId]?.primaryEmail && (
+                {self?.primaryEmail && (
                     <Text type={"p"} clazzName={"mb-6"}>
-                        <strong>Email:</strong> {users[userId]?.primaryEmail}
+                        <strong>Email:</strong> {self?.primaryEmail}
                     </Text>
                 )}
             </div>

@@ -7,7 +7,7 @@ import Button from "../components/Button";
 import useUser from "../hooks/useUser";
 
 function Orders() {
-    const { orders, setOrders } = useUser();
+    const { orders } = useUser();
 
     return (
         <div className="navMargin">
