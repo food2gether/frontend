@@ -41,7 +41,7 @@ function Login() {
                 value={password}
                 onChange={handlePasswordChange}
             /> */}
-            <Link to={"/oauth2/start" + location.search} className="mt-5" onClick={handleLogin}>
+            <Link to={"/oauth2/start" + location.search} className="mt-5">
                 <Button type="primary" childrenClassess={"text-center px-5 py-1"} arrow={false}>
                     Login with SSO
                 </Button>
