@@ -5,8 +5,14 @@ const userContext = createContext({});
 
 const useUserContext = () => {
     const loggedIn = () => {
-       return document.cookie.includes("_oauth2_proxy");
+      let cookieTemp = document.cookie
+      document.cookie = "_oauth2_proxy=some_val;path=/;"
+      let cookieIndex = document.cookie.indexOf('_oauth2_proxy=');
+      document.cookie = cookieTemp;
+      // when cookie is set it will be removed from cookies
+      return cookieIndex === -1;
     }
+
     // check if cookie is set
     // const [loggedIn, setLoggedIn] = useState(document.cookie.includes("loggedIn=true"));
     const [order, setOrder] = useState({});

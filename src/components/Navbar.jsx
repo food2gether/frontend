@@ -42,7 +42,7 @@ function Navbar() {
             className="h-[80px] flex items-center justify-center fixed w-full top-0 bg-primary"
             style={{ zIndex: 999 }}
         >
-            <div className="flex items-center justify-between gap-10 px-4 container-nav">
+            <div className={`flex items-center ${loggedIn() ? "justify-between" : "justify-center"} gap-10 px-4 container-nav`}>
                 <Link reloadDocument to="/">
                     <Text type={"h2"} bold light>
                         Food
@@ -53,7 +53,7 @@ function Navbar() {
                     </Text>
                 </Link>
 
-                {loggedIn && (
+                {loggedIn() && (
                     <>
                         <ul className="hidden md:flex items-center gap-10">
                             {navItems.map((item, index) => (
@@ -89,20 +89,20 @@ function Navbar() {
                                 <HiMiniBars3BottomLeft size={30} />
                             </button>
                         </div>
+
+                        <ul
+                            className={`absolute top-[120px] left-0 w-full h-[83.4vh] py-32 bg-primary-dark flex flex-col items-center justify-between gap-5 md:hidden transition-all ${menu ? "opacity-100" : "opacity-0 pointer-events-none"}`}
+                        >
+                            {navItems.map((item, index) => (
+                                <Link reloadDocument key={index} to={item.to}>
+                                    <Text type={"p"} light>
+                                        {item.name}
+                                    </Text>
+                                </Link>
+                            ))}
+                        </ul>
                     </>
                 )}
-
-                <ul
-                    className={`absolute top-[120px] left-0 w-full h-[83.4vh] py-32 bg-primary-dark flex flex-col items-center justify-between gap-5 md:hidden transition-all ${menu ? "opacity-100" : "opacity-0 pointer-events-none"}`}
-                >
-                    {navItems.map((item, index) => (
-                        <Link reloadDocument key={index} to={item.to}>
-                            <Text type={"p"} light>
-                                {item.name}
-                            </Text>
-                        </Link>
-                    ))}
-                </ul>
             </div>
         </nav>
     );
