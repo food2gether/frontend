@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
-import qrcode from "qrcode-generator";
+import React from "react";
 
 // Components
 import Text from "../components/Text";
 import { useLocation } from "react-router-dom";
+import QRCode from "react-qr-code";
 
 function Payment() {
     const location = useLocation();
@@ -13,22 +13,6 @@ function Payment() {
         order && Object.keys(order).length > 0
             ? `${Object.values(order).reduce((acc, item) => acc + item.price * item.quantity, 0)}`
             : 0.0;
-
-    // QR-Code generieren
-    useEffect(() => {
-        var typeNumber = 4;
-        var errorCorrectionLevel = "L";
-        var cellSize = 14;
-        var margin = 0;
-
-        var data = "https://www.paypal.com/paypalme/robinahnn/" + moneyToPay + "EUR";
-
-        var qr = qrcode(typeNumber, errorCorrectionLevel);
-        qr.addData(data);
-        qr.make();
-
-        document.getElementById("qrcode").innerHTML = qr.createSvgTag(cellSize, margin);
-    }, []);
 
     return (
         <div className="navMargin">
@@ -41,8 +25,12 @@ function Payment() {
                         href={`https://www.paypal.com/paypalme/robinahnn/${moneyToPay}EUR`}
                         target="_blank"
                         rel="noreferrer"
-                        id="qrcode"
-                    ></a>
+                    >
+                        <QRCode
+                            value={`https://www.paypal.com/paypalme/robinahnn/${moneyToPay}EUR`}
+                            level={"M"}
+                        />
+                    </a>
                     <Text type="p" clazzName="mt-10 max-w-[400px]" center>
                         Bitte scanne den QR-Code, um zu bezahlen, oder klicke auf den QR-Code um die
                         Seite in einem neuen Tab zu öffnen.
