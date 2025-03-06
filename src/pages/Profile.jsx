@@ -5,6 +5,7 @@ import Text from "../components/Text";
 
 // Hooks
 import useAPI from "../hooks/useAPI";
+import PageHeader from "../components/PageHeader.jsx";
 
 function Profile() {
     const { self, fetchSelf } = useAPI();
@@ -15,12 +16,7 @@ function Profile() {
     return (
         <div className="navMargin">
             <div className="container">
-                <Text type={"h2"} bold>
-                    Profil
-                </Text>
-                <Text type={"p"} clazzName={"mb-6"}>
-                    Hier kannst du dein Profil sehen.
-                </Text>
+              <PageHeader title="Profil" description="Hier kannst du dein Profil sehen."/>
                 {self?.profilePictureUrl ? (
                     <img
                         src={self.profilePictureUrl}

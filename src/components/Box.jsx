@@ -7,7 +7,7 @@ import Button from "./Button";
 function Box({ children, title, details, img, button, room, onClick, row }) {
     return (
         <div
-            className="bg-white rounded-lg p-4 mb-2 border border-primary w-full min-w-[500px] max-w-[600px] h-auto cursor-pointer"
+            className="bg-white rounded-lg p-4 mb-2 border border-primary w-full min-w-[500px] h-auto cursor-pointer"
             onClick={onClick}
         >
             {!row && (

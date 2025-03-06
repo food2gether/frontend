@@ -52,6 +52,10 @@ const useApiContext = () => {
         return await apiFetch(`/api/v1/restaurants/${restaurantId}`, setter);
     };
 
+    const fetchAllRestaurants = async (setter) => {
+        return await apiFetch(`/api/v1/restaurants/`, setter);
+    };
+
     const fetchMenu = async (restaurantId, setter) => {
         return await apiFetch(`/api/v1/restaurants/${restaurantId}/menu`, setter);
     };
@@ -70,6 +74,16 @@ const useApiContext = () => {
         });
     };
 
+    const createSession = async (session, setter) => {
+        return await apiFetch(`/api/v1/sessions/`, setter, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(session),
+        });
+    };
+
     return {
         rooms,
         self,
@@ -78,9 +92,11 @@ const useApiContext = () => {
         fetchAllRooms,
         fetchRoom,
         fetchRestaurant,
+        fetchAllRestaurants,
         fetchMenu,
         fetchOrders,
         placeOrder,
+        createSession,
     };
 };
 export const useAPI = () => useContext(apiContext);
