@@ -2,8 +2,6 @@ import React from "react";
 
 // Components
 import Text from "../components/Text";
-import Box from "../components/Box";
-import Button from "../components/Button";
 import useUser from "../hooks/useUser";
 
 function Orders() {

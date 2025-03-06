@@ -6,26 +6,28 @@ import Box from "../components/Box";
 import Text from "../components/Text";
 
 // Hooks
-import { useFood } from "../hooks/useFood";
+import { useAPI } from "../hooks/useAPI";
 
 function Home() {
-    const { rooms, fetchUser } = useFood();
-    const [ fetchedRooms, setFetchedRooms ] = useState([]);
+    const { rooms, fetchAllRooms, fetchUser } = useAPI();
+    const [fetchedRooms, setFetchedRooms] = useState([]);
+
+    useEffect(fetchAllRooms, []);
 
     useEffect(() => {
-      const fetchOrganizers = async () => {
-        const roomsWithOrganizers = await Promise.all(
-            rooms.map(async (room) => {
-              const organizer = await fetchUser(room.organizerId);
-              return { room, organizer };
-            })
-        );
-        setFetchedRooms(roomsWithOrganizers);
-      };
+        const fetchOrganizers = async () => {
+            const roomsWithOrganizers = await Promise.all(
+                rooms.map(async (room) => {
+                    const organizer = await fetchUser(room.organizerId);
+                    return { room, organizer };
+                }),
+            );
+            setFetchedRooms(roomsWithOrganizers);
+        };
 
-      if (rooms) {
-        fetchOrganizers();
-      }
+        if (rooms) {
+            fetchOrganizers();
+        }
     }, [rooms]);
 
     return (

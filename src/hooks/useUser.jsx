@@ -13,8 +13,6 @@ const useUserContext = () => {
       return cookieIndex === -1;
     }
 
-    // check if cookie is set
-    // const [loggedIn, setLoggedIn] = useState(document.cookie.includes("loggedIn=true"));
     const [order, setOrder] = useState({});
     const [orders, setOrders] = useState([]);
     const [userOrders, setUserOrders] = useState([

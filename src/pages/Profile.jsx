@@ -1,16 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 
 // Components
 import Text from "../components/Text";
-import Button from "../components/Button";
 
 // Hooks
-import useFood from "../hooks/useFood";
-import { use } from "react";
+import useAPI from "../hooks/useAPI";
 
 function Profile() {
-    const { self } = useFood();
-    const [userId, setUserId] = useState(0);
+    const { self, fetchSelf } = useAPI();
+    useEffect(fetchSelf, []);
 
     return (
         <div className="navMargin">

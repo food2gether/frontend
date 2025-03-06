@@ -1,26 +1,49 @@
-import React, { useState, useEffect } from "react";
-import { useParams, Link, useLocation, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import Text from "../components/Text";
 import Button from "../components/Button";
-import NotFound from "./NotFound";
-import { useFood } from "../hooks/useFood";
-import { useUser } from "../hooks/useUser";
+import { LOADING_USER, useAPI } from "../hooks/useAPI";
 
 function Room() {
-    const location = useLocation();
-    const { roomId, userName, restaurantId } = location.state || {};
+    const { roomId } = useParams();
     const navigate = useNavigate();
-    const { rooms, fetchRestaurant, fetchMenu } = useFood();
+    const { fetchRoom, fetchUser, fetchRestaurant, fetchMenu } = useAPI();
+
+    const [room, setRoom] = useState({});
+    const [restaurant, setRestaurant] = useState({});
+    const [organizer, setOrganizer] = useState({ ...LOADING_USER });
+    const [menu, setMenu] = useState([]);
     const [order, setOrder] = useState({});
     const [totalPrice, setTotalPrice] = useState(0);
-    const [restaurant, setRestaurant] = useState({});
-    const [menu, setMenu] = useState([]);
 
     useEffect(() => {
-        if (!rooms.find((room) => room.id === parseInt(roomId))) {
-            navigate("/notfound");
-        }
-    }, [roomId, rooms, navigate]);
+        const fetch = async () => {
+            let room = await fetchRoom(roomId, setRoom);
+            if (!room) {
+                navigate("/notfound");
+            }
+        };
+        fetch();
+    }, [fetchRoom, roomId, navigate]);
+
+    useEffect(() => {
+        fetchUser(room.organizerId, setOrganizer);
+    }, [fetchUser, room]);
+
+    useEffect(() => {
+        fetchRestaurant(room.restaurantId, setRestaurant);
+    }, [fetchRestaurant, room]);
+
+    useEffect(() => {
+        fetchMenu(room.restaurantId, setMenu);
+    }, [fetchMenu, room]);
+
+    useEffect(() => {
+        const total = Object.values(order).reduce((acc, item) => {
+            return acc + item.quantity * item.price;
+        }, 0);
+        setTotalPrice(total);
+    }, [order]);
 
     const handleQuantityChangePlus = (product) => {
         setOrder((prev) => ({
@@ -43,29 +66,13 @@ function Room() {
             },
         }));
     };
-    useEffect(() => {
-        const total = Object.values(order).reduce((acc, item) => {
-            return acc + item.quantity * item.price;
-        }, 0);
-        setTotalPrice(total);
-    }, [order]);
-
-    useEffect(() => {
-        const fetchData = async () => {
-            const restaurantData = await fetchRestaurant(restaurantId);
-            setRestaurant(restaurantData);
-            const menuData = await fetchMenu(restaurantId);
-            setMenu(menuData);
-        };
-        fetchData();
-    }, [fetchRestaurant, restaurantId]);
 
     return (
         <>
             <div className="navMargin"></div>
             <div className="container">
                 <div className="flex flex-col items-center mt-10">
-                    <Text type="h1">Willkommen im Raum von {userName}</Text>
+                    <Text type="h1">Willkommen im Raum von {organizer.displayName}</Text>
                     <Text type="h2" clazzName={"mb-14 text-primary font-normal"}>
                         Restaurant: {restaurant.displayName}
                     </Text>
