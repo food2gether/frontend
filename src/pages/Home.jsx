@@ -9,7 +9,7 @@ import Text from "../components/Text";
 import { useAPI } from "../hooks/useAPI";
 
 function Home() {
-    const { rooms, fetchAllRooms, fetchUser } = useAPI();
+    const { rooms, fetchAllRooms, fetchUser, fetchRestaurant } = useAPI();
     const [fetchedRooms, setFetchedRooms] = useState([]);
 
     useEffect(() => {
@@ -17,18 +17,20 @@ function Home() {
     }, []);
 
     useEffect(() => {
-        const fetchOrganizers = async () => {
-            const roomsWithOrganizers = await Promise.all(
+        const fetchDetails = async () => {
+            const roomDetails = await Promise.all(
                 rooms.map(async (room) => {
                     const organizer = await fetchUser(room.organizerId);
-                    return { room, organizer };
+                    const restaurant = await fetchRestaurant(room.restaurantId);
+                    const deadline = new Date(room.deadline)
+                    return { room, organizer, restaurant, deadline };
                 }),
             );
-            setFetchedRooms(roomsWithOrganizers);
+            setFetchedRooms(roomDetails);
         };
 
         if (rooms) {
-            fetchOrganizers();
+            fetchDetails();
         }
     }, [rooms]);
 
@@ -36,24 +38,20 @@ function Home() {
         <>
             <div className="navMargin"></div>
             <div className="container">
-                <Text type="h2">Home</Text>
+                <Text type="h1">Home</Text>
                 <Text type={"p"} clazzName={"mb-6"}>
                     Hier kannst du die Räume der Restaurants sehen.
                 </Text>
                 <div className="flex flex-col w-full">
-                    {fetchedRooms.map(({ room, organizer }) => (
+                    {fetchedRooms.map(({ room, organizer, restaurant, deadline }) => (
                         <Link
                             to={`/room/${room.id}`}
                             key={room.id}
-                            state={{
-                                roomId: room.id,
-                                userName: organizer?.displayName,
-                                restaurantId: room.restaurantId,
-                            }}
                             className="mb-4"
                         >
                             <Box
                                 title={`Raum von ${organizer?.displayName || ""}`}
+                                details={`Bei ${restaurant.displayName} bis ${deadline.toLocaleDateString()} ${deadline.toLocaleTimeString()}`}
                                 button={"ansehen"}
                                 row
                             />

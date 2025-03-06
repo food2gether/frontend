@@ -9,7 +9,7 @@ function Room() {
     const navigate = useNavigate();
     const { fetchRoom, fetchUser, fetchRestaurant, fetchMenu } = useAPI();
 
-    const [room, setRoom] = useState({});
+    const [room, setRoom] = useState();
     const [restaurant, setRestaurant] = useState({});
     const [organizer, setOrganizer] = useState({ ...LOADING_USER });
     const [menu, setMenu] = useState([]);
