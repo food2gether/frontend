@@ -46,9 +46,9 @@ function Navbar() {
                 <Link reloadDocument to="/">
                     <Text type={"h2"} bold light>
                         Food
-                        <Text clazzName="text-primary-dark inline" type="h2">
+                        <span className="text-primary-dark inline">
                             2
-                        </Text>
+                        </span>
                         Gether
                     </Text>
                 </Link>

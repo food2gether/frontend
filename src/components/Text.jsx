@@ -11,7 +11,7 @@ function Text({ children, type, bold, center, light, clazzName }) {
             : type === "h1"
               ? "text-3xl font-bold"
               : type === "h2"
-                ? "text-2xl font-bold"
+                ? "fetchSelf"
                 : type === "h3"
                   ? "text-xl font-bold"
                   : type === "h4"

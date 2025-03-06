@@ -27,15 +27,21 @@ function Room() {
     }, [fetchRoom, roomId, navigate]);
 
     useEffect(() => {
-        fetchUser(room.organizerId, setOrganizer);
+      if (room) {
+          fetchUser(room.organizerId, setOrganizer);
+      }
     }, [fetchUser, room]);
 
     useEffect(() => {
-        fetchRestaurant(room.restaurantId, setRestaurant);
+      if (room) {
+          fetchRestaurant(room.restaurantId, setRestaurant);
+      }
     }, [fetchRestaurant, room]);
 
     useEffect(() => {
-        fetchMenu(room.restaurantId, setMenu);
+      if (room) {
+          fetchMenu(room.restaurantId, setMenu);
+      }
     }, [fetchMenu, room]);
 
     useEffect(() => {
