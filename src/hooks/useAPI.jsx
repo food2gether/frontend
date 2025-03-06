@@ -60,8 +60,8 @@ const useApiContext = () => {
         return await apiFetch(`/api/v1/restaurants/${restaurantId}/menu`, setter);
     };
 
-    const fetchOrders = async (sessionId, setter) => {
-        return await apiFetch(`/api/v1/sessions/${sessionId}/orders`, setter);
+    const fetchOrders = async ({ sessionId, profileId }, setter) => {
+        return await apiFetch(`/api/v1/sessions/${sessionId}/orders${profileId !== undefined ? `?profile_id=${profileId}` : ""}`, setter);
     };
 
     const placeOrder = async (sessionId, order) => {
