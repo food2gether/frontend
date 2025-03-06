@@ -50,8 +50,9 @@ function RoomNew() {
                     <select
                         className="border border-gray-300 px-5 py-[10px] rounded-xl mt-1 text-black w-full text-lg"
                         onChange={(e) => setRestaurantId(parseInt(e.target.value))}
+                        value={-1}
                     >
-                        <option value={-1} disabled selected>
+                        <option value={-1} disabled>
                             Bitte wählen
                         </option>
                         {restaurants.map((restaurant) => (

@@ -21,6 +21,7 @@ import Login from "./pages/Login.jsx";
 import { APIProvider } from "./hooks/useAPI.jsx";
 import { UserProvider } from "./hooks/useUser.jsx";
 import RoomNew from "./pages/RoomNew.jsx";
+import RoomManage from "./pages/RoomManage.jsx";
 
 const App = () => {
     return (
@@ -38,6 +39,7 @@ const App = () => {
                         <Route path="/requests" element={<Requests />} />
                         <Route path="/room/new" element={<RoomNew />} />
                         <Route path="/room/:roomId" element={<Room />} />
+                        <Route path="/room/:roomId/manage" element={<RoomManage />} />
                         <Route path="*" element={<NotFound />} />
                         <Route path="/notfound" element={<NotFound />} />
                         <Route path="/login" element={<Login />} />

@@ -102,10 +102,15 @@ function Room() {
 
     return (
         <>
-            <PageHeader
-                title={`Bestelle mit ${organizer.displayName} bei ${restaurant.displayName}`}
-                description={`Offen bis ${deadline?.toLocaleDateString()} um ${deadline?.toLocaleTimeString()}`}
-            />
+            <div className={"flex flex-row justify-between items-center"}>
+                <PageHeader
+                    title={`Bestelle mit ${organizer.displayName} bei ${restaurant.displayName}`}
+                    description={`Offen bis ${deadline?.toLocaleDateString()} um ${deadline?.toLocaleTimeString()}`}
+                />
+                {self?.id === room?.organizerId && (
+                    <Button link={`/room/${roomId}/manage`}>Verwalten</Button>
+                )}
+            </div>
             <div className="flex flex-row gap-5 mt-10">
                 <div className="flex flex-col items-center">
                     {Object.values(menu).map((product) => (
@@ -161,7 +166,7 @@ function Room() {
                         clazzName="mt-10"
                         onClick={() => console.log(order)}
                     >
-                        <Link to="/order" state={{ order: order, sessionId: roomId }}>
+                        <Link to="/order" state={{ order: order, sessionId: roomId, payee: organizer.name }}>
                             Bestellung abschicken
                         </Link>
                     </Button>

@@ -64,8 +64,8 @@ const useApiContext = () => {
         return await apiFetch(`/api/v1/sessions/${sessionId}/orders${profileId !== undefined ? `?profile_id=${profileId}` : ""}`, setter);
     };
 
-    const placeOrder = async (sessionId, order) => {
-        return await apiFetch(`/api/v1/sessions/${sessionId}/orders`, undefined, {
+    const placeOrder = async (sessionId, order, setter) => {
+        return await apiFetch(`/api/v1/sessions/${sessionId}/orders`, setter, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",

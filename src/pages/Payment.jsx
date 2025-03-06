@@ -8,12 +8,7 @@ import PageHeader from "../components/PageHeader.jsx";
 
 function Payment() {
     const location = useLocation();
-    const order = location.state?.robin;
-
-    const moneyToPay =
-        order && Object.keys(order).length > 0
-            ? `${Object.values(order).reduce((acc, item) => acc + item.price * item.quantity, 0)}`
-            : 0.0;
+    const { moneyToPay, payee } = location.state;
 
     return (
         <>
@@ -23,12 +18,12 @@ function Payment() {
                     Das macht dann {parseFloat(moneyToPay)?.toFixed(2)}€
                 </Text>
                 <a
-                    href={`https://www.paypal.com/paypalme/robinahnn/${moneyToPay}EUR`}
+                    href={`https://www.paypal.com/paypalme/${payee}/${moneyToPay}EUR`}
                     target="_blank"
                     rel="noreferrer"
                 >
                     <QRCode
-                        value={`https://www.paypal.com/paypalme/robinahnn/${moneyToPay}EUR`}
+                        value={`https://www.paypal.com/paypalme/${payee}/${moneyToPay}EUR`}
                         level={"M"}
                     />
                 </a>

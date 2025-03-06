@@ -11,9 +11,9 @@ function Order() {
     const { placeOrder, self, fetchSelf } = useAPI();
     const [orderDto, setOrderDto] = useState({});
     const location = useLocation();
-    const order = location.state?.order;
-    const sessionId = location.state?.sessionId;
-    console.log("sessionId", sessionId);
+    const { order, payee, sessionId } = location.state;
+    const moneyToPay = Object.values(order)
+        .reduce((acc, item) => acc + item.price * item.quantity, 0)
 
     useEffect(() => {
         fetchSelf();
@@ -55,12 +55,10 @@ function Order() {
                     <Text type={"p"} bold clazzName={"mt-6"}>
                         Gesamt:{" "}
                         {order && Object.keys(order).length > 0
-                            ? `${Object.values(order)
-                                  .reduce((acc, item) => acc + item.price * item.quantity, 0)
-                                  .toFixed(2)} €`
+                            ? `${moneyToPay.toFixed(2)} €`
                             : "0 €"}
                     </Text>
-                    <Link to="/payment" className="mt-5" state={{ robin: order }}>
+                    <Link to="/payment" className="mt-5" state={{ moneyToPay: moneyToPay, payee: payee }}>
                         <Button
                             type="primary"
                             clazzName="mt-5"
