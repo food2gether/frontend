@@ -33,7 +33,7 @@ function RoomManage() {
 
     useEffect(() => {
         if (self?.id !== room?.organizerId) {
-            //navigate("/");
+            navigate("/notfound");
         }
     }, [self, room]);
 
