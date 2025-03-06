@@ -38,26 +38,26 @@ function Home() {
 
     return (
         <>
-            <div className="navMargin"></div>
-            <div className="container">
-                <div className="flex justify-between items-end mb-6">
-                    <PageHeader title={"Home"} description="Hier kannst du die Räume der Restaurants sehen."/>
-                    <Button clazzName={"mb-0"} slide link="/room/new">
-                        <Text light>Neuen Raum erstellen</Text>
-                    </Button>
-                </div>
-                <div className="flex flex-col w-full">
-                    {fetchedRooms.map(({ room, organizer, restaurant, deadline }) => (
-                        <Link to={`/room/${room.id}`} key={room.id} className="mb-4">
-                            <Box
-                                title={`Raum von ${organizer?.displayName || ""}`}
-                                details={`Bei ${restaurant.displayName} bis ${deadline.toLocaleDateString()} ${deadline.toLocaleTimeString()}`}
-                                button={"ansehen"}
-                                row
-                            />
-                        </Link>
-                    ))}
-                </div>
+            <div className="flex justify-between items-end mb-6">
+                <PageHeader
+                    title={"Home"}
+                    description="Hier kannst du die Räume der Restaurants sehen."
+                />
+                <Button clazzName={"mb-0"} slide link="/room/new">
+                    <Text light>Neuen Raum erstellen</Text>
+                </Button>
+            </div>
+            <div className="flex flex-col w-full">
+                {fetchedRooms.map(({ room, organizer, restaurant, deadline }) => (
+                    <Link to={`/room/${room.id}`} key={room.id} className="mb-4">
+                        <Box
+                            title={`Raum von ${organizer?.displayName || ""}`}
+                            details={`Bei ${restaurant.displayName} bis ${deadline.toLocaleDateString()} ${deadline.toLocaleTimeString()}`}
+                            button={"ansehen"}
+                            row
+                        />
+                    </Link>
+                ))}
             </div>
         </>
     );

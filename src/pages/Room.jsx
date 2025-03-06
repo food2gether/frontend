@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import Text from "../components/Text";
 import Button from "../components/Button";
 import { LOADING_USER, useAPI } from "../hooks/useAPI";
+import PageHeader from "../components/PageHeader.jsx";
 
 function Room() {
     const { roomId } = useParams();
@@ -82,75 +83,63 @@ function Room() {
 
     return (
         <>
-            <div className="navMargin"></div>
-            <div className="container">
-                <div className="flex flex-col items-center mt-10">
-                    <Text type="h1">Willkommen im Raum von {organizer.displayName}</Text>
-                    <Text type="h2" clazzName={"text-primary font-normal"}>
-                        Restaurant: {restaurant.displayName}
-                    </Text>
-                    <Text clazzName={"mb-14 text-gray font-small"}>
-                        Offen bis {deadline?.toLocaleDateString()} um{" "}
-                        {deadline?.toLocaleTimeString()}
-                    </Text>
-                    {menu?.map((product) => (
-                        <div
-                            key={product.id}
-                            className="flex justify-between items-center bg-white w-full p-4 mb-3 rounded-2xl border-primary border"
-                        >
-                            <div>
-                                <Text type="h5">{product.name}</Text>
-                                <Text type="p" clazzName={"mb-2"}>
-                                    {product.description}
-                                </Text>
-                                <Text type="p" clazzName="text-primary">
-                                    {(product.price / 100).toFixed(2)} €
-                                </Text>
-                            </div>
-                            <div className="flex items-center gap-4">
-                                <Text type="p">Anzahl:</Text>
-                                <input
-                                    type="text"
-                                    min="0"
-                                    className="w-8 text-black outline-none border-none"
-                                    value={order[product.id]?.quantity || "0"}
-                                    onChange={(e) =>
-                                        updateQuantity(product, parseInt(e.target.value))
-                                    }
-                                />
-                                <div className="flex flex-col gap-1">
-                                    <button
-                                        className="w-7 h-7 bg-primary rounded-full flex items-center justify-center"
-                                        onClick={() => handleQuantityChangePlus(product)}
-                                    >
-                                        +
-                                    </button>
-                                    <button
-                                        className="w-7 h-7 bg-primary rounded-full flex items-center justify-center"
-                                        onClick={() => handleQuantityChangeMinus(product)}
-                                    >
-                                        -
-                                    </button>
-                                </div>
+          <PageHeader title={`Bestelle mit ${organizer.displayName} bei ${restaurant.displayName}`} description={`Offen bis ${deadline?.toLocaleDateString()} um ${deadline?.toLocaleTimeString()}`} />
+            <div className="flex flex-col items-center mt-10">
+                {menu?.map((product) => (
+                    <div
+                        key={product.id}
+                        className="flex justify-between items-center bg-white w-full p-4 mb-3 rounded-2xl border-primary border"
+                    >
+                        <div>
+                            <Text type="h5">{product.name}</Text>
+                            <Text type="p" clazzName={"mb-2"}>
+                                {product.description}
+                            </Text>
+                            <Text type="p" clazzName="text-primary">
+                                {(product.price / 100).toFixed(2)} €
+                            </Text>
+                        </div>
+                        <div className="flex items-center gap-4">
+                            <Text type="p">Anzahl:</Text>
+                            <input
+                                type="text"
+                                min="0"
+                                className="w-8 text-black outline-none border-none"
+                                value={order[product.id]?.quantity || "0"}
+                                onChange={(e) => updateQuantity(product, parseInt(e.target.value))}
+                            />
+                            <div className="flex flex-col gap-1">
+                                <button
+                                    className="w-7 h-7 bg-primary rounded-full flex items-center justify-center"
+                                    onClick={() => handleQuantityChangePlus(product)}
+                                >
+                                    +
+                                </button>
+                                <button
+                                    className="w-7 h-7 bg-primary rounded-full flex items-center justify-center"
+                                    onClick={() => handleQuantityChangeMinus(product)}
+                                >
+                                    -
+                                </button>
                             </div>
                         </div>
-                    ))}
-                    <Text type="h2" bold clazzName="mt-10">
-                        {order && Object.keys(order).length > 0
-                            ? `Gesamtpreis: ${totalPrice.toFixed(2)} €`
-                            : "Bitte wähle etwas aus!"}
-                    </Text>
-                    <Button
-                        type="primary"
-                        disabled={totalPrice <= 0}
-                        clazzName="mt-10"
-                        onClick={() => console.log(order)}
-                    >
-                        <Link to="/order" state={{ order: order, sessionId: roomId }}>
-                            Bestellung abschicken
-                        </Link>
-                    </Button>
-                </div>
+                    </div>
+                ))}
+                <Text type="h2" bold clazzName="mt-10">
+                    {order && Object.keys(order).length > 0
+                        ? `Gesamtpreis: ${totalPrice.toFixed(2)} €`
+                        : "Bitte wähle etwas aus!"}
+                </Text>
+                <Button
+                    type="primary"
+                    disabled={totalPrice <= 0}
+                    clazzName="mt-10"
+                    onClick={() => console.log(order)}
+                >
+                    <Link to="/order" state={{ order: order, sessionId: roomId }}>
+                        Bestellung abschicken
+                    </Link>
+                </Button>
             </div>
         </>
     );
