@@ -12,7 +12,9 @@ function Home() {
     const { rooms, fetchAllRooms, fetchUser } = useAPI();
     const [fetchedRooms, setFetchedRooms] = useState([]);
 
-    useEffect(fetchAllRooms, []);
+    useEffect(() => {
+      fetchAllRooms()
+    }, []);
 
     useEffect(() => {
         const fetchOrganizers = async () => {

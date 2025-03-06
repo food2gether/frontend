@@ -8,7 +8,9 @@ import useAPI from "../hooks/useAPI";
 
 function Profile() {
     const { self, fetchSelf } = useAPI();
-    useEffect(fetchSelf, []);
+    useEffect(() => {
+      fetchSelf()
+    }, []);
 
     return (
         <div className="navMargin">
