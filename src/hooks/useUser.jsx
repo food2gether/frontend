@@ -13,8 +13,7 @@ const useUserContext = () => {
       return cookieIndex === -1;
     }
 
-    const [order, setOrder] = useState({});
-    const [orders, setOrders] = useState([]);
+    const [orders, setOrders] = useState([]); // todo
     const [userOrders, setUserOrders] = useState([
         {
             id: 1,
@@ -67,31 +66,14 @@ const useUserContext = () => {
                 },
             ],
         },
-    ]);
-    const [moneyToPay, setMoneyToPay] = useState(0);
-    const [state, setState] = useState("home");
-    const [user, setUser] = useState({
-        name: "Robin Ahn",
-        age: 20,
-        email: "robin.ahn99@gmail.com",
-        phone: "+49 151 234 56 789",
-        profilePic: "https://robin-ahn.de/assets/avatar.svg",
-    });
+    ]); // todo
 
     return {
         loggedIn,
-        order,
-        setOrder,
         orders,
         setOrders,
         userOrders,
         setUserOrders,
-        moneyToPay,
-        setMoneyToPay,
-        state,
-        setState,
-        user,
-        setUser,
     };
 };
 

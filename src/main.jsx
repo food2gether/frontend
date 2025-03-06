@@ -21,6 +21,7 @@ import Payment from "./pages/Payment.jsx";
 import Login from "./pages/Login.jsx";
 import Logout from "./pages/Logout.jsx";
 import { APIProvider } from "./hooks/useAPI.jsx";
+import { UserProvider } from "./hooks/useUser.jsx";
 
 const App = () => {
     return (
@@ -49,6 +50,8 @@ const App = () => {
 // Hier wird UserProvider um App gesetzt
 createRoot(document.getElementById("root")).render(
     <StrictMode>
-        <App />
+        <UserProvider>
+            <App />
+        </UserProvider>
     </StrictMode>,
 );

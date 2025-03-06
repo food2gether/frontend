@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 
 // Components
 import Text from "../components/Text";
-import Box from "../components/Box";
 import Button from "../components/Button";
 
 // Hooks
