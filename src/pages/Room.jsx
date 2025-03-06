@@ -187,7 +187,7 @@ function Room() {
                                     {order?.items
                                         ?.map((item) => ({
                                             quantity: item.quantity,
-                                            price: menu[item.menuItemId].price / 100,
+                                            price: menu[item.menuItemId]?.price / 100,
                                         }))
                                         .reduce((a, b) => a + b.price * b.quantity, 0)
                                         .toFixed(2)}
@@ -196,20 +196,30 @@ function Room() {
                                 <div className={"flex items-center justify-center relative w-full"}>
                                     <div className="h-2 bg-gray-500 absolute w-[95%]"></div>
                                     <div
-                                        className={`h-2 bg-primary left-1 absolute w-[${order.state === "PAYED" ? "95" : "50"}%]`}
+                                        className={`h-2 ${order.state === "REJECTED" ? "bg-red-600" : "bg-primary"} left-1 absolute w-[${order.state === "PAYED" || order.state === "REJECTED" ? "95" : "50"}%]`}
                                     ></div>
                                     <div
                                         className={
                                             "relative flex gap-8 justify-between items-center w-full"
                                         }
                                     >
-                                        <div className={`rounded-full w-5 h-5 bg-primary`}></div>
-                                        <div className={`rounded-full w-5 h-5 bg-primary`}></div>
-                                        <div className={`rounded-full w-5 h-5 bg-primary`}></div>
+                                        <div
+                                            className={`rounded-full w-5 h-5 ${order.state === "REJECTED" ? "bg-red-600" : "bg-primary"}`}
+                                        ></div>
+                                        <div
+                                            className={`rounded-full w-5 h-5 ${order.state === "REJECTED" ? "bg-red-600" : "bg-primary"}`}
+                                        ></div>
+                                        <div
+                                            className={`rounded-full w-5 h-5 ${order.state === "REJECTED" ? "bg-red-600" : "bg-primary"}`}
+                                        ></div>
                                     </div>
                                 </div>
                                 <Text clazzName={"self-center"}>
-                                    {order.state === "PAYED" ? "Bezahlt" : "Abgeschickt"}
+                                    {order.state === "PAYED"
+                                        ? "Bezahlt"
+                                        : order.state === "REJECTED"
+                                          ? "Abgelehnt"
+                                          : "Abgeschickt"}
                                 </Text>
                             </div>
                         ))}
