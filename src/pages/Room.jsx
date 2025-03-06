@@ -54,26 +54,30 @@ function Room() {
         setTotalPrice(total);
     }, [order]);
 
-    const handleQuantityChangePlus = (product) => {
+    const updateQuantity = (product, quantity) => {
+        if (quantity === 0) {
+            const { [product.id]: _, ...rest } = order;
+            setOrder(rest);
+            return;
+        }
         setOrder((prev) => ({
             ...prev,
-            [product.name]: {
-                ...prev[product.name],
-                quantity: (prev[product.name]?.quantity || 0) + 1,
+            [product.id]: {
+                ...product,
+                quantity: quantity,
                 price: (product.price / 100).toFixed(2),
             },
         }));
     };
 
+    const handleQuantityChangePlus = (product) => {
+        const newQuantity = Math.max((order[product.id]?.quantity || 0) + 1, 0);
+        updateQuantity(product, newQuantity);
+    };
+
     const handleQuantityChangeMinus = (product) => {
-        setOrder((prev) => ({
-            ...prev,
-            [product.name]: {
-                ...prev[product.name],
-                quantity: Math.max((prev[product.name]?.quantity || 0) - 1, 0),
-                price: (product.price / 100).toFixed(2),
-            },
-        }));
+        const newQuantity = Math.max((order[product.id]?.quantity || 0) - 1, 0);
+        updateQuantity(product, newQuantity);
     };
 
     return (
@@ -89,9 +93,9 @@ function Room() {
                         Offen bis {deadline?.toLocaleDateString()} um{" "}
                         {deadline?.toLocaleTimeString()}
                     </Text>
-                    {menu?.map((product, index) => (
+                    {menu?.map((product) => (
                         <div
-                            key={index}
+                            key={product.id}
                             className="flex justify-between items-center bg-white w-full p-4 mb-3 rounded-2xl border-primary border"
                         >
                             <div>
@@ -109,15 +113,9 @@ function Room() {
                                     type="text"
                                     min="0"
                                     className="w-8 text-black outline-none border-none"
-                                    value={order[product.name]?.quantity || "0"}
+                                    value={order[product.id]?.quantity || "0"}
                                     onChange={(e) =>
-                                        setOrder((prev) => ({
-                                            ...prev,
-                                            [product.name]: {
-                                                ...prev[product.name],
-                                                quantity: parseInt(e.target.value) || 0,
-                                            },
-                                        }))
+                                        updateQuantity(product, parseInt(e.target.value))
                                     }
                                 />
                                 <div className="flex flex-col gap-1">
@@ -148,7 +146,7 @@ function Room() {
                         clazzName="mt-10"
                         onClick={() => console.log(order)}
                     >
-                        <Link to="/order" state={{ order: order }}>
+                        <Link to="/order" state={{ order: order, sessionId: roomId }}>
                             Bestellung abschicken
                         </Link>
                     </Button>

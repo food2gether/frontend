@@ -1,13 +1,33 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useParams, useLocation } from "react-router-dom";
 
 // Components
 import Text from "../components/Text";
 import Button from "../components/Button";
+import useAPI from "../hooks/useAPI.jsx";
 
 function Order() {
+    const { placeOrder, self, fetchSelf } = useAPI();
+    const [orderDto, setOrderDto] = useState({});
     const location = useLocation();
     const order = location.state?.order;
+    const sessionId = location.state?.sessionId;
+    console.log("sessionId", sessionId);
+
+    useEffect(() => {
+        fetchSelf();
+    }, []);
+
+    useEffect(() => {
+        const orderDto = {
+            profileId: self.id,
+            items: Object.values(order).map((order_item) => {
+                const { id, quantity } = order_item;
+                return { menuItemId: id, quantity };
+            }),
+        };
+        setOrderDto(orderDto);
+    }, [self]);
 
     return (
         <div className="navMargin">
@@ -19,17 +39,22 @@ function Order() {
                     Hier kannst du deine Bestellung überprüfen.
                 </Text>
                 {order &&
-                    Object.keys(order).map((product, index) => {
-                        const { quantity, price } = order[product]; // Zugriff auf Menge und Preis
+                    Object.keys(order).map((id, index) => {
+                        const { name, quantity, price } = order[id]; // Zugriff auf Menge und Preis
                         return (
                             <div
                                 key={index}
-                                className="flex justify-between items-center bg-white w-full mb-6 rounded"
+                                className={`flex justify-between items-center bg-white w-full py-1 px-2 rounded ${index % 2 === 0 ? "bg-primary-light" : ""} bg-opacity-25`}
                             >
+                                <Text type={"p"}>{name}</Text>
+                              <div className="flex gap-2">
                                 <Text type={"p"}>
-                                    {quantity}x&nbsp;&nbsp;{product}
+                                  {quantity}x
                                 </Text>
-                                <Text type={"p"}>{price}€</Text>
+                                <Text type={"p"}>
+                                  {price}€
+                                </Text>
+                              </div>
                             </div>
                         );
                     })}
@@ -48,7 +73,7 @@ function Order() {
                             <Button
                                 type="primary"
                                 clazzName="mt-5"
-                                onClick={() => console.log(order)}
+                                onClick={() => placeOrder(sessionId, orderDto)}
                             >
                                 Bezahlen
                             </Button>

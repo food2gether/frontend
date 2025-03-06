@@ -14,7 +14,7 @@ const apiFetch = async (input, setter, init = {}) => {
     const res = await fetch(input, { credentials: "same-origin", method: "GET", ...init });
 
     if (!res.ok) {
-        console.error((await res.text()) || res.statusText);
+        console.error(await res.text());
         return;
     }
 
@@ -38,7 +38,10 @@ const useApiContext = () => {
     };
 
     const fetchAllRooms = async (orderable = undefined) => {
-        return await apiFetch(`/api/v1/sessions${orderable !== undefined && `?orderable=${orderable}`}`, setRooms);
+        return await apiFetch(
+            `/api/v1/sessions${orderable !== undefined ? `?orderable=${orderable}` : ""}`,
+            setRooms,
+        );
     };
 
     const fetchRoom = async (sessionId, setter) => {
@@ -57,6 +60,16 @@ const useApiContext = () => {
         return await apiFetch(`/api/v1/sessions/${sessionId}/orders`, setter);
     };
 
+    const placeOrder = async (sessionId, order) => {
+        return await apiFetch(`/api/v1/sessions/${sessionId}/orders`, undefined, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(order),
+        });
+    };
+
     return {
         rooms,
         self,
@@ -67,6 +80,7 @@ const useApiContext = () => {
         fetchRestaurant,
         fetchMenu,
         fetchOrders,
+        placeOrder,
     };
 };
 export const useAPI = () => useContext(apiContext);
