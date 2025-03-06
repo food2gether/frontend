@@ -126,7 +126,7 @@ function Room() {
                             ? `Gesamtpreis: ${totalPrice.toFixed(2)} €`
                             : "Bitte wähle etwas aus!"}
                     </Text>
-                    <Link to="/order" state={{ robin: order }}>
+                    <Link to="/order" state={{ order: order }}>
                         <Button type="primary" clazzName="mt-10" onClick={() => console.log(order)}>
                             Bestellung abschicken
                         </Button>

@@ -7,7 +7,7 @@ import Button from "../components/Button";
 
 function Order() {
     const location = useLocation();
-    const order = location.state?.robin;
+    const order = location.state?.order;
 
     return (
         <div className="navMargin">
