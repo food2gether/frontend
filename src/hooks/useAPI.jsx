@@ -1,4 +1,5 @@
 import { createContext, useContext, useState } from "react";
+import order from "../pages/Order.jsx";
 
 const apiContext = createContext({});
 
@@ -36,8 +37,8 @@ const useApiContext = () => {
         return await apiFetch(`/api/v1/profiles/${userId}`, setter);
     };
 
-    const fetchAllRooms = async () => {
-        return await apiFetch("/api/v1/sessions", setRooms);
+    const fetchAllRooms = async (orderable = undefined) => {
+        return await apiFetch(`/api/v1/sessions${orderable !== undefined && `?orderable=${orderable}`}`, setRooms);
     };
 
     const fetchRoom = async (sessionId, setter) => {

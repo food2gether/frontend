@@ -11,6 +11,7 @@ function Room() {
 
     const [room, setRoom] = useState();
     const [restaurant, setRestaurant] = useState({});
+    const [deadline, setDeadline] = useState(new Date());
     const [organizer, setOrganizer] = useState({ ...LOADING_USER });
     const [menu, setMenu] = useState([]);
     const [order, setOrder] = useState({});
@@ -21,27 +22,29 @@ function Room() {
             let room = await fetchRoom(roomId, setRoom);
             if (!room) {
                 navigate("/notfound");
+            } else {
+                setDeadline(new Date(room.deadline));
             }
         };
         fetch();
     }, [fetchRoom, roomId, navigate]);
 
     useEffect(() => {
-      if (room) {
-          fetchUser(room.organizerId, setOrganizer);
-      }
+        if (room) {
+            fetchUser(room.organizerId, setOrganizer);
+        }
     }, [fetchUser, room]);
 
     useEffect(() => {
-      if (room) {
-          fetchRestaurant(room.restaurantId, setRestaurant);
-      }
+        if (room) {
+            fetchRestaurant(room.restaurantId, setRestaurant);
+        }
     }, [fetchRestaurant, room]);
 
     useEffect(() => {
-      if (room) {
-          fetchMenu(room.restaurantId, setMenu);
-      }
+        if (room) {
+            fetchMenu(room.restaurantId, setMenu);
+        }
     }, [fetchMenu, room]);
 
     useEffect(() => {
@@ -79,8 +82,12 @@ function Room() {
             <div className="container">
                 <div className="flex flex-col items-center mt-10">
                     <Text type="h1">Willkommen im Raum von {organizer.displayName}</Text>
-                    <Text type="h2" clazzName={"mb-14 text-primary font-normal"}>
+                    <Text type="h2" clazzName={"text-primary font-normal"}>
                         Restaurant: {restaurant.displayName}
+                    </Text>
+                    <Text clazzName={"mb-14 text-gray font-small"}>
+                        Offen bis {deadline?.toLocaleDateString()} um{" "}
+                        {deadline?.toLocaleTimeString()}
                     </Text>
                     {menu?.map((product, index) => (
                         <div
@@ -88,7 +95,10 @@ function Room() {
                             className="flex justify-between items-center bg-white w-full p-4 mb-3 rounded-2xl border-primary border"
                         >
                             <div>
-                                <Text type="p">{product.name}</Text>
+                                <Text type="h5">{product.name}</Text>
+                                <Text type="p" clazzName={"mb-2"}>
+                                    {product.description}
+                                </Text>
                                 <Text type="p" clazzName="text-primary">
                                     {(product.price / 100).toFixed(2)} €
                                 </Text>
@@ -132,11 +142,16 @@ function Room() {
                             ? `Gesamtpreis: ${totalPrice.toFixed(2)} €`
                             : "Bitte wähle etwas aus!"}
                     </Text>
-                    <Link to="/order" state={{ order: order }}>
-                        <Button type="primary" clazzName="mt-10" onClick={() => console.log(order)}>
+                    <Button
+                        type="primary"
+                        disabled={totalPrice <= 0}
+                        clazzName="mt-10"
+                        onClick={() => console.log(order)}
+                    >
+                        <Link to="/order" state={{ order: order }}>
                             Bestellung abschicken
-                        </Button>
-                    </Link>
+                        </Link>
+                    </Button>
                 </div>
             </div>
         </>

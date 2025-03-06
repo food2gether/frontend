@@ -13,7 +13,7 @@ function Button({
     externalLink,
     round,
     slide,
-    noAnimation,
+    disabled,
     arrow = <FaArrowRight />,
 }) {
     const renderArrow = () => {
@@ -38,6 +38,7 @@ function Button({
                 ? "bg-white text-primary border-2 border-white"
                 : "bg-primary text-white"
     }
+    ${disabled ? "pointer-events-none cursor-not-allowed opacity-50" : ""}
     ${clazzName}
   `;
 
@@ -56,7 +57,7 @@ function Button({
             {renderArrow()}
         </a>
     ) : (
-        <button className={buttonClasses} onClick={onClick}>
+        <button className={buttonClasses} onClick={disabled ? undefined : onClick}>
             <span className={childrenClasses}>{children}</span>
             {renderArrow()}
         </button>
