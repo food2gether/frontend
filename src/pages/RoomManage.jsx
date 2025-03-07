@@ -13,8 +13,9 @@ function RoomManage() {
     const [restaurant, setRestaurant] = useState({});
     const [menu, setMenu] = useState({});
     const [roomOrders, setRoomOrders] = useState([]);
+    const [users, setUsers] = useState({});
 
-    const { self, fetchSelf, fetchRoom, fetchRestaurant, fetchOrders, fetchMenu, placeOrder } =
+    const { self, fetchSelf, fetchUser, fetchRoom, fetchRestaurant, fetchOrders, fetchMenu, placeOrder } =
         useAPI();
 
     useEffect(() => {
@@ -61,6 +62,18 @@ function RoomManage() {
         }
     }, [fetchMenu, room]);
 
+  useEffect(() => {
+    // filter unique orders by profileId and fetch users
+    roomOrders
+        ?.map((order) => order.profileId)
+        .filter((value, index, self) => self.indexOf(value) === index)
+        .forEach((profileId) => {
+            fetchUser(profileId, (user) => {
+                setUsers((users) => ({ ...users, [profileId]: user }))
+            })
+        });
+  }, [roomOrders]);
+
     const updateOrderState = (orderId, state) => {
         const orderDto = {
             id: orderId,
@@ -86,9 +99,10 @@ function RoomManage() {
             />
             {roomOrders?.map((order) => (
                 <div
-                    className="bg-white rounded-lg p-4 mb-2 border border-primary w-full min-w-[500px] h-auto cursor-pointer"
+                    className="bg-white rounded-lg p-4 mb-2 border border-primary w-full min-w-[500px] h-auto"
                     key={order.id}
                 >
+                  <Text type={"h4"} clazzName={"mb-2"}>{users[order.profileId]?.displayName}</Text>
                     {order.items.map((item, index) => {
                         const menuItem = menu[item.menuItemId];
                         return (
@@ -124,7 +138,7 @@ function RoomManage() {
                         <Button
                             arrow={""}
                             type={"tertiary"}
-                            clazzName={`${order.state === "PAYED" && "!bg-primary"} border-primary-light`}
+                            clazzName={`${order.state === "PAYED" && "!bg-primary"} !border-primary-light`}
                             childrenClassess={`${order.state === "PAYED" && "!text-white"}`}
                             onClick={() => updateOrderState(order.id, "PAYED")}
                         >
@@ -133,13 +147,13 @@ function RoomManage() {
                         <Button
                             arrow={""}
                             type={"tertiary"}
-                            clazzName={`${order.state === "REJECTED" && "!bg-red-600"} border-red-600`}
+                            clazzName={`${order.state === "REJECTED" && "!bg-red-600"} !border-red-600`}
                             childrenClassess={`${order.state === "REJECTED" && "!text-white"}`}
                             onClick={() => updateOrderState(order.id, "REJECTED")}
                         >
                             Ablehnen
                         </Button>
-                        <Button arrow={""} type={"tertiary"} clazzName={"border-black"} onClick={() => updateOrderState(order.id, "OPEN")}>
+                        <Button arrow={""} type={"tertiary"} clazzName={"!border-black"} onClick={() => updateOrderState(order.id, "OPEN")}>
                             Zurücksetzen
                         </Button>
                     </div>

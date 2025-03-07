@@ -1,5 +1,5 @@
 import { createContext, useContext, useState } from "react";
-import order from "../pages/Order.jsx";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const apiContext = createContext({});
 
@@ -28,9 +28,20 @@ const apiFetch = async (input, setter, init = {}) => {
 const useApiContext = () => {
     const [rooms, setRooms] = useState([]);
     const [self, setSelf] = useState({ ...LOADING_USER });
+    const navigate = useNavigate();
+    const location = useLocation();
 
-    const fetchSelf = async () => {
-        return await apiFetch("/api/v1/profiles/me", setSelf);
+    const fetchSelf = async (redirect = true, setter) => {
+        const self = await apiFetch("/api/v1/profiles/me", (val) => {
+          setSelf(val)
+          if (setter) {
+              setter(val);
+          }
+        });
+        if (!self && redirect) {
+            navigate("/profile/setup?redirect=" + encodeURIComponent(location.pathname));
+        }
+        return self;
     };
 
     const fetchUser = async (userId, setter) => {
@@ -61,7 +72,10 @@ const useApiContext = () => {
     };
 
     const fetchOrders = async ({ sessionId, profileId }, setter) => {
-        return await apiFetch(`/api/v1/sessions/${sessionId}/orders${profileId !== undefined ? `?profile_id=${profileId}` : ""}`, setter);
+        return await apiFetch(
+            `/api/v1/sessions/${sessionId}/orders${profileId !== undefined ? `?profile_id=${profileId}` : ""}`,
+            setter,
+        );
     };
 
     const placeOrder = async (sessionId, order, setter) => {
@@ -84,6 +98,16 @@ const useApiContext = () => {
         });
     };
 
+    const setupProfile = async (dto, setter) => {
+        return await apiFetch(`/api/v1/profiles/`, setter, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(dto),
+        });
+    };
+
     return {
         rooms,
         self,
@@ -97,6 +121,7 @@ const useApiContext = () => {
         fetchOrders,
         placeOrder,
         createSession,
+        setupProfile,
     };
 };
 export const useAPI = () => useContext(apiContext);

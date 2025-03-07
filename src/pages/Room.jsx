@@ -166,7 +166,10 @@ function Room() {
                         clazzName="mt-10"
                         onClick={() => console.log(order)}
                     >
-                        <Link to="/order" state={{ order: order, sessionId: roomId, payee: organizer.name }}>
+                        <Link
+                            to="/order"
+                            state={{ order: order, sessionId: roomId, payee: organizer.name }}
+                        >
                             Bestellung abschicken
                         </Link>
                     </Button>
@@ -199,9 +202,9 @@ function Room() {
                                     €
                                 </Text>
                                 <div className={"flex items-center justify-center relative w-full"}>
-                                    <div className="h-2 bg-gray-500 absolute w-[95%]"></div>
+                                    <div className="h-1.5 bg-gray-500 absolute !w-[95%] w-[50%]"></div>
                                     <div
-                                        className={`h-2 ${order.state === "REJECTED" ? "bg-red-600" : "bg-primary"} left-1 absolute w-[${order.state === "PAYED" || order.state === "REJECTED" ? "95" : "50"}%]`}
+                                        className={`h-2 z-10 ${order.state === "REJECTED" ? "bg-red-600" : "bg-primary"} left-1 absolute w-[${order.state === "PAYED" || order.state === "REJECTED" ? "95" : "50"}%]`}
                                     ></div>
                                     <div
                                         className={
@@ -215,7 +218,7 @@ function Room() {
                                             className={`rounded-full w-5 h-5 ${order.state === "REJECTED" ? "bg-red-600" : "bg-primary"}`}
                                         ></div>
                                         <div
-                                            className={`rounded-full w-5 h-5 ${order.state === "REJECTED" ? "bg-red-600" : "bg-primary"}`}
+                                            className={`rounded-full w-5 h-5 ${order.state === "REJECTED" ? "bg-red-600" : order.state === "PAYED" ? "bg-primary" : "bg-gray-500"}`}
                                         ></div>
                                     </div>
                                 </div>

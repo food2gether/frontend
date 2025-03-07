@@ -12,7 +12,7 @@ import Text from "./Text";
 
 function Navbar() {
     const [menu, setMenu] = useState(false);
-    const [activeTab, setActivetab] = useState(0);
+    const [activeTab, setActiveTab] = useState(0);
 
     const { loggedIn } = useUser();
 
@@ -21,14 +21,13 @@ function Navbar() {
 
     const navItems = [
         { name: "Home", to: "/" },
-        { name: "Anfragen", to: "/Requests" },
-        { name: "Profil", to: "/profile" },
+        { name: "Profil", to: "/profile/me" },
     ];
 
     useEffect(() => {
         const activeIndex = navItems.findIndex((item) => item.to === currentRoute);
         if (activeIndex !== -1) {
-            setActivetab(activeIndex);
+            setActiveTab(activeIndex);
         }
     }, [currentRoute]);
 
@@ -57,7 +56,7 @@ function Navbar() {
                         <ul className="hidden md:flex items-center gap-10">
                             {navItems.map((item, index) => (
                                 <button
-                                    onClick={() => setActivetab(index)}
+                                    onClick={() => setActiveTab(index)}
                                     className={` ${activeTab === index ? "border-b-2 bg-red-500" : "bg-green-500"}"`}
                                     key={index}
                                 >
