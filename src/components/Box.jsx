@@ -4,7 +4,7 @@ import React from "react";
 import Text from "./Text";
 import Button from "./Button";
 
-function Box({ children, title, details, img, button, room, onClick, row }) {
+function Box({ children, title, details, img, button, session, onClick, row }) {
     return (
         <div
             className="bg-white rounded-lg p-4 mb-2 border border-primary w-full min-w-[500px] h-auto cursor-pointer"
@@ -22,7 +22,7 @@ function Box({ children, title, details, img, button, room, onClick, row }) {
                         <Text light>{button}</Text>
                     </Button>
                     <div className="absolute top-0 right-0 text-black">
-                        <Text>{room}</Text>
+                        <Text>{session}</Text>
                     </div>
                 </div>
             )}

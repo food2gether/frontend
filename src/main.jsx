@@ -8,10 +8,10 @@ import Navbar from "./components/Navbar.jsx";
 import ScrollToTop from "./components/ScrollToTop.jsx";
 
 // Pages
-import Home from "./pages/Home.jsx";
+import Home, { PATH as HOME_PATH } from "./pages/Home.jsx";
 import Order from "./pages/Order.jsx";
 import Profile from "./pages/Profile.jsx";
-import Room from "./pages/Room.jsx";
+import SessionView from "./pages/SessionView.jsx";
 import NotFound from "./pages/NotFound.jsx";
 import Payment from "./pages/Payment.jsx";
 
@@ -19,33 +19,33 @@ import Payment from "./pages/Payment.jsx";
 import Login from "./pages/Login.jsx";
 import { APIProvider } from "./hooks/useAPI.jsx";
 import { UserProvider } from "./hooks/useUser.jsx";
-import RoomNew from "./pages/RoomNew.jsx";
-import RoomManage from "./pages/RoomManage.jsx";
-import ProfileSetup from "./pages/ProfileSetup.jsx";
+import SessionCreate from "./pages/SessionCreate.jsx";
+import SessionManage from "./pages/SessionManage.jsx";
 
 const App = () => {
     return (
         <Router>
             <APIProvider>
-                <ScrollToTop />
-                <Navbar />
-                <div className="navMargin"></div>
-                <div className={"container"}>
-                    <Routes>
-                        <Route path="/" element={<Home />} />
-                        <Route path="/order" element={<Order />} />
-                        <Route path="/payment" element={<Payment />} />
-                        {/*<Route path="/profile/setup" element={<ProfileSetup />} />*/}
-                        <Route path="/profile/:id" element={<Profile />} />
-                        <Route path="/profile/" element={<Navigate to={"/profile/me"} />} />
-                        <Route path="/room/new" element={<RoomNew />} />
-                        <Route path="/room/:roomId" element={<Room />} />
-                        <Route path="/room/:roomId/manage" element={<RoomManage />} />
-                        <Route path="/404" element={<NotFound />} />
-                        <Route path="/login" element={<Login />} />
-                        <Route path="*" element={<Navigate to={"/404"} />} />
-                    </Routes>
-                </div>
+                <UserProvider>
+                    <ScrollToTop />
+                    <Navbar />
+                    <div className={"container mt-[80px]"}>
+                        <Routes>
+                            <Route path={HOME_PATH} element={<Home />} />
+                            <Route path="/order" element={<Order />} />
+                            <Route path="/payment" element={<Payment />} />
+                            {/*<Route path="/profile/edit" element={<ProfileSetup />} />*/}
+                            <Route path="/profile/:id" element={<Profile />} />
+                            <Route path="/profile/" element={<Navigate to={"/profile/me"} />} />
+                            <Route path="/session/new" element={<SessionCreate />} />
+                            <Route path="/session/:sessionId" element={<SessionView />} />
+                            <Route path="/session/:sessionId/manage" element={<SessionManage />} />
+                            <Route path="/404" element={<NotFound />} />
+                            <Route path="/login" element={<Login />} />
+                            <Route path="*" element={<Navigate to={"/404"} />} />
+                        </Routes>
+                    </div>
+                </UserProvider>
             </APIProvider>
         </Router>
     );
@@ -54,8 +54,6 @@ const App = () => {
 // Hier wird UserProvider um App gesetzt
 createRoot(document.getElementById("root")).render(
     <StrictMode>
-        <UserProvider>
-            <App />
-        </UserProvider>
+        <App />
     </StrictMode>,
 );

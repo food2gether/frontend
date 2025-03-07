@@ -5,7 +5,7 @@ import useAPI from "../hooks/useAPI.jsx";
 import Button from "../components/Button.jsx";
 import { useNavigate } from "react-router-dom";
 
-function RoomNew() {
+function SessionNew() {
     const [restaurants, setRestaurants] = useState([]);
     const [restaurantId, setRestaurantId] = useState(-1);
     const [deadline, setDeadline] = useState(new Date());
@@ -21,7 +21,7 @@ function RoomNew() {
     // correct the timezone offset
     const correctedTime = new Date(now.getTime() - now.getTimezoneOffset() * 60000);
 
-    const createRoom = () => {
+    const handleSubmit = () => {
         // correct deadline timezone offset
         const correctedDeadline = new Date(
             deadline.getTime() - deadline.getTimezoneOffset() * 60000,
@@ -33,15 +33,15 @@ function RoomNew() {
         };
 
         createSession(sessionDto, (session) => {
-            navigate("/room/" + session.id);
+            navigate("/session/" + session.id);
         });
     };
 
     return (
         <>
             <PageHeader
-                title="Neuer Raum"
-                description="Hier kannst du einen neuen Raum erstellen."
+                title="Neue SessionView"
+                description="Hier kannst du eine neue SessionView erstellen."
             />
 
             <div className="flex flex-row justify-center gap-5 my-16">
@@ -75,7 +75,7 @@ function RoomNew() {
                 </div>
             </div>
             <div className="flex flex-row justify-end">
-                <Button clazzName="self-end" onClick={createRoom} slide disabled={restaurantId < 0}>
+                <Button clazzName="self-end" onClick={handleSubmit} slide disabled={restaurantId < 0}>
                     Erstellen
                 </Button>
             </div>
@@ -83,4 +83,4 @@ function RoomNew() {
     );
 }
 
-export default RoomNew;
+export default SessionNew;

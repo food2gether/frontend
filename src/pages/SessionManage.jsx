@@ -5,17 +5,17 @@ import useAPI from "../hooks/useAPI.jsx";
 import Text from "../components/Text.jsx";
 import Button from "../components/Button.jsx";
 
-function RoomManage() {
-    const { roomId } = useParams();
+function SessionManage() {
+    const { sessionId } = useParams();
     const navigate = useNavigate();
 
-    const [room, setRoom] = useState();
+    const [session, setSession] = useState();
     const [restaurant, setRestaurant] = useState({});
     const [menu, setMenu] = useState({});
-    const [roomOrders, setRoomOrders] = useState([]);
+    const [sessionOrders, setSessionOrders] = useState([]);
     const [users, setUsers] = useState({});
 
-    const { self, fetchSelf, fetchUser, fetchRoom, fetchRestaurant, fetchOrders, fetchMenu, placeOrder } =
+    const { self, fetchSelf, fetchUser, fetchSession, fetchRestaurant, fetchOrders, fetchMenu, placeOrder } =
         useAPI();
 
     useEffect(() => {
@@ -23,36 +23,37 @@ function RoomManage() {
     }, []);
 
     useEffect(() => {
-        const fetch = async () => {
-            let room = await fetchRoom(roomId, setRoom);
-            if (!room) {
-                navigate("/notfound");
+      fetchSession(sessionId, setSession)
+          .then((session) => {
+            if (!session) {
+              window.alert("SessionView nicht gefunden");
+              navigate("/notfound");
             }
-        };
-        fetch();
-    }, [fetchRoom, roomId, navigate]);
+          });
+    }, [fetchSession, sessionId, navigate]);
 
     useEffect(() => {
-        if (self && room && self.id !== room.organizerId) {
-            navigate("/notfound");
+        if (self && session && self.id !== session.organizerId) {
+          window.alert("Du bist nicht berechtigt diesen SessionView zu verwalten");
+          //  navigate("/notfound");
         }
-    }, [self, room]);
+    }, [self, session]);
 
     useEffect(() => {
-        if (room) {
-            fetchRestaurant(room.restaurantId, setRestaurant);
+        if (session) {
+            fetchRestaurant(session.restaurantId, setRestaurant);
         }
-    }, [fetchRestaurant, room]);
+    }, [fetchRestaurant, session]);
 
     useEffect(() => {
-        if (room) {
-            fetchOrders({ sessionId: room.id }, setRoomOrders);
+        if (session) {
+            fetchOrders({ sessionId: session.id }, setSessionOrders);
         }
-    }, [fetchOrders, room]);
+    }, [fetchOrders, session]);
 
     useEffect(() => {
-        if (room) {
-            fetchMenu(room.restaurantId, (menu_arr) => {
+        if (session) {
+            fetchMenu(session.restaurantId, (menu_arr) => {
                 const menu_map = menu_arr?.reduce((menu_map, menu_item) => {
                     menu_map[menu_item.id] = menu_item;
                     return menu_map;
@@ -60,11 +61,11 @@ function RoomManage() {
                 setMenu(menu_map);
             });
         }
-    }, [fetchMenu, room]);
+    }, [fetchMenu, session]);
 
   useEffect(() => {
     // filter unique orders by profileId and fetch users
-    roomOrders
+    sessionOrders
         ?.map((order) => order.profileId)
         .filter((value, index, self) => self.indexOf(value) === index)
         .forEach((profileId) => {
@@ -72,32 +73,32 @@ function RoomManage() {
                 setUsers((users) => ({ ...users, [profileId]: user }))
             })
         });
-  }, [roomOrders]);
+  }, [sessionOrders]);
 
     const updateOrderState = (orderId, state) => {
         const orderDto = {
             id: orderId,
             state: state,
         };
-        placeOrder(roomId, orderDto, (order) => {
-            // update in roomOrders]
-            const updatedOrders = roomOrders.map((o) => {
+        placeOrder(sessionId, orderDto, (order) => {
+            // update in sessionOrders]
+            const updatedOrders = sessionOrders.map((o) => {
                 if (o.id === order.id) {
                     return order;
                 }
                 return o;
             });
-            setRoomOrders(updatedOrders);
+            setSessionOrders(updatedOrders);
         });
     };
 
     return (
         <>
             <PageHeader
-                title={`Verwalte bestellung bei ${restaurant.displayName || `Raum ${roomId}`}`}
+                title={`Verwalte bestellung bei ${restaurant.displayName || `Session ${sessionId}`}`}
                 description={"Hier kannst du die Bestellungen verwalten."}
             />
-            {roomOrders?.map((order) => (
+            {sessionOrders?.map((order) => (
                 <div
                     className="bg-white rounded-lg p-4 mb-2 border border-primary w-full min-w-[500px] h-auto"
                     key={order.id}
@@ -113,9 +114,9 @@ function RoomManage() {
                                 <div
                                     className={`flex flex-row justify-between w-full p-1 rounded ${index % 2 === 0 ? "bg-primary-light bg-opacity-50" : ""}`}
                                 >
-                                    <Text>{menuItem.name}</Text>
+                                    <Text>{menuItem?.name}</Text>
                                     <Text>
-                                        {item.quantity}x {(menuItem.price / 100).toFixed(2)}€
+                                        {item?.quantity}x {(menuItem?.price / 100).toFixed(2)}€
                                     </Text>
                                 </div>
                             </div>
@@ -129,7 +130,7 @@ function RoomManage() {
                             {order.items
                                 .reduce((prev, curr) => {
                                     const menuItem = menu[curr.menuItemId];
-                                    return prev + (curr.quantity * menuItem.price) / 100;
+                                    return prev + (curr?.quantity * menuItem?.price) / 100;
                                 }, 0)
                                 .toFixed(2)}
                         </Text>
@@ -163,4 +164,4 @@ function RoomManage() {
     );
 }
 
-export default RoomManage;
+export default SessionManage;

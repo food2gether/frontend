@@ -10,49 +10,41 @@ import { useAPI } from "../hooks/useAPI";
 import Button from "../components/Button.jsx";
 import PageHeader from "../components/PageHeader.jsx";
 
+export const PATH = "/";
+
 function Home() {
-    const { rooms, fetchAllRooms, fetchUser, fetchRestaurant } = useAPI();
-    const [fetchedRooms, setFetchedRooms] = useState([]);
+    const { fetchAllSessions, fetchUser, fetchRestaurant } = useAPI();
+    const [sessionDetails, setSessionDetails] = useState([]);
 
     useEffect(() => {
-        fetchAllRooms();
+        fetchAllSessions().then((response) => {
+            const detailPromises = response.data?.map(async (session) => {
+                const organizerResp = await fetchUser(session.organizerId);
+                const restaurantResp = await fetchRestaurant(session.restaurantId);
+                const deadline = new Date(session.deadline);
+                return { id: session.id, organizer: organizerResp.data, restaurant: restaurantResp.data, deadline };
+            });
+            Promise.all(detailPromises).then(setSessionDetails);
+        });
     }, []);
-
-    useEffect(() => {
-        const fetchDetails = async () => {
-            const roomDetails = await Promise.all(
-                rooms.map(async (room) => {
-                    const organizer = await fetchUser(room.organizerId);
-                    const restaurant = await fetchRestaurant(room.restaurantId);
-                    const deadline = new Date(room.deadline);
-                    return { room, organizer, restaurant, deadline };
-                }),
-            );
-            setFetchedRooms(roomDetails);
-        };
-
-        if (rooms) {
-            fetchDetails();
-        }
-    }, [rooms]);
 
     return (
         <>
             <div className="flex justify-between items-end mb-6">
                 <PageHeader
                     title={"Home"}
-                    description="Hier kannst du die Räume der Restaurants sehen."
+                    description="Hier kannst du die alle registrierten Sessions sehen."
                 />
-                <Button clazzName={"mb-0"} slide link="/room/new">
-                    <Text light>Neuen Raum erstellen</Text>
+                <Button clazzName={"mb-0"} slide link="/session/new">
+                    <Text light>Neue Session</Text>
                 </Button>
             </div>
             <div className="flex flex-col w-full">
-                {fetchedRooms.map(({ room, organizer, restaurant, deadline }) => (
-                    <Link to={`/room/${room.id}`} key={room.id} className="mb-4">
+                {sessionDetails.map((sessionDetail) => (
+                    <Link to={`/session/${sessionDetail.id}`} key={sessionDetail.id} className="mb-4">
                         <Box
-                            title={`Raum von ${organizer?.displayName || ""}`}
-                            details={`Bei ${restaurant.displayName} bis ${deadline.toLocaleDateString()} ${deadline.toLocaleTimeString()}`}
+                            title={`Session von ${sessionDetail.organizer.displayName}`}
+                            details={`Bei ${sessionDetail.restaurant.displayName} bis ${sessionDetail.deadline.toLocaleDateString()} ${sessionDetail.deadline.toLocaleTimeString()}`}
                             button={"ansehen"}
                             row
                         />

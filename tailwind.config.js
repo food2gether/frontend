@@ -27,10 +27,10 @@ export default {
                     dark: "#b91c1c",
                 },
             },
-            width: {
-              half: "50%",
-            },
         },
     },
-    plugins: [],
+  safelist: [
+    "w-[50%]",
+    "w-[95%]",
+  ],
 };

@@ -5,13 +5,13 @@ import Button from "../components/Button";
 import { LOADING_USER, useAPI } from "../hooks/useAPI";
 import PageHeader from "../components/PageHeader.jsx";
 
-function Room() {
-    const { roomId } = useParams();
+function SessionView() {
+    const { sessionId } = useParams();
     const navigate = useNavigate();
-    const { self, fetchOrders, fetchRoom, fetchUser, fetchSelf, fetchRestaurant, fetchMenu } =
+    const { self, fetchOrders, fetchSession, fetchUser, fetchSelf, fetchRestaurant, fetchMenu } =
         useAPI();
 
-    const [room, setRoom] = useState();
+    const [session, setSession] = useState();
     const [restaurant, setRestaurant] = useState({});
     const [deadline, setDeadline] = useState(new Date());
     const [organizer, setOrganizer] = useState({ ...LOADING_USER });
@@ -27,37 +27,37 @@ function Room() {
 
     useEffect(() => {
         if (self) {
-            fetchOrders({ sessionId: roomId, profileId: self.id }, setOwnOrders);
+            fetchOrders({ sessionId: sessionId, profileId: self.id }, setOwnOrders);
         }
     }, [self]);
 
     useEffect(() => {
         const fetch = async () => {
-            let room = await fetchRoom(roomId, setRoom);
-            if (!room) {
+            let session = await fetchSession(sessionId, setSession);
+            if (!session) {
                 navigate("/notfound");
             } else {
-                setDeadline(new Date(room.deadline));
+                setDeadline(new Date(session.deadline));
             }
         };
         fetch();
-    }, [fetchRoom, roomId, navigate]);
+    }, [fetchSession, sessionId, navigate]);
 
     useEffect(() => {
-        if (room) {
-            fetchUser(room.organizerId, setOrganizer);
+        if (session) {
+            fetchUser(session.organizerId, setOrganizer);
         }
-    }, [fetchUser, room]);
+    }, [fetchUser, session]);
 
     useEffect(() => {
-        if (room) {
-            fetchRestaurant(room.restaurantId, setRestaurant);
+        if (session) {
+            fetchRestaurant(session.restaurantId, setRestaurant);
         }
-    }, [fetchRestaurant, room]);
+    }, [fetchRestaurant, session]);
 
     useEffect(() => {
-        if (room) {
-            fetchMenu(room.restaurantId, (menu_arr) => {
+        if (session) {
+            fetchMenu(session.restaurantId, (menu_arr) => {
                 const menu_map = menu_arr?.reduce((menu_map, menu_item) => {
                     menu_map[menu_item.id] = menu_item;
                     return menu_map;
@@ -65,7 +65,7 @@ function Room() {
                 setMenu(menu_map);
             });
         }
-    }, [fetchMenu, room]);
+    }, [fetchMenu, session]);
 
     useEffect(() => {
         const total = Object.values(order).reduce((acc, item) => {
@@ -107,8 +107,8 @@ function Room() {
                     title={`Bestelle mit ${organizer.displayName} bei ${restaurant.displayName}`}
                     description={`Offen bis ${deadline?.toLocaleDateString()} um ${deadline?.toLocaleTimeString()}`}
                 />
-                {self?.id === room?.organizerId && (
-                    <Button link={`/room/${roomId}/manage`}>Verwalten</Button>
+                {self?.id === session?.organizerId && (
+                    <Button link={`/session/${sessionId}/manage`}>Verwalten</Button>
                 )}
             </div>
             <div className="flex flex-row gap-5 mt-10">
@@ -168,7 +168,7 @@ function Room() {
                     >
                         <Link
                             to="/order"
-                            state={{ order: order, sessionId: roomId, payee: organizer.name }}
+                            state={{ order: order, sessionId: sessionId, payee: organizer.name }}
                         >
                             Bestellung abschicken
                         </Link>
@@ -202,7 +202,7 @@ function Room() {
                                     €
                                 </Text>
                                 <div className={"flex items-center justify-center relative w-full"}>
-                                    <div className="h-1.5 bg-gray-500 absolute !w-[95%] w-[50%]"></div>
+                                    <div className="h-1.5 bg-gray-500 absolute w-[95%]"></div>
                                     <div
                                         className={`h-2 z-10 ${order.state === "REJECTED" ? "bg-red-600" : "bg-primary"} left-1 absolute w-[${order.state === "PAYED" || order.state === "REJECTED" ? "95" : "50"}%]`}
                                     ></div>
@@ -238,4 +238,4 @@ function Room() {
     );
 }
 
-export default Room;
+export default SessionView;
