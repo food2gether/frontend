@@ -1,61 +1,72 @@
-import React, { cloneElement } from "react";
-
-// Icons
+import { useNavigate } from "react-router-dom";
+import { cloneElement, useEffect, useState } from "react";
 import { FaArrowRight } from "react-icons/fa6";
-import { Link } from "react-router-dom";
 
 function Button({
     children,
-    className,
-    childrenClassess,
+    linkTo,
+    linkOptions,
     onClick,
-    type,
-    link,
+    checkDisabled,
+    className,
+    arrow,
     tabIndex,
-    round,
-    slide,
-    disabled,
-    arrow = <FaArrowRight />,
+    fill,
+    border,
 }) {
-    const renderArrow = () => {
-        if (!arrow) return null;
+    const navigate = useNavigate();
+    const [disabled, setDisabled] = useState(false);
 
-        return cloneElement(arrow, {
-            className: `${arrow.props.className || ""} h-5 w-5 transition-transform duration-200 ${
-                slide ? "group-hover:translate-x-1" : "group-hover:-translate-y-1"
-            }`.trim(),
-        });
+    useEffect(() => {
+        setDisabled(checkDisabled && checkDisabled())
+    }, [checkDisabled]);
+
+    if (fill === true) {
+        fill = "primary";
+        className += " text-white";
+    }
+
+    if (border === true) {
+        border = "primary";
+    }
+
+    if (arrow === true) {
+        arrow = <FaArrowRight />;
+    }
+
+    const handleClick = () => {
+        const disabled = checkDisabled && checkDisabled();
+        setDisabled(disabled);
+
+        if (!disabled) {
+            onClick && onClick();
+            linkTo && navigate(linkTo, linkOptions);
+        }
     };
 
-    const buttonClasses = `
-    btn group inline-flex items-center gap-2 transition-all duration-200
-    ${round ? "rounded-full" : "rounded-[12px]"}
-    ${
-        type === "primary"
-            ? "bg-primary text-white border-2 border-white-lighter hover:border-white-light"
-            : type === "secondary"
-              ? "bg-secondary text-white"
-              : type === "tertiary"
-                ? "bg-white text-primary border-2 border-white"
-                : "bg-primary text-white"
-    }
-    ${disabled ? "pointer-events-none cursor-not-allowed opacity-50" : ""}
-    ${className}
-  `;
-
-    const childrenClasses = `${childrenClassess} transition-transform duration-200
-    ${!slide ? "group-hover:-translate-y-1" : ""}
-  `;
-
-    return link ? (
-        <Link to={link} className={buttonClasses} tabIndex={tabIndex}>
-            <span className={childrenClasses}>{children}</span>
-            {renderArrow()}
-        </Link>
-    ) : (
-        <button className={buttonClasses} onClick={disabled ? undefined : onClick} onKeyDown={disabled ? undefined : onClick} tabIndex={tabIndex}>
-            <span className={childrenClasses}>{children}</span>
-            {renderArrow()}
+    return (
+        <button
+            onClick={handleClick}
+            onKeyDown={handleClick}
+            tabIndex={tabIndex}
+            className={
+                "px-2.5 py-1.5 cursor pointer text-sm group inline-flex items-center gap-2 transition-all duration-200 rounded-xl " +
+                (fill ? `bg-${fill} ${arrow ? "" : "hover:bg-opacity-80 text-white "} ` : "text-black ") +
+                (border ? `border-2 border-${border} border-opacity-100 hover:border-opacity-80 ` : "") +
+                (disabled ? "pointer-events-none cursor-not-allowed opacity-50 " : "") +
+                (arrow ? "" : "group-hover:-translate-y-1 ") +
+                className
+            }
+        >
+            <span className={"group-hover:-translate-y-1 transition-all duration-200"}>
+                {children}
+            </span>
+            {arrow
+                ? cloneElement(arrow, {
+                      ...arrow.props,
+                      className: `${arrow.props.className || ""} h-5 w-5 transition-transform duration-200 group-hover:translate-x-1`,
+                  })
+                : null}
         </button>
     );
 }

@@ -4,8 +4,8 @@ import React from "react";
 import Text from "../components/Text";
 import { useLocation } from "react-router-dom";
 import QRCode from "react-qr-code";
-import Button from "../components/Button.jsx";
 import Page from "../components/Page.jsx";
+import Button from "../components/Button.jsx";
 
 function Payment() {
     const location = useLocation();
@@ -14,10 +14,7 @@ function Payment() {
     const paypalLink = `https://www.paypal.com/paypalme/${payee}/${moneyToPay}EUR`;
 
     return (
-        <Page
-            title="Bestellung abgeschlossen"
-            className="w-full h-full flex flex-col items-center justify-center gap-10 mt-10"
-        >
+        <Page title="Bestellung abgeschlossen" className="w-full h-full flex flex-col items-center justify-center gap-10 mt-10">
             <Text type="h1">Das macht dann {parseFloat(moneyToPay).toFixed(2)}€</Text>
             <a href={paypalLink} target="_blank" rel="noreferrer">
                 <QRCode value={paypalLink} level={"M"} />
@@ -26,7 +23,7 @@ function Payment() {
                 Klicke oder Scanne den QR-Code, um zu bezahlen.
             </Text>
 
-            <Button slide link="/">
+            <Button arrow fill link="/">
                 Zurück zur Startseite
             </Button>
         </Page>

@@ -3,22 +3,31 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 // Components
 import Text from "../components/Text";
-import Button from "../components/Button";
 import useAPI from "../hooks/useAPI.jsx";
 import Page from "../components/Page.jsx";
 import useUser from "../hooks/useUser.jsx";
+import Button from "../components/Button.jsx";
 
 function Order() {
-    const { placeOrder } = useAPI();
+    const { placeOrder, fetchSession } = useAPI();
     const { data: self } = useUser();
     const navigate = useNavigate();
     const [orderDto, setOrderDto] = useState({});
     const location = useLocation();
     const { order, payee, sessionId } = location.state;
-    const moneyToPay = Object.values(order).reduce(
-        (acc, item) => acc + item.price * item.quantity,
-        0,
-    );
+    const moneyToPay = Object.values(order).reduce((acc, item) => acc + item.price * item.quantity, 0);
+
+    const [deadline, setDeadline] = useState();
+
+    useEffect(() => {
+        fetchSession(sessionId).then((response) => {
+            if (response.data) {
+                setDeadline(new Date(response.data.deadline + "Z"));
+            } else {
+                navigate("/404");
+            }
+        });
+    }, []);
 
     useEffect(() => {
         const orderDto = {
@@ -66,7 +75,7 @@ function Order() {
                     <Text type={"p"} bold className={"mt-6"}>
                         Gesamt: {moneyToPay.toFixed(2)} €
                     </Text>
-                    <Button type="primary" className="mt-5" onClick={submitOrder}>
+                    <Button fill arrow className="mt-5" onClick={submitOrder} checkDisabled={() => deadline < new Date()}>
                         Bezahlen
                     </Button>
                 </div>

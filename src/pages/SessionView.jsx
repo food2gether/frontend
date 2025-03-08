@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Text from "../components/Text";
-import Button from "../components/Button";
 import { LOADING_USER, useAPI } from "../hooks/useAPI";
 import useUser from "../hooks/useUser.jsx";
 import Page from "../components/Page.jsx";
-import { toDateTimeString, toInputDateTimeString, toTimezoneOffsetCorrectedInputDateTimeString } from "../util.js";
+import { toDateTimeString, toInputDateTimeString } from "../util.js";
+import Button from "../components/Button.jsx";
 
 function MenuItemCard({ name, description, price, quantity, updateQuantity }) {
     return (
@@ -21,24 +21,12 @@ function MenuItemCard({ name, description, price, quantity, updateQuantity }) {
             </div>
             <div className="flex items-center gap-4">
                 <Text type="p">Anzahl:</Text>
-                <input
-                    type="text"
-                    min="0"
-                    className="w-8 text-black outline-none border-none"
-                    value={quantity || 0}
-                    onChange={(e) => updateQuantity(parseInt(e.target.value))}
-                />
+                <input type="text" min="0" className="w-8 text-black outline-none border-none" value={quantity || 0} onChange={(e) => updateQuantity(parseInt(e.target.value))} />
                 <div className="flex flex-col gap-1">
-                    <button
-                        className="w-7 h-7 bg-primary rounded-full flex items-center justify-center"
-                        onClick={() => updateQuantity(quantity + 1)}
-                    >
+                    <button className="w-7 h-7 bg-primary rounded-full flex items-center justify-center" onClick={() => updateQuantity(quantity + 1)}>
                         +
                     </button>
-                    <button
-                        className="w-7 h-7 bg-primary rounded-full flex items-center justify-center"
-                        onClick={() => updateQuantity(Math.max(quantity - 1, 0))}
-                    >
+                    <button className="w-7 h-7 bg-primary rounded-full flex items-center justify-center" onClick={() => updateQuantity(Math.max(quantity - 1, 0))}>
                         -
                     </button>
                 </div>
@@ -72,20 +60,11 @@ function ProgressBar({ state }) {
         <>
             <div className={"flex items-center justify-center relative w-full"}>
                 <div className="h-1.5 bg-gray-500 absolute w-[95%] left-1"></div>
-                <div
-                    className={`h-2 z-10 ${progressColor} left-1 absolute`}
-                    style={{ width: `${((progress - 1) / 2) * 95}%` }}
-                ></div>
+                <div className={`h-2 z-10 ${progressColor} left-1 absolute`} style={{ width: `${((progress - 1) / 2) * 95}%` }}></div>
                 <div className="relative flex gap-8 justify-between items-center w-full">
-                    <div
-                        className={`rounded-full z-10 w-5 h-5 ${progress >= 1 ? progressColor : "bg-gray-500"}`}
-                    ></div>
-                    <div
-                        className={`rounded-full z-10 w-5 h-5 ${progress >= 2 ? progressColor : "bg-gray-500"}`}
-                    ></div>
-                    <div
-                        className={`rounded-full z-10 w-5 h-5 ${progress >= 3 ? progressColor : "bg-gray-500"}`}
-                    ></div>
+                    <div className={`rounded-full z-10 w-5 h-5 ${progress >= 1 ? progressColor : "bg-gray-500"}`}></div>
+                    <div className={`rounded-full z-10 w-5 h-5 ${progress >= 2 ? progressColor : "bg-gray-500"}`}></div>
+                    <div className={`rounded-full z-10 w-5 h-5 ${progress >= 3 ? progressColor : "bg-gray-500"}`}></div>
                 </div>
             </div>
             <Text className={"self-center"}>{translation[state]}</Text>
@@ -96,14 +75,7 @@ function ProgressBar({ state }) {
 function SessionView() {
     const { sessionId } = useParams();
     const navigate = useNavigate();
-    const {
-        fetchOrders,
-        fetchSession,
-        fetchProfile,
-        fetchRestaurant,
-        fetchMenu,
-        createOrUpdateSession,
-    } = useAPI();
+    const { fetchOrders, fetchSession, fetchProfile, fetchRestaurant, fetchMenu, createOrUpdateSession } = useAPI();
     const { data: self } = useUser();
 
     const [session, setSession] = useState();
@@ -121,7 +93,7 @@ function SessionView() {
         const sessionData = sessionResponse.data;
         if (sessionData) {
             setSession(sessionData);
-            setDeadline(new Date(sessionData.deadline));
+            setDeadline(new Date(sessionData.deadline + "Z"));
         } else {
             navigate("/notfound");
             return;
@@ -177,9 +149,7 @@ function SessionView() {
     };
 
     useEffect(() => {
-        setTotalPrice(
-            Object.values(order).reduce((acc, item) => acc + item.quantity * item.price, 0),
-        );
+        setTotalPrice(Object.values(order).reduce((acc, item) => acc + item.quantity * item.price, 0));
     }, [order]);
 
     const [deadlineValid, setDeadlineValid] = useState(true);
@@ -194,32 +164,28 @@ function SessionView() {
 
         createOrUpdateSession({ id: sessionId, deadline: newDeadline }).then((response) => {
             if (response.data) {
-                setDeadline(new Date(response.data.deadline));
+                setDeadline(new Date(response.data.deadline + "Z"));
             }
         });
     };
 
     return (
-        <Page
-            title={`Bestelle mit ${organizer.displayName} bei ${restaurant.displayName}`}
-            description={`Offen bis ${deadline && toDateTimeString(deadline)}`}
-        >
+        <Page title={`Bestelle mit ${organizer.displayName} bei ${restaurant.displayName}`} description={`Offen bis ${deadline && toDateTimeString(deadline)}`}>
             {self?.id === session?.organizerId && (
                 <div className={"flex flex-row justify-between items-center"}>
                     <input
                         type="datetime-local"
-                        className={
-                            "border border-primary py-[5px] px-[10px] rounded-xl text-black text-[20px]" +
-                            `${deadlineValid ? "" : " border-red-500"}`
-                        }
-                        defaultValue={deadline ? toTimezoneOffsetCorrectedInputDateTimeString(deadline) : undefined}
+                        className={"border border-primary py-[5px] px-[10px] rounded-xl text-black text-[20px]" + `${deadlineValid ? "" : " border-red-500"}`}
+                        defaultValue={deadline ? toInputDateTimeString(deadline) : undefined}
                         onChange={(e) => updateDeadline(e.target.value)}
                     />
-                    <Button link={`/session/${sessionId}/manage`}>Verwalten</Button>
+                    <Button linkTo={`/session/${sessionId}/manage`} fill arrow>
+                        Verwalten
+                    </Button>
                 </div>
             )}
             <div className="flex flex-row gap-5 mt-10">
-                <div className="flex flex-col items-center gap-3">
+                <div className="flex flex-col items-center gap-10">
                     <div className={"flex flex-col gap-4"}>
                         {Object.values(menu).map((product) => (
                             <MenuItemCard
@@ -232,18 +198,23 @@ function SessionView() {
                             />
                         ))}
                     </div>
-                    <Text type="h2" bold className="mt-10">
-                        {order && Object.keys(order).length > 0
-                            ? `Gesamtpreis: ${totalPrice.toFixed(2)} €`
-                            : "Bitte wähle etwas aus!"}
+                    <Text type="h2" bold>
+                        {order && Object.keys(order).length > 0 ? `Gesamtpreis: ${totalPrice.toFixed(2)} €` : "Bitte wähle etwas aus!"}
                     </Text>
-                    <Button type="primary" disabled={totalPrice <= 0} className="mt-10">
-                        <Link
-                            to="/order"
-                            state={{ order: order, sessionId: sessionId, payee: organizer.name }}
-                        >
-                            "Fortfahren"
-                        </Link>
+                    <Button
+                        linkTo="/order"
+                        linkOptions={{
+                            state: {
+                                order: order,
+                                sessionId: sessionId,
+                                payee: organizer.name,
+                            },
+                        }}
+                        fill
+                        arrow
+                        checkDisabled={() => totalPrice <= 0 || deadline < new Date()}
+                    >
+                        Fortfahren
                     </Button>
                 </div>
                 {/*Currently placed orders*/}
@@ -253,10 +224,7 @@ function SessionView() {
                             Deine Bestellungen
                         </Text>
                         {ownOrders?.map((order) => (
-                            <div
-                                key={order.id}
-                                className="flex flex-col justify-between bg-white w-full p-4 mb-3 rounded-2xl border-primary border"
-                            >
+                            <div key={order.id} className="flex flex-col justify-between bg-white w-full p-4 mb-3 rounded-2xl border-primary border">
                                 <div className="flex flex-col">
                                     {order?.items?.map((item) => (
                                         <Text key={item.id}>

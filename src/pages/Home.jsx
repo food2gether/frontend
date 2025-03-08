@@ -6,25 +6,11 @@ import Text from "../components/Text";
 
 // Hooks
 import { useAPI } from "../hooks/useAPI";
-import Button from "../components/Button.jsx";
 import Page from "../components/Page.jsx";
+import { toDateTimeString } from "../util.js";
+import Button from "../components/Button.jsx";
 
 export const PATH = "/";
-
-function Filter({ children, active, onClick, tabIndex }) {
-    return (
-        <div
-            onClick={onClick}
-            onKeyDown={onClick}
-            tabIndex={tabIndex}
-            className={`cursor-pointer rounded-3xl border border-primary py-1 px-3 bg-primary
-             hover:bg-primary-light hover:bg-opacity-75 transition-colors
-             ${active ? "text-white bg-opacity-100" : "text-black bg-opacity-0"}`}
-        >
-            {children}
-        </div>
-    );
-}
 
 function SessionBox({ sessionLink, title, description, tabIndex }) {
     return (
@@ -37,8 +23,8 @@ function SessionBox({ sessionLink, title, description, tabIndex }) {
                         </Text>
                         <Text>{description}</Text>
                     </div>
-                    <Button slide>
-                        <Text light>ansehen</Text>
+                    <Button arrow fill>
+                        ansehen
                     </Button>
                 </div>
             </div>
@@ -50,23 +36,19 @@ function Home() {
     const { fetchAllSessions, fetchProfile, fetchRestaurant } = useAPI();
     const [sessionDetails, setSessionDetails] = useState([]);
     const [filterActive, setFilterActive] = useState(true);
-    const [filterRestaurantId, setFilterRestaurantId] = useState(-1);
-
-    const handleRestaurant = (restaurantId) => {
-        setFilterRestaurantId(restaurantId);
-    };
 
     useEffect(() => {
         fetchAllSessions(filterActive ? true : undefined).then((response) => {
             const detailPromises = response.data?.map(async (session) => {
                 const organizerResp = await fetchProfile(session.organizerId);
                 const restaurantResp = await fetchRestaurant(session.restaurantId);
-                const deadline = new Date(session.deadline);
+                // Z indicates UTC time (GMT which is what the api service uses)
+                const deadline = new Date(session.deadline + "Z");
                 return {
                     id: session.id,
                     organizer: organizerResp.data,
                     restaurant: restaurantResp.data,
-                    deadline,
+                    deadline: deadline,
                 };
             });
             Promise.all(detailPromises).then(setSessionDetails);
@@ -77,23 +59,25 @@ function Home() {
         <Page title="Home" description="Hier kannst du die alle registrierten Sessions sehen.">
             <div className="flex justify-between items-center mb-6">
                 <div className={"flex-row flex justify-around gap-4 items-center"}>
-                    <Filter
+                    <Button
                         tabIndex={0}
-                        active={filterActive}
+                        fill={filterActive}
+                        border
                         onClick={() => setFilterActive(!filterActive)}
+                        className={filterActive ? "text-white" : "text-black"}
                     >
                         Aktive Sessions
-                    </Filter>
-                    <Filter
+                    </Button>
+                    <Button
                         tabIndex={1}
-                        active={filterRestaurantId >= 0}
-                        onClick={(event) => handleRestaurant(event.value)}
+                        border
+                        className="text-black"
                     >
                         Restaurant
-                    </Filter>
+                    </Button>
                 </div>
-                <Button className={"mb-0"} slide link="/session/new" tabIndex={2}>
-                    <Text light>Neue Session</Text>
+                <Button arrow fill linkTo="/session/new" tabIndex={2}>
+                    Neue Session
                 </Button>
             </div>
             <div className="flex flex-col w-full">
@@ -101,7 +85,7 @@ function Home() {
                     <SessionBox
                         sessionLink={`/session/${sessionDetail.id}`}
                         title={`${sessionDetail.organizer.displayName} bei ${sessionDetail.restaurant.displayName}`}
-                        description={`Bis ${sessionDetail.deadline.toLocaleDateString("de")} ${sessionDetail.deadline.toLocaleTimeString("de")}`}
+                        description={`Bis ${toDateTimeString(sessionDetail.deadline)}`}
                         tabIndex={index + 3}
                         key={sessionDetail.id}
                     />

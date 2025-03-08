@@ -1,11 +1,11 @@
 import Text from "../components/Text.jsx";
 import React, { useEffect, useState } from "react";
 import useAPI from "../hooks/useAPI.jsx";
-import Button from "../components/Button.jsx";
 import { useNavigate } from "react-router-dom";
 import Page from "../components/Page.jsx";
 import useUser from "../hooks/useUser.jsx";
-import { toTimezoneOffsetCorrectedInputDateTimeString } from "../util.js";
+import { toInputDateTimeString } from "../util.js";
+import Button from "../components/Button.jsx";
 
 function SessionNew() {
     const [restaurants, setRestaurants] = useState([]);
@@ -35,10 +35,7 @@ function SessionNew() {
     };
 
     return (
-        <Page
-            title="Neue SessionView"
-            description="Hier kannst du eine neue SessionView erstellen."
-        >
+        <Page title="Neue SessionView" description="Hier kannst du eine neue SessionView erstellen.">
             <div className="flex flex-row justify-center gap-5 my-16">
                 <div className="w-1/3">
                     <Text type="p">Restaurant</Text>
@@ -63,19 +60,14 @@ function SessionNew() {
                     <input
                         type="datetime-local"
                         className="border border-gray-300 px-5 py-[10px] rounded-xl mt-1 text-black w-full text-lg"
-                        defaultValue={toTimezoneOffsetCorrectedInputDateTimeString(deadline)}
-                        min={toTimezoneOffsetCorrectedInputDateTimeString(new Date())}
+                        defaultValue={toInputDateTimeString(deadline)}
+                        min={toInputDateTimeString(new Date())}
                         onChange={(e) => setDeadline(new Date(e.target.value))}
                     />
                 </div>
             </div>
             <div className="flex flex-row justify-end">
-                <Button
-                    className="self-end"
-                    onClick={handleSubmit}
-                    slide
-                    disabled={restaurantId < 0 || deadline <= new Date()}
-                >
+                <Button className="self-end" onClick={handleSubmit} fill arrow checkDisabled={() => restaurantId < 0 || deadline <= new Date()}>
                     Erstellen
                 </Button>
             </div>
