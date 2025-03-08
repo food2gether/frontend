@@ -1,23 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
-// Hooks
-import { useUser } from "../hooks/useUser";
+import { loggedIn } from "../hooks/useUser";
 
-// Icons
-import { HiMiniBars3BottomLeft } from "react-icons/hi2";
-
-// Components
 import Text from "./Text";
 
 function Navbar() {
-    const [menu, setMenu] = useState(false);
     const [activeTab, setActiveTab] = useState(0);
-
-    const { loggedIn } = useUser();
-
-    // get current route
-    const currentRoute = window.location.pathname;
+    const location = useLocation();
 
     const navItems = [
         { name: "Home", to: "/" },
@@ -25,28 +15,24 @@ function Navbar() {
     ];
 
     useEffect(() => {
-        const activeIndex = navItems.findIndex((item) => item.to === currentRoute);
+        const activeIndex = navItems.findIndex((item) => item.to === location.pathname);
         if (activeIndex !== -1) {
             setActiveTab(activeIndex);
         }
-    }, [currentRoute]);
-
-    const handleMenu = () => {
-        setMenu(!menu);
-    };
+    }, [location]);
 
     return (
         <nav
             className="h-[80px] flex items-center justify-center fixed w-full top-0 bg-primary"
             style={{ zIndex: 999 }}
         >
-            <div className={`flex items-center ${loggedIn() ? "justify-between" : "justify-center"} gap-10 px-4 container-nav`}>
+            <div
+                className={`flex items-center ${loggedIn() ? "justify-between" : "justify-center"} gap-10 px-4 container-nav`}
+            >
                 <Link reloadDocument to="/">
                     <Text type={"h2"} bold light>
                         Food
-                        <span className="text-primary-dark inline">
-                            2
-                        </span>
+                        <span className="text-primary-dark inline">2</span>
                         Gether
                     </Text>
                 </Link>
@@ -73,31 +59,10 @@ function Navbar() {
                                 to={"/oauth2/sign_out"}
                                 className="bg-white px-5 py-2 rounded-xl"
                             >
-                                <Text type={"p"} clazzName={"text-primary"}>
+                                <Text type={"p"} className={"text-primary"}>
                                     Logout
                                 </Text>
                             </Link>
-                        </ul>
-
-                        <div className="flex items-center md:hidden">
-                            <button
-                                className="h-full w-full cursor-pointer mr-0"
-                                onClick={handleMenu}
-                            >
-                                <HiMiniBars3BottomLeft size={30} />
-                            </button>
-                        </div>
-
-                        <ul
-                            className={`absolute top-[120px] left-0 w-full h-[83.4vh] py-32 bg-primary-dark flex flex-col items-center justify-between gap-5 md:hidden transition-all ${menu ? "opacity-100" : "opacity-0 pointer-events-none"}`}
-                        >
-                            {navItems.map((item, index) => (
-                                <Link reloadDocument key={index} to={item.to}>
-                                    <Text type={"p"} light>
-                                        {item.name}
-                                    </Text>
-                                </Link>
-                            ))}
                         </ul>
                     </>
                 )}

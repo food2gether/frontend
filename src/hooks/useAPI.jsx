@@ -1,7 +1,4 @@
-import { createContext, useContext, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-
-const apiContext = createContext({});
+import { createContext, useContext } from "react";
 
 export const LOADING_USER = {
     displayName: "Loading...",
@@ -10,121 +7,88 @@ export const LOADING_USER = {
     profilePictureUrl: "",
 };
 
-const apiFetch = async (input, setter, init = {}) => {
-    const res = await fetch(input, { credentials: "same-origin", method: "GET", ...init });
-
-    if (!res.ok) {
-        console.error(await res.text());
-        return;
-    }
+const apiFetch = async (input, init = {}) => {
+    const res = await fetch(input, { credentials: "same-origin", ...init });
 
     const data = await res.json();
-    if (setter) {
-        setter(data.data);
-    }
-    return data.data;
+    return data || { success: false, message: "Could not parse data" };
+};
+
+const apiPut = async (input, body, init = {}) => {
+    return apiFetch(input, {
+        method: "PUT",
+        body: JSON.stringify(body),
+        headers: { "Content-Type": "application/json" },
+        ...init,
+    });
+};
+
+const apiGet = async (input, init = {}) => {
+    return apiFetch(input, { method: "GET", ...init });
 };
 
 const useApiContext = () => {
-    const [rooms, setRooms] = useState([]);
-    const [self, setSelf] = useState({ ...LOADING_USER });
-    const navigate = useNavigate();
-    const location = useLocation();
-
-    const fetchSelf = async (redirect = true, setter) => {
-        const self = await apiFetch("/api/v1/profiles/me", (val) => {
-          setSelf(val)
-          if (setter) {
-              setter(val);
-          }
-        });
-        if (!self && redirect) {
-            navigate("/profile/setup?redirect=" + encodeURIComponent(location.pathname));
-        }
-        return self;
+    const fetchProfile = async (userId, setter) => {
+        return await apiGet(`/api/v1/profiles/${userId}`, setter);
     };
 
-    const fetchUser = async (userId, setter) => {
-        return await apiFetch(`/api/v1/profiles/${userId}`, setter);
-    };
-
-    const fetchAllRooms = async (orderable = undefined) => {
-        return await apiFetch(
+    const fetchAllSessions = async (orderable = undefined) => {
+        return await apiGet(
             `/api/v1/sessions${orderable !== undefined ? `?orderable=${orderable}` : ""}`,
-            setRooms,
         );
     };
 
-    const fetchRoom = async (sessionId, setter) => {
-        return await apiFetch(`/api/v1/sessions/${sessionId}`, setter);
+    const fetchSession = async (sessionId) => {
+        return await apiGet(`/api/v1/sessions/${sessionId}`);
     };
 
-    const fetchRestaurant = async (restaurantId, setter) => {
-        return await apiFetch(`/api/v1/restaurants/${restaurantId}`, setter);
+    const fetchRestaurant = async (restaurantId) => {
+        return await apiGet(`/api/v1/restaurants/${restaurantId}`);
     };
 
-    const fetchAllRestaurants = async (setter) => {
-        return await apiFetch(`/api/v1/restaurants/`, setter);
+    const fetchAllRestaurants = async () => {
+        return await apiGet(`/api/v1/restaurants/`);
     };
 
-    const fetchMenu = async (restaurantId, setter) => {
-        return await apiFetch(`/api/v1/restaurants/${restaurantId}/menu`, setter);
+    const fetchMenu = async (restaurantId) => {
+        return await apiGet(`/api/v1/restaurants/${restaurantId}/menu`);
     };
 
-    const fetchOrders = async ({ sessionId, profileId }, setter) => {
-        return await apiFetch(
+    const fetchOrders = async (sessionId, profileId) => {
+        return await apiGet(
             `/api/v1/sessions/${sessionId}/orders${profileId !== undefined ? `?profile_id=${profileId}` : ""}`,
-            setter,
         );
     };
 
-    const placeOrder = async (sessionId, order, setter) => {
-        return await apiFetch(`/api/v1/sessions/${sessionId}/orders`, setter, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(order),
-        });
+    const placeOrder = async (sessionId, order) => {
+        return await apiPut(`/api/v1/sessions/${sessionId}/orders`, order);
     };
 
-    const createSession = async (session, setter) => {
-        return await apiFetch(`/api/v1/sessions/`, setter, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(session),
-        });
+    const createSession = async (session) => {
+        return await apiPut(`/api/v1/sessions/`, session);
     };
 
-    const setupProfile = async (dto, setter) => {
-        return await apiFetch(`/api/v1/profiles/`, setter, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(dto),
-        });
+    const createOrUpdateProfile = async (dto) => {
+        return await apiPut(`/api/v1/profiles/`, dto);
     };
 
     return {
-        rooms,
-        self,
-        fetchSelf,
-        fetchUser,
-        fetchAllRooms,
-        fetchRoom,
+        fetchProfile,
+        fetchAllSessions,
+        fetchSession,
         fetchRestaurant,
         fetchAllRestaurants,
         fetchMenu,
         fetchOrders,
         placeOrder,
         createSession,
-        setupProfile,
+        createOrUpdateProfile,
     };
 };
+
+const apiContext = createContext({});
 export const useAPI = () => useContext(apiContext);
+
 export const APIProvider = ({ children }) => {
     const data = useApiContext();
     return <apiContext.Provider value={data}>{children}</apiContext.Provider>;

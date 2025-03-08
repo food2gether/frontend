@@ -1,4 +1,3 @@
-import PageHeader from "../components/PageHeader.jsx";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import Button from "../components/Button.jsx";
 import React, { useEffect, useState } from "react";
@@ -6,6 +5,8 @@ import { FaCheck } from "react-icons/fa6";
 import Text from "../components/Text.jsx";
 import { RxCross2 } from "react-icons/rx";
 import useAPI from "../hooks/useAPI.jsx";
+import Page from "../components/Page.jsx";
+import useUser from "../hooks/useUser.jsx";
 
 function ValidatedInput({ onChange, valid, placeholder, defaultValue }) {
     return (
@@ -18,11 +19,11 @@ function ValidatedInput({ onChange, valid, placeholder, defaultValue }) {
                 defaultValue={defaultValue}
             />
             {valid ? (
-                <Text type={"h3"} clazzName={"text-green-600"}>
+                <Text type={"h3"} className={"text-green-600"}>
                     <FaCheck />
                 </Text>
             ) : (
-                <Text type={"h3"} clazzName={"text-red-600"}>
+                <Text type={"h3"} className={"text-red-600"}>
                     <RxCross2 />
                 </Text>
             )}
@@ -30,10 +31,11 @@ function ValidatedInput({ onChange, valid, placeholder, defaultValue }) {
     );
 }
 
-function ProfileSetup() {
+function ProfileEdit() {
     const [searchParams, _] = useSearchParams();
     const navigate = useNavigate();
-    const { fetchSelf, setupProfile } = useAPI();
+    const { createOrUpdateProfile } = useAPI();
+    const { data: self } = useUser();
 
     const [displayName, setDisplayName] = useState("");
     const [paypalMe, setPaypalMe] = useState("");
@@ -41,19 +43,14 @@ function ProfileSetup() {
     const [profilePictureUrl, setProfilePictureUrl] = useState("");
     const [profilePictureUrlValid, setProfilePictureUrlValid] = useState(true);
     const [showError, setShowError] = useState(false);
-    const [self, setSelf] = useState(null);
 
     useEffect(() => {
-        fetchSelf(false, setSelf);
-    }, []);
-
-    useEffect(() => {
-      if (self) {
-        handlePaypalMeChange(self.name);
-        handleDisplayNameChange(self.displayName);
-        handleProfilePictureUrlChange(self.profilePictureUrl);
-      }
-    }, [self])
+        if (self) {
+            handlePaypalMeChange(self.name);
+            handleDisplayNameChange(self.displayName);
+            handleProfilePictureUrlChange(self.profilePictureUrl);
+        }
+    }, [self]);
 
     const handleDisplayNameChange = (val) => {
         setDisplayName(val);
@@ -71,7 +68,6 @@ function ProfileSetup() {
     };
 
     const handleFinish = () => {
-        console.log(self);
         if (displayName && paypalMeValid && profilePictureUrlValid) {
             const dto = {
                 displayName,
@@ -81,10 +77,10 @@ function ProfileSetup() {
             if (self) {
                 dto.id = self.id;
             }
-            setupProfile(dto, () => {
-                navigate(searchParams.get("redirect") || "/profile/me");
-            }).then((val) => {
-                if (!val) {
+            createOrUpdateProfile(dto).then((response) => {
+                if (response.data) {
+                    navigate(searchParams.get("redirect") || "/profile/me");
+                } else {
                     setShowError(true);
                 }
             });
@@ -92,12 +88,11 @@ function ProfileSetup() {
     };
 
     return (
-        <div className={"w-full flex flex-col gap-6"}>
-            <PageHeader
-                title={"Profil Setup"}
-                description={"Bitte richte erst dein Profil ein, bevor du weiter gehst."}
-            />
-
+        <Page
+            title={"Profil Setup"}
+            description={"Bitte richte erst dein Profil ein, bevor du weiter gehst."}
+            className={"w-full flex flex-col gap-6"}
+        >
             <div className={"flex flex-col gap-4"}>
                 <ValidatedInput
                     placeholder="Anzeige-Name"
@@ -121,20 +116,20 @@ function ProfileSetup() {
 
             <Button
                 slide
-                clazzName={"self-center"}
+                className={"self-center"}
                 disabled={!(displayName && paypalMeValid && profilePictureUrlValid)}
                 onClick={handleFinish}
             >
                 Fertig
             </Button>
             {showError && (
-                <Text type={"p"} clazzName={"!text-red-500 w-1/2 text-center self-center"}>
+                <Text type={"p"} className={"!text-red-500 w-1/2 text-center self-center"}>
                     Es gab einen Fehler. Hast du vielleicht den PayPal.me-Namen eines anderen
                     eingetragen?
                 </Text>
             )}
-        </div>
+        </Page>
     );
 }
 
-export default ProfileSetup;
+export default ProfileEdit;

@@ -2,15 +2,16 @@ import React, { cloneElement } from "react";
 
 // Icons
 import { FaArrowRight } from "react-icons/fa6";
+import { Link } from "react-router-dom";
 
 function Button({
     children,
-    clazzName,
+    className,
     childrenClassess,
     onClick,
     type,
     link,
-    externalLink,
+    tabIndex,
     round,
     slide,
     disabled,
@@ -27,7 +28,7 @@ function Button({
     };
 
     const buttonClasses = `
-    btn group inline-flex items-center gap-2 transition-all duration-200 mb-2
+    btn group inline-flex items-center gap-2 transition-all duration-200
     ${round ? "rounded-full" : "rounded-[12px]"}
     ${
         type === "primary"
@@ -39,7 +40,7 @@ function Button({
                 : "bg-primary text-white"
     }
     ${disabled ? "pointer-events-none cursor-not-allowed opacity-50" : ""}
-    ${clazzName}
+    ${className}
   `;
 
     const childrenClasses = `${childrenClassess} transition-transform duration-200
@@ -47,17 +48,12 @@ function Button({
   `;
 
     return link ? (
-        <a href={link} className={buttonClasses}>
+        <Link to={link} className={buttonClasses} tabIndex={tabIndex}>
             <span className={childrenClasses}>{children}</span>
             {renderArrow()}
-        </a>
-    ) : externalLink ? (
-        <a href={externalLink} className={buttonClasses} target="_blank" rel="noopener noreferrer">
-            <span className={childrenClasses}>{children}</span>
-            {renderArrow()}
-        </a>
+        </Link>
     ) : (
-        <button className={buttonClasses} onClick={disabled ? undefined : onClick}>
+        <button className={buttonClasses} onClick={disabled ? undefined : onClick} onKeyDown={disabled ? undefined : onClick} tabIndex={tabIndex}>
             <span className={childrenClasses}>{children}</span>
             {renderArrow()}
         </button>

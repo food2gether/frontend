@@ -4,19 +4,19 @@
 /*----------------------------------------------------*/
 
 #root {
-  height: calc(100dvh - 80px);
-  overflow: visible;
+    height: calc(100dvh - 80px);
+    overflow: visible;
 }
 
 html {
-  scroll-behavior: smooth;
+    scroll-behavior: smooth;
 }
 
 body {
-  height: calc(100dvh - 80px);
-  background: white;
-  color: white;
-  font-family: "Poppins", sans-serif;
+    height: calc(100dvh - 80px);
+    background: white;
+    color: white;
+    font-family: "Poppins", sans-serif;
 }
 
 /*----------------------------------------------------*/
@@ -30,84 +30,76 @@ $breakpoint-xs: 320px;
 
 /*----------------------------------------------------*/
 
-.test {
-  border: 1px solid red;
-}
-
-.navMargin {
-  margin-top: 80px;
-}
-
 .btn {
-  padding: 5px 10px;
-  cursor: pointer;
-  font-size: 20px;
-  transition: 0.3s;
-  position: relative;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 20px;
+    transition: 0.3s;
+    position: relative;
 }
 
 .container {
-  width: 70%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding-top: 50px;
+    width: 70%;
+    max-width: 1200px;
+    margin-inline: auto;
+    padding-top: 50px;
 
-  &-nav {
-    background: none;
-    width: 72%;
+    &-nav {
+        background: none;
+        width: 72%;
+
+        @media screen and (max-width: $breakpoint-xl) {
+            width: 82%;
+        }
+
+        @media screen and (max-width: $breakpoint-lg) {
+            width: 82%;
+        }
+
+        @media screen and (max-width: $breakpoint-md) {
+            width: 89%;
+        }
+
+        @media screen and (max-width: $breakpoint-sm) {
+            width: 95%;
+        }
+
+        @media screen and (max-width: $breakpoint-xs) {
+            width: 97%;
+        }
+    }
 
     @media screen and (max-width: $breakpoint-xl) {
-      width: 82%;
+        width: 80%;
     }
 
     @media screen and (max-width: $breakpoint-lg) {
-      width: 82%;
+        width: 80%;
     }
 
     @media screen and (max-width: $breakpoint-md) {
-      width: 89%;
+        width: 85%;
     }
 
     @media screen and (max-width: $breakpoint-sm) {
-      width: 95%;
+        width: 90%;
     }
 
     @media screen and (max-width: $breakpoint-xs) {
-      width: 97%;
+        width: 95%;
     }
-  }
-
-  @media screen and (max-width: $breakpoint-xl) {
-    width: 80%;
-  }
-
-  @media screen and (max-width: $breakpoint-lg) {
-    width: 80%;
-  }
-
-  @media screen and (max-width: $breakpoint-md) {
-    width: 85%;
-  }
-
-  @media screen and (max-width: $breakpoint-sm) {
-    width: 90%;
-  }
-
-  @media screen and (max-width: $breakpoint-xs) {
-    width: 95%;
-  }
 }
 
 /*----------------------------------------------------*/
 
 #qrcode {
-  width: 200px;
-  height: 200px;
+    width: 200px;
+    height: 200px;
 
-  svg {
-    width: 100% !important;
-    height: 100% !important;
-  }
+    svg {
+        width: 100% !important;
+        height: 100% !important;
+    }
 }
 
 /*----------------------------------------------------*/

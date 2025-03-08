@@ -27,10 +27,15 @@ export default {
                     dark: "#b91c1c",
                 },
             },
-            width: {
-              half: "50%",
-            },
         },
     },
-    plugins: [],
+    safelist: [
+        "w-[50%]",
+        "w-[95%]",
+        "!bg-primary",
+        "!bg-red-600",
+        "!border-primary",
+        "!border-red-600",
+        "!border-black",
+    ],
 };
