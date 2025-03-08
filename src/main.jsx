@@ -21,6 +21,7 @@ import { APIProvider } from "./hooks/useAPI.jsx";
 import { UserProvider } from "./hooks/useUser.jsx";
 import SessionCreate from "./pages/SessionCreate.jsx";
 import SessionManage from "./pages/SessionManage.jsx";
+import ProfileEdit from "./pages/ProfileEdit.jsx";
 
 const App = () => {
     return (
@@ -34,7 +35,7 @@ const App = () => {
                             <Route path={HOME_PATH} element={<Home />} />
                             <Route path="/order" element={<Order />} />
                             <Route path="/payment" element={<Payment />} />
-                            {/*<Route path="/profile/edit" element={<ProfileSetup />} />*/}
+                            <Route path="/profile/edit" element={<ProfileEdit />} />
                             <Route path="/profile/:id" element={<Profile />} />
                             <Route path="/profile/" element={<Navigate to={"/profile/me"} />} />
                             <Route path="/session/new" element={<SessionCreate />} />

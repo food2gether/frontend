@@ -1,20 +1,23 @@
-import PageHeader from "../components/PageHeader.jsx";
 import Text from "../components/Text.jsx";
 import React, { useEffect, useState } from "react";
 import useAPI from "../hooks/useAPI.jsx";
 import Button from "../components/Button.jsx";
 import { useNavigate } from "react-router-dom";
+import Page from "../components/Page.jsx";
+import useUser from "../hooks/useUser.jsx";
 
 function SessionNew() {
     const [restaurants, setRestaurants] = useState([]);
     const [restaurantId, setRestaurantId] = useState(-1);
     const [deadline, setDeadline] = useState(new Date());
-    const { self, fetchSelf, fetchAllRestaurants, createSession } = useAPI();
+    const { fetchAllRestaurants, createSession } = useAPI();
     const navigate = useNavigate();
+    const { data: self } = useUser();
 
     useEffect(() => {
-        fetchSelf();
-        fetchAllRestaurants(setRestaurants);
+        fetchAllRestaurants().then((response) => {
+            setRestaurants(response.data);
+        });
     }, []);
 
     const now = new Date();
@@ -32,18 +35,14 @@ function SessionNew() {
             deadline: correctedDeadline.toISOString(),
         };
 
-        createSession(sessionDto, (session) => {
-            navigate("/session/" + session.id);
+        createSession(sessionDto).then((response) => {
+            navigate("/session/" + response.data.id);
         });
     };
 
     return (
-        <>
-            <PageHeader
-                title="Neue SessionView"
-                description="Hier kannst du eine neue SessionView erstellen."
-            />
-
+        <Page title="Neue SessionView"
+              description="Hier kannst du eine neue SessionView erstellen.">
             <div className="flex flex-row justify-center gap-5 my-16">
                 <div className="w-1/3">
                     <Text type="p">Restaurant</Text>
@@ -68,18 +67,23 @@ function SessionNew() {
                     <input
                         type="datetime-local"
                         className="border border-gray-300 px-5 py-[10px] rounded-xl mt-1 text-black w-full text-lg"
-                        value={correctedTime.toISOString().slice(0, 16)}
+                        defaultValue={correctedTime.toISOString().slice(0, 16)}
                         min={correctedTime.toISOString().slice(0, 16)}
                         onChange={(e) => setDeadline(new Date(e.target.value))}
                     />
                 </div>
             </div>
             <div className="flex flex-row justify-end">
-                <Button className="self-end" onClick={handleSubmit} slide disabled={restaurantId < 0}>
+                <Button
+                    className="self-end"
+                    onClick={handleSubmit}
+                    slide
+                    disabled={restaurantId < 0 || deadline <= new Date()}
+                >
                     Erstellen
                 </Button>
             </div>
-        </>
+        </Page>
     );
 }
 

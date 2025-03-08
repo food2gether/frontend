@@ -61,11 +61,11 @@ function ProgressBar({ state }) {
     }
 
     let translation = {
-        "OPEN": "In Bearbeitung",
-        "SUBMITTED": "In Bearbeitung",
-        "PAYED": "Bezahlt",
-        "REJECTED": "Abgelehnt"
-    }
+        OPEN: "In Bearbeitung",
+        SUBMITTED: "In Bearbeitung",
+        PAYED: "Bezahlt",
+        REJECTED: "Abgelehnt",
+    };
 
     return (
         <>
@@ -87,9 +87,7 @@ function ProgressBar({ state }) {
                     ></div>
                 </div>
             </div>
-            <Text className={"self-center"}>
-                {translation[state]}
-            </Text>
+            <Text className={"self-center"}>{translation[state]}</Text>
         </>
     );
 }

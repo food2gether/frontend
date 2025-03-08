@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 // Components
 import Text from "../components/Text";
 import Button from "../components/Button";
 import useAPI from "../hooks/useAPI.jsx";
-import PageHeader from "../components/PageHeader.jsx";
 import Page from "../components/Page.jsx";
 import useUser from "../hooks/useUser.jsx";
 
@@ -41,7 +40,7 @@ function Order() {
                 },
             }),
         );
-    }
+    };
 
     return (
         <Page title="Bestellung" description="Prüfe noch einmal, ob alles stimmt">
@@ -67,11 +66,7 @@ function Order() {
                     <Text type={"p"} bold className={"mt-6"}>
                         Gesamt: {moneyToPay.toFixed(2)} €
                     </Text>
-                    <Button
-                        type="primary"
-                        className="mt-5"
-                        onClick={submitOrder}
-                    >
+                    <Button type="primary" className="mt-5" onClick={submitOrder}>
                         Bezahlen
                     </Button>
                 </div>

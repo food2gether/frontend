@@ -2,7 +2,6 @@ import React from "react";
 
 // Components
 import Button from "../components/Button";
-import PageHeader from "../components/PageHeader.jsx";
 import Page from "../components/Page.jsx";
 
 function NotFound() {

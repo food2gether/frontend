@@ -161,9 +161,23 @@ function SessionManage() {
                         </Text>
                     </div>
                     <div className={"flex flex-row gap-2 mt-2 justify-end"}>
-                        <ActionButton active={order.state === "PAYED"} colorKey="primary" label="Bezahlt" onClick={() => updateOrderState(order.id, "PAYED")} />
-                        <ActionButton active={order.state === "REJECTED"} colorKey="red-600" label="Ablehnen" onClick={() => updateOrderState(order.id, "REJECTED")} />
-                        <ActionButton colorKey="black" label="Zurücksetzen" onClick={() => updateOrderState(order.id, "OPEN")} />
+                        <ActionButton
+                            active={order.state === "PAYED"}
+                            colorKey="primary"
+                            label="Bezahlt"
+                            onClick={() => updateOrderState(order.id, "PAYED")}
+                        />
+                        <ActionButton
+                            active={order.state === "REJECTED"}
+                            colorKey="red-600"
+                            label="Ablehnen"
+                            onClick={() => updateOrderState(order.id, "REJECTED")}
+                        />
+                        <ActionButton
+                            colorKey="black"
+                            label="Zurücksetzen"
+                            onClick={() => updateOrderState(order.id, "OPEN")}
+                        />
                     </div>
                 </div>
             ))}

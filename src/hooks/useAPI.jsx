@@ -1,5 +1,4 @@
-import { createContext, useContext, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { createContext, useContext } from "react";
 
 export const LOADING_USER = {
     displayName: "Loading...",
@@ -16,11 +15,16 @@ const apiFetch = async (input, init = {}) => {
 };
 
 const apiPut = async (input, body, init = {}) => {
-    return apiFetch(input, { method: "PUT", body: JSON.stringify(body), headers: { "Content-Type": "application/json" }, ...init });
+    return apiFetch(input, {
+        method: "PUT",
+        body: JSON.stringify(body),
+        headers: { "Content-Type": "application/json" },
+        ...init,
+    });
 };
 
 const apiGet = async (input, init = {}) => {
-    return apiFetch(input, { method: "GET", ...init })
+    return apiFetch(input, { method: "GET", ...init });
 };
 
 const useApiContext = () => {
@@ -29,7 +33,9 @@ const useApiContext = () => {
     };
 
     const fetchAllSessions = async (orderable = undefined) => {
-        return await apiGet(`/api/v1/sessions${orderable !== undefined ? `?orderable=${orderable}` : ""}`);
+        return await apiGet(
+            `/api/v1/sessions${orderable !== undefined ? `?orderable=${orderable}` : ""}`,
+        );
     };
 
     const fetchSession = async (sessionId) => {
@@ -50,7 +56,7 @@ const useApiContext = () => {
 
     const fetchOrders = async (sessionId, profileId) => {
         return await apiGet(
-            `/api/v1/sessions/${sessionId}/orders${profileId !== undefined ? `?profile_id=${profileId}` : ""}`
+            `/api/v1/sessions/${sessionId}/orders${profileId !== undefined ? `?profile_id=${profileId}` : ""}`,
         );
     };
 
