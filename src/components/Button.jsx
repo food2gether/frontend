@@ -2,6 +2,7 @@ import React, { cloneElement } from "react";
 
 // Icons
 import { FaArrowRight } from "react-icons/fa6";
+import { Link } from "react-router-dom";
 
 function Button({
     children,
@@ -10,7 +11,7 @@ function Button({
     onClick,
     type,
     link,
-    externalLink,
+    tabIndex,
     round,
     slide,
     disabled,
@@ -47,17 +48,12 @@ function Button({
   `;
 
     return link ? (
-        <a href={link} className={buttonClasses}>
+        <Link to={link} className={buttonClasses} tabIndex={tabIndex}>
             <span className={childrenClasses}>{children}</span>
             {renderArrow()}
-        </a>
-    ) : externalLink ? (
-        <a href={externalLink} className={buttonClasses} target="_blank" rel="noopener noreferrer">
-            <span className={childrenClasses}>{children}</span>
-            {renderArrow()}
-        </a>
+        </Link>
     ) : (
-        <button className={buttonClasses} onClick={disabled ? undefined : onClick}>
+        <button className={buttonClasses} onClick={disabled ? undefined : onClick} onKeyDown={disabled ? undefined : onClick} tabIndex={tabIndex}>
             <span className={childrenClasses}>{children}</span>
             {renderArrow()}
         </button>
