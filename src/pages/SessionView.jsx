@@ -5,6 +5,7 @@ import Button from "../components/Button";
 import { LOADING_USER, useAPI } from "../hooks/useAPI";
 import useUser from "../hooks/useUser.jsx";
 import Page from "../components/Page.jsx";
+import { toDateTimeString, toInputDateTimeString, toTimezoneOffsetCorrectedInputDateTimeString } from "../util.js";
 
 function MenuItemCard({ name, description, price, quantity, updateQuantity }) {
     return (
@@ -95,12 +96,19 @@ function ProgressBar({ state }) {
 function SessionView() {
     const { sessionId } = useParams();
     const navigate = useNavigate();
-    const { fetchOrders, fetchSession, fetchProfile, fetchRestaurant, fetchMenu } = useAPI();
+    const {
+        fetchOrders,
+        fetchSession,
+        fetchProfile,
+        fetchRestaurant,
+        fetchMenu,
+        createOrUpdateSession,
+    } = useAPI();
     const { data: self } = useUser();
 
     const [session, setSession] = useState();
     const [restaurant, setRestaurant] = useState({});
-    const [deadline, setDeadline] = useState(new Date());
+    const [deadline, setDeadline] = useState();
     const [organizer, setOrganizer] = useState({ ...LOADING_USER });
     const [menu, setMenu] = useState({});
     const [order, setOrder] = useState({});
@@ -174,16 +182,42 @@ function SessionView() {
         );
     }, [order]);
 
+    const [deadlineValid, setDeadlineValid] = useState(true);
+    const updateDeadline = (value) => {
+        const newDeadline = new Date(value);
+        if (newDeadline < new Date()) {
+            setDeadlineValid(false);
+            return;
+        } else {
+            setDeadlineValid(true);
+        }
+
+        createOrUpdateSession({ id: sessionId, deadline: newDeadline }).then((response) => {
+            if (response.data) {
+                setDeadline(new Date(response.data.deadline));
+            }
+        });
+    };
+
     return (
         <Page
             title={`Bestelle mit ${organizer.displayName} bei ${restaurant.displayName}`}
-            description={`Offen bis ${deadline?.toLocaleDateString()} um ${deadline?.toLocaleTimeString()}`}
+            description={`Offen bis ${deadline && toDateTimeString(deadline)}`}
         >
-            <div className={"flex flex-row-reverse justify-between items-center"}>
-                {self?.id === session?.organizerId && (
+            {self?.id === session?.organizerId && (
+                <div className={"flex flex-row justify-between items-center"}>
+                    <input
+                        type="datetime-local"
+                        className={
+                            "border border-primary py-[5px] px-[10px] rounded-xl text-black text-[20px]" +
+                            `${deadlineValid ? "" : " border-red-500"}`
+                        }
+                        defaultValue={deadline ? toTimezoneOffsetCorrectedInputDateTimeString(deadline) : undefined}
+                        onChange={(e) => updateDeadline(e.target.value)}
+                    />
                     <Button link={`/session/${sessionId}/manage`}>Verwalten</Button>
-                )}
-            </div>
+                </div>
+            )}
             <div className="flex flex-row gap-5 mt-10">
                 <div className="flex flex-col items-center gap-3">
                     <div className={"flex flex-col gap-4"}>
@@ -208,7 +242,7 @@ function SessionView() {
                             to="/order"
                             state={{ order: order, sessionId: sessionId, payee: organizer.name }}
                         >
-                            Bestellung abschicken
+                            "Fortfahren"
                         </Link>
                     </Button>
                 </div>

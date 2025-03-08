@@ -5,12 +5,13 @@ import Button from "../components/Button.jsx";
 import { useNavigate } from "react-router-dom";
 import Page from "../components/Page.jsx";
 import useUser from "../hooks/useUser.jsx";
+import { toTimezoneOffsetCorrectedInputDateTimeString } from "../util.js";
 
 function SessionNew() {
     const [restaurants, setRestaurants] = useState([]);
     const [restaurantId, setRestaurantId] = useState(-1);
     const [deadline, setDeadline] = useState(new Date());
-    const { fetchAllRestaurants, createSession } = useAPI();
+    const { fetchAllRestaurants, createOrUpdateSession } = useAPI();
     const navigate = useNavigate();
     const { data: self } = useUser();
 
@@ -20,22 +21,15 @@ function SessionNew() {
         });
     }, []);
 
-    const now = new Date();
-    // correct the timezone offset
-    const correctedTime = new Date(now.getTime() - now.getTimezoneOffset() * 60000);
-
     const handleSubmit = () => {
         // correct deadline timezone offset
-        const correctedDeadline = new Date(
-            deadline.getTime() - deadline.getTimezoneOffset() * 60000,
-        );
         const sessionDto = {
             restaurantId: restaurantId,
             organizerId: self.id,
-            deadline: correctedDeadline.toISOString(),
+            deadline: deadline,
         };
 
-        createSession(sessionDto).then((response) => {
+        createOrUpdateSession(sessionDto).then((response) => {
             navigate("/session/" + response.data.id);
         });
     };
@@ -69,8 +63,8 @@ function SessionNew() {
                     <input
                         type="datetime-local"
                         className="border border-gray-300 px-5 py-[10px] rounded-xl mt-1 text-black w-full text-lg"
-                        defaultValue={correctedTime.toISOString().slice(0, 16)}
-                        min={correctedTime.toISOString().slice(0, 16)}
+                        defaultValue={toTimezoneOffsetCorrectedInputDateTimeString(deadline)}
+                        min={toTimezoneOffsetCorrectedInputDateTimeString(new Date())}
                         onChange={(e) => setDeadline(new Date(e.target.value))}
                     />
                 </div>
