@@ -19,7 +19,7 @@ function Button({
     const [disabled, setDisabled] = useState(false);
 
     useEffect(() => {
-        setDisabled(checkDisabled && checkDisabled())
+        setDisabled(checkDisabled?.())
     }, [checkDisabled]);
 
     if (fill === true) {
@@ -36,11 +36,11 @@ function Button({
     }
 
     const handleClick = () => {
-        const disabled = checkDisabled && checkDisabled();
+        const disabled = checkDisabled?.();
         setDisabled(disabled);
 
         if (!disabled) {
-            onClick && onClick();
+            onClick?.();
             linkTo && navigate(linkTo, linkOptions);
         }
     };
