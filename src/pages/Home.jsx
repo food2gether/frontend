@@ -57,7 +57,7 @@ function Home() {
     };
 
     useEffect(() => {
-        fetchAllSessions().then((response) => {
+        fetchAllSessions(filterActive ? true : undefined).then((response) => {
             const detailPromises = response.data?.map(async (session) => {
                 const organizerResp = await fetchProfile(session.organizerId);
                 const restaurantResp = await fetchRestaurant(session.restaurantId);
@@ -71,7 +71,7 @@ function Home() {
             });
             Promise.all(detailPromises).then(setSessionDetails);
         });
-    }, []);
+    }, [filterActive]);
 
     return (
         <Page title="Home" description="Hier kannst du die alle registrierten Sessions sehen.">
@@ -82,7 +82,7 @@ function Home() {
                         active={filterActive}
                         onClick={() => setFilterActive(!filterActive)}
                     >
-                        Nur Aktiv
+                        Aktive Sessions
                     </Filter>
                     <Filter
                         tabIndex={1}
