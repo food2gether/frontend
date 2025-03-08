@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { cloneElement, useEffect, useState } from "react";
 import { FaArrowRight } from "react-icons/fa6";
+import PropTypes from "prop-types";
 
 function Button({
     children,
@@ -69,6 +70,19 @@ function Button({
                 : null}
         </button>
     );
+}
+
+Button.prototype = {
+    children: PropTypes.node,
+    linkTo: PropTypes.string,
+    linkOptions: PropTypes.element,
+    onClick: PropTypes.func,
+    checkDisabled: PropTypes.func,
+    className: PropTypes.string,
+    arrow: PropTypes.node,
+    tabIndex: PropTypes.number,
+    fill: PropTypes.string,
+    border: PropTypes.string,
 }
 
 export default Button;
