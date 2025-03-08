@@ -5,6 +5,7 @@ logs
 **/*.back.*
 .vite
 .env
+.idea
 
 node_modules
 bower_components

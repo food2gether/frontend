@@ -29,5 +29,13 @@ export default {
             },
         },
     },
-    safelist: ["w-[50%]", "w-[95%]", "!bg-primary", "!bg-red-600", "!border-primary", "!border-red-600", "!border-black"],
+    safelist: [
+        "w-[50%]",
+        "w-[95%]",
+        "!bg-primary",
+        "!bg-red-600",
+        "!border-primary",
+        "!border-red-600",
+        "!border-black",
+    ],
 };

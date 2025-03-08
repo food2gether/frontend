@@ -41,8 +41,10 @@ function SessionNew() {
     };
 
     return (
-        <Page title="Neue SessionView"
-              description="Hier kannst du eine neue SessionView erstellen.">
+        <Page
+            title="Neue SessionView"
+            description="Hier kannst du eine neue SessionView erstellen."
+        >
             <div className="flex flex-row justify-center gap-5 my-16">
                 <div className="w-1/3">
                     <Text type="p">Restaurant</Text>

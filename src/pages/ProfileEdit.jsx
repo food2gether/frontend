@@ -83,7 +83,7 @@ function ProfileEdit() {
                 } else {
                     setShowError(true);
                 }
-            })
+            });
         }
     };
 

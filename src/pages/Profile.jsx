@@ -32,7 +32,9 @@ function Profile() {
     return (
         <Page title="Profil" description="Hier kannst du dein Profil sehen.">
             <div className={"flex flex-row items-center justify-end"}>
-                <Button link="/profile/edit" slide>Profil bearbeiten</Button>
+                <Button link="/profile/edit" slide>
+                    Profil bearbeiten
+                </Button>
             </div>
             <div className="flex flex-row">
                 <div className="w-1/3">
