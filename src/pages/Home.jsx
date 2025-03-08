@@ -78,8 +78,8 @@ function Home() {
                         className="mb-4"
                     >
                         <Box
-                            title={`Session von ${sessionDetail.organizer.displayName}`}
-                            description={`Bei ${sessionDetail.restaurant.displayName} bis ${sessionDetail.deadline.toLocaleDateString("de")} ${sessionDetail.deadline.toLocaleTimeString("de")}`}
+                            title={`${sessionDetail.organizer.displayName} bei ${sessionDetail.restaurant.displayName}`}
+                            description={`Bis ${sessionDetail.deadline.toLocaleDateString("de")} ${sessionDetail.deadline.toLocaleTimeString("de")}`}
                             row
                         >
                             <Button slide>

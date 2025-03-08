@@ -16,7 +16,9 @@ function Login() {
     }
 
     return (
-        <Page title="Login" description="Bitte logge dich ein, um fortzufahren.">
+        <Page title="Login"
+              description="Bitte logge dich ein, um fortzufahren."
+              className="flex flex-col items-center mt-20 h-full">
             <Link
                 reloadDocument
                 to={`/oauth2/start?rd=${encodeURIComponent(redirectPath)}`}

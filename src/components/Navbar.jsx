@@ -54,7 +54,7 @@ function Navbar() {
                                 </button>
                             ))}
 
-                            <Link to={"/oauth2/sign_out"} className="bg-white px-5 py-2 rounded-xl">
+                            <Link reloadDocument to={"/oauth2/sign_out"} className="bg-white px-5 py-2 rounded-xl">
                                 <Text type={"p"} className={"text-primary"}>
                                     Logout
                                 </Text>
