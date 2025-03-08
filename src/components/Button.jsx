@@ -45,19 +45,33 @@ function Button({
         }
     };
 
+    let classNames = "px-2.5 py-1.5 cursor pointer text-sm group inline-flex items-center gap-2 transition-all duration-200 rounded-xl ";
+    if (fill) {
+        classNames += `bg-${fill} ${arrow ? "" : "hover:bg-opacity-80 text-white "} `;
+    } else {
+        classNames += "text-black ";
+    }
+
+    if (border) {
+        classNames += `border-2 border-${border} border-opacity-100 hover:border-opacity-80 `;
+    }
+
+    if (disabled) {
+        classNames += "pointer-events-none cursor-not-allowed opacity-50 ";
+    }
+
+    if (!arrow) {
+        classNames += "group-hover:-translate-y-1 ";
+    }
+
+    classNames += className;
+
     return (
         <button
             onClick={handleClick}
             onKeyDown={handleClick}
             tabIndex={tabIndex}
-            className={
-                "px-2.5 py-1.5 cursor pointer text-sm group inline-flex items-center gap-2 transition-all duration-200 rounded-xl " +
-                (fill ? `bg-${fill} ${arrow ? "" : "hover:bg-opacity-80 text-white "} ` : "text-black ") +
-                (border ? `border-2 border-${border} border-opacity-100 hover:border-opacity-80 ` : "") +
-                (disabled ? "pointer-events-none cursor-not-allowed opacity-50 " : "") +
-                (arrow ? "" : "group-hover:-translate-y-1 ") +
-                className
-            }
+            className={classNames}
         >
             <span className={"group-hover:-translate-y-1 transition-all duration-200"}>
                 {children}
