@@ -1,21 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
-// Hooks
-import { useUser } from "../hooks/useUser";
+import { loggedIn } from "../hooks/useUser";
 
-// Icons
-
-// Components
 import Text from "./Text";
 
 function Navbar() {
     const [activeTab, setActiveTab] = useState(0);
-
-    const { loggedIn } = useUser();
-
-    // get current route
-    const currentRoute = window.location.pathname;
+    const location = useLocation();
 
     const navItems = [
         { name: "Home", to: "/" },
@@ -23,11 +15,11 @@ function Navbar() {
     ];
 
     useEffect(() => {
-        const activeIndex = navItems.findIndex((item) => item.to === currentRoute);
+        const activeIndex = navItems.findIndex((item) => item.to === location.pathname);
         if (activeIndex !== -1) {
             setActiveTab(activeIndex);
         }
-    }, [currentRoute]);
+    }, [location]);
 
     return (
         <nav
@@ -63,7 +55,7 @@ function Navbar() {
                             ))}
 
                             <Link to={"/oauth2/sign_out"} className="bg-white px-5 py-2 rounded-xl">
-                                <Text type={"p"} clazzName={"text-primary"}>
+                                <Text type={"p"} className={"text-primary"}>
                                     Logout
                                 </Text>
                             </Link>

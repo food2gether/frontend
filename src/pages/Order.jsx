@@ -1,23 +1,25 @@
 import React, { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 // Components
 import Text from "../components/Text";
 import Button from "../components/Button";
 import useAPI from "../hooks/useAPI.jsx";
 import PageHeader from "../components/PageHeader.jsx";
+import Page from "../components/Page.jsx";
+import useUser from "../hooks/useUser.jsx";
 
 function Order() {
-    const { placeOrder, self, fetchSelf } = useAPI();
+    const { placeOrder } = useAPI();
+    const { data: self } = useUser();
+    const navigate = useNavigate();
     const [orderDto, setOrderDto] = useState({});
     const location = useLocation();
     const { order, payee, sessionId } = location.state;
-    const moneyToPay = Object.values(order)
-        .reduce((acc, item) => acc + item.price * item.quantity, 0)
-
-    useEffect(() => {
-        fetchSelf();
-    }, []);
+    const moneyToPay = Object.values(order).reduce(
+        (acc, item) => acc + item.price * item.quantity,
+        0,
+    );
 
     useEffect(() => {
         const orderDto = {
@@ -30,9 +32,19 @@ function Order() {
         setOrderDto(orderDto);
     }, [self]);
 
+    const submitOrder = () => {
+        placeOrder(sessionId, orderDto).then(() =>
+            navigate("/payment", {
+                state: {
+                    moneyToPay: moneyToPay,
+                    payee: payee,
+                },
+            }),
+        );
+    }
+
     return (
-        <>
-          <PageHeader title="Bestellung" description="Prüfe noch einmal, ob alles stimmt" />
+        <Page title="Bestellung" description="Prüfe noch einmal, ob alles stimmt">
             {order &&
                 Object.keys(order).map((id, index) => {
                     const { name, quantity, price } = order[id]; // Zugriff auf Menge und Preis
@@ -52,24 +64,19 @@ function Order() {
             <div className="h-[2px] w-full bg-black"></div>
             <div className="w-full flex justify-end items-center">
                 <div className="flex flex-col items-end gap-4">
-                    <Text type={"p"} bold clazzName={"mt-6"}>
-                        Gesamt:{" "}
-                        {order && Object.keys(order).length > 0
-                            ? `${moneyToPay.toFixed(2)} €`
-                            : "0 €"}
+                    <Text type={"p"} bold className={"mt-6"}>
+                        Gesamt: {moneyToPay.toFixed(2)} €
                     </Text>
-                    <Link to="/payment" className="mt-5" state={{ moneyToPay: moneyToPay, payee: payee }}>
-                        <Button
-                            type="primary"
-                            clazzName="mt-5"
-                            onClick={() => placeOrder(sessionId, orderDto)}
-                        >
-                            Bezahlen
-                        </Button>
-                    </Link>
+                    <Button
+                        type="primary"
+                        className="mt-5"
+                        onClick={submitOrder}
+                    >
+                        Bezahlen
+                    </Button>
                 </div>
             </div>
-        </>
+        </Page>
     );
 }
 

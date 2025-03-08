@@ -50,7 +50,7 @@ function SessionNew() {
                     <select
                         className="border border-gray-300 px-5 py-[10px] rounded-xl mt-1 text-black w-full text-lg"
                         onChange={(e) => setRestaurantId(parseInt(e.target.value))}
-                        value={-1}
+                        defaultValue={-1}
                     >
                         <option value={-1} disabled>
                             Bitte wählen
@@ -75,7 +75,7 @@ function SessionNew() {
                 </div>
             </div>
             <div className="flex flex-row justify-end">
-                <Button clazzName="self-end" onClick={handleSubmit} slide disabled={restaurantId < 0}>
+                <Button className="self-end" onClick={handleSubmit} slide disabled={restaurantId < 0}>
                     Erstellen
                 </Button>
             </div>

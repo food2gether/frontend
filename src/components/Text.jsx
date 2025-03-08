@@ -1,6 +1,6 @@
 import React from "react";
 
-function Text({ children, type, bold, center, light, clazzName }) {
+function Text({ children, type, bold, center, light, className }) {
     const textClass = `
     ${bold ? "font-bold" : ""}
     ${center ? "text-center" : "text-left"}
@@ -22,7 +22,7 @@ function Text({ children, type, bold, center, light, clazzName }) {
     }
     
   `;
-    return <p className={`${textClass}${clazzName}`}>{children}</p>;
+    return <p className={`${textClass}${className}`}>{children}</p>;
 }
 
 export default Text;

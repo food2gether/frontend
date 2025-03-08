@@ -6,7 +6,7 @@ function PageHeader({ title, description }) {
         <Text type="h2">{title}</Text>
         <div className="bg-primary h-1 w-10"></div>
         { description &&
-          <Text type="p" clazzName="mt-2">
+          <Text type="p" className="mt-2">
             {description}
           </Text>
         }

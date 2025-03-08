@@ -1,37 +1,36 @@
-import React, { useEffect, useState } from "react";
-import { createContext, useContext } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import useAPI from "./useAPI.jsx";
 import { useLocation, useNavigate } from "react-router-dom";
 
+const pathsWithoutProfile = ["/profile/edit", "/login"];
+
+export const loggedIn = () => {
+    let cookieTemp = document.cookie;
+    document.cookie = "_oauth2_proxy=some_val;path=/;";
+    let cookieIndex = document.cookie.indexOf("_oauth2_proxy=");
+    document.cookie = cookieTemp;
+    // when cookie is set it will be removed from cookies
+    return cookieIndex === -1;
+};
 
 const useUserContext = () => {
-    const { fetchUser } = useAPI();
+    const { fetchProfile } = useAPI();
     const [data, setData] = useState();
     const location = useLocation();
     const navigate = useNavigate();
 
     useEffect(() => {
-        fetchUser("me").then((response) => {
+        fetchProfile("me").then((response) => {
             if (response.data) {
                 setData(response.data);
-            } else if (location.pathname !== "/profile/edit") {
+            } else if (pathsWithoutProfile.indexOf(location.pathname) === -1) {
                 navigate("/profile/edit");
             }
         });
     }, []);
 
-    const loggedIn = () => {
-        let cookieTemp = document.cookie;
-        document.cookie = "_oauth2_proxy=some_val;path=/;";
-        let cookieIndex = document.cookie.indexOf("_oauth2_proxy=");
-        document.cookie = cookieTemp;
-        // when cookie is set it will be removed from cookies
-        return cookieIndex === -1;
-    };
-
     return {
-        loggedIn,
-        data
+        data,
     };
 };
 

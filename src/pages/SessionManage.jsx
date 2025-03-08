@@ -1,9 +1,24 @@
 import { useNavigate, useParams } from "react-router-dom";
-import PageHeader from "../components/PageHeader.jsx";
 import { useEffect, useState } from "react";
 import useAPI from "../hooks/useAPI.jsx";
 import Text from "../components/Text.jsx";
 import Button from "../components/Button.jsx";
+import useUser from "../hooks/useUser.jsx";
+import Page from "../components/Page.jsx";
+
+function ActionButton({ label, active, colorKey, onClick }) {
+    return (
+        <Button
+            arrow={""}
+            type={"tertiary"}
+            className={`${active ? `!bg-${colorKey}` : ""} border-2 !border-${colorKey}`}
+            childrenClassess={`${active && "!text-white"}`}
+            onClick={onClick}
+        >
+            {label}
+        </Button>
+    );
+}
 
 function SessionManage() {
     const { sessionId } = useParams();
@@ -15,72 +30,81 @@ function SessionManage() {
     const [sessionOrders, setSessionOrders] = useState([]);
     const [users, setUsers] = useState({});
 
-    const { self, fetchSelf, fetchUser, fetchSession, fetchRestaurant, fetchOrders, fetchMenu, placeOrder } =
+    const { fetchProfile, fetchSession, fetchRestaurant, fetchOrders, fetchMenu, placeOrder } =
         useAPI();
+    const { data: self } = useUser();
 
+    // validate route
     useEffect(() => {
-        fetchSelf();
-    }, []);
-
-    useEffect(() => {
-      fetchSession(sessionId, setSession)
-          .then((session) => {
-            if (!session) {
-              window.alert("SessionView nicht gefunden");
-              navigate("/notfound");
+        fetchSession(sessionId).then((session) => {
+            if (session.data) {
+                setSession(session.data);
+            } else {
+                navigate("/notfound");
             }
-          });
+        });
     }, [fetchSession, sessionId, navigate]);
 
+    // protected route
     useEffect(() => {
         if (self && session && self.id !== session.organizerId) {
-          window.alert("Du bist nicht berechtigt diesen SessionView zu verwalten");
-          //  navigate("/notfound");
+            window.alert("Du bist nicht berechtigt diesen SessionView zu verwalten");
+            navigate("/notfound");
         }
     }, [self, session]);
 
+    // fetch restaurant, orders and menu
     useEffect(() => {
         if (session) {
-            fetchRestaurant(session.restaurantId, setRestaurant);
-        }
-    }, [fetchRestaurant, session]);
+            fetchRestaurant(session.restaurantId).then(
+                (response) => response.data && setRestaurant(response.data),
+            );
+            fetchOrders(session.id).then(
+                (response) => response.data && setSessionOrders(response.data),
+            );
 
-    useEffect(() => {
-        if (session) {
-            fetchOrders({ sessionId: session.id }, setSessionOrders);
-        }
-    }, [fetchOrders, session]);
-
-    useEffect(() => {
-        if (session) {
-            fetchMenu(session.restaurantId, (menu_arr) => {
-                const menu_map = menu_arr?.reduce((menu_map, menu_item) => {
+            fetchMenu(session.restaurantId).then((response) => {
+                const menu_map = response.data?.reduce((menu_map, menu_item) => {
                     menu_map[menu_item.id] = menu_item;
                     return menu_map;
                 }, {});
-                setMenu(menu_map);
+
+                if (menu_map) {
+                    setMenu(menu_map);
+                }
             });
         }
-    }, [fetchMenu, session]);
+    }, [session]);
 
-  useEffect(() => {
-    // filter unique orders by profileId and fetch users
-    sessionOrders
-        ?.map((order) => order.profileId)
-        .filter((value, index, self) => self.indexOf(value) === index)
-        .forEach((profileId) => {
-            fetchUser(profileId, (user) => {
-                setUsers((users) => ({ ...users, [profileId]: user }))
-            })
+    // fetch user info
+    useEffect(() => {
+        if (!sessionOrders) return;
+
+        // filter unique orders by profileId and fetch users
+        const profileResponsePromises = sessionOrders
+            .map((order) => order.profileId)
+            // filter unique profileIds to prevent multiple fetches per profile
+            .filter((value, index, self) => self.indexOf(value) === index)
+            .map((profileId) => fetchProfile(profileId));
+
+        Promise.all(profileResponsePromises).then((responses) => {
+            const users = responses.reduce((users, response) => {
+                if (response.data) {
+                    users[response.data.id] = response.data;
+                }
+                return users;
+            }, {});
+            setUsers(users);
         });
-  }, [sessionOrders]);
+    }, [sessionOrders]);
 
     const updateOrderState = (orderId, state) => {
         const orderDto = {
             id: orderId,
             state: state,
         };
-        placeOrder(sessionId, orderDto, (order) => {
+        placeOrder(sessionId, orderDto).then((orderResponse) => {
+            const order = orderResponse.data;
             // update in sessionOrders]
             const updatedOrders = sessionOrders.map((o) => {
                 if (o.id === order.id) {
@@ -93,17 +117,18 @@ function SessionManage() {
     };
 
     return (
-        <>
-            <PageHeader
-                title={`Verwalte bestellung bei ${restaurant.displayName || `Session ${sessionId}`}`}
-                description={"Hier kannst du die Bestellungen verwalten."}
-            />
+        <Page
+            title={`Verwalte bestellung bei ${restaurant?.displayName}`}
+            description="Hier kannst du die Bestellungen verwalten."
+        >
             {sessionOrders?.map((order) => (
                 <div
                     className="bg-white rounded-lg p-4 mb-2 border border-primary w-full min-w-[500px] h-auto"
                     key={order.id}
                 >
-                  <Text type={"h4"} clazzName={"mb-2"}>{users[order.profileId]?.displayName}</Text>
+                    <Text type={"h4"} className={"mb-2"}>
+                        {users[order.profileId]?.displayName}
+                    </Text>
                     {order.items.map((item, index) => {
                         const menuItem = menu[item.menuItemId];
                         return (
@@ -123,10 +148,10 @@ function SessionManage() {
                         );
                     })}
                     <div className={`flex flex-row justify-between w-full items-end`}>
-                        <Text bold clazzName={"pl-1"}>
+                        <Text bold className={"pl-1"}>
                             Gesamt
                         </Text>
-                        <Text clazzName={"border-t-4 mt-2 border-primary"}>
+                        <Text className={"border-t-4 mt-2 border-primary"}>
                             {order.items
                                 .reduce((prev, curr) => {
                                     const menuItem = menu[curr.menuItemId];
@@ -136,31 +161,13 @@ function SessionManage() {
                         </Text>
                     </div>
                     <div className={"flex flex-row gap-2 mt-2 justify-end"}>
-                        <Button
-                            arrow={""}
-                            type={"tertiary"}
-                            clazzName={`${order.state === "PAYED" && "!bg-primary"} !border-primary-light`}
-                            childrenClassess={`${order.state === "PAYED" && "!text-white"}`}
-                            onClick={() => updateOrderState(order.id, "PAYED")}
-                        >
-                            Bezahlt
-                        </Button>
-                        <Button
-                            arrow={""}
-                            type={"tertiary"}
-                            clazzName={`${order.state === "REJECTED" && "!bg-red-600"} !border-red-600`}
-                            childrenClassess={`${order.state === "REJECTED" && "!text-white"}`}
-                            onClick={() => updateOrderState(order.id, "REJECTED")}
-                        >
-                            Ablehnen
-                        </Button>
-                        <Button arrow={""} type={"tertiary"} clazzName={"!border-black"} onClick={() => updateOrderState(order.id, "OPEN")}>
-                            Zurücksetzen
-                        </Button>
+                        <ActionButton active={order.state === "PAYED"} colorKey="primary" label="Bezahlt" onClick={() => updateOrderState(order.id, "PAYED")} />
+                        <ActionButton active={order.state === "REJECTED"} colorKey="red-600" label="Ablehnen" onClick={() => updateOrderState(order.id, "REJECTED")} />
+                        <ActionButton colorKey="black" label="Zurücksetzen" onClick={() => updateOrderState(order.id, "OPEN")} />
                     </div>
                 </div>
             ))}
-        </>
+        </Page>
     );
 }
 

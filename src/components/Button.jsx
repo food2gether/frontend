@@ -5,7 +5,7 @@ import { FaArrowRight } from "react-icons/fa6";
 
 function Button({
     children,
-    clazzName,
+    className,
     childrenClassess,
     onClick,
     type,
@@ -27,7 +27,7 @@ function Button({
     };
 
     const buttonClasses = `
-    btn group inline-flex items-center gap-2 transition-all duration-200 mb-2
+    btn group inline-flex items-center gap-2 transition-all duration-200
     ${round ? "rounded-full" : "rounded-[12px]"}
     ${
         type === "primary"
@@ -39,7 +39,7 @@ function Button({
                 : "bg-primary text-white"
     }
     ${disabled ? "pointer-events-none cursor-not-allowed opacity-50" : ""}
-    ${clazzName}
+    ${className}
   `;
 
     const childrenClasses = `${childrenClassess} transition-transform duration-200

@@ -3,13 +3,102 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import Text from "../components/Text";
 import Button from "../components/Button";
 import { LOADING_USER, useAPI } from "../hooks/useAPI";
-import PageHeader from "../components/PageHeader.jsx";
+import useUser from "../hooks/useUser.jsx";
+import Page from "../components/Page.jsx";
+
+function MenuItemCard({ name, description, price, quantity, updateQuantity }) {
+    return (
+        <div className="flex justify-between items-center bg-white w-full p-4 rounded-2xl border-primary border gap-4">
+            <div>
+                <Text type="h5">{name}</Text>
+                <Text type="p" className={"mb-2"}>
+                    {description}
+                </Text>
+                <Text type="p" className="text-primary">
+                    {(price / 100).toFixed(2)} €
+                </Text>
+            </div>
+            <div className="flex items-center gap-4">
+                <Text type="p">Anzahl:</Text>
+                <input
+                    type="text"
+                    min="0"
+                    className="w-8 text-black outline-none border-none"
+                    value={quantity || 0}
+                    onChange={(e) => updateQuantity(parseInt(e.target.value))}
+                />
+                <div className="flex flex-col gap-1">
+                    <button
+                        className="w-7 h-7 bg-primary rounded-full flex items-center justify-center"
+                        onClick={() => updateQuantity(quantity + 1)}
+                    >
+                        +
+                    </button>
+                    <button
+                        className="w-7 h-7 bg-primary rounded-full flex items-center justify-center"
+                        onClick={() => updateQuantity(Math.max(quantity - 1, 0))}
+                    >
+                        -
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+function ProgressBar({ state }) {
+    let progress = 1;
+    let progressColor = state === "REJECTED" ? "bg-red-600" : "bg-primary";
+    switch (state) {
+        case "OPEN":
+        case "SUBMITTED":
+            progress = 2;
+            break;
+        case "PAYED":
+        case "REJECTED":
+            progress = 3;
+            break;
+    }
+
+    let translation = {
+        "OPEN": "In Bearbeitung",
+        "SUBMITTED": "In Bearbeitung",
+        "PAYED": "Bezahlt",
+        "REJECTED": "Abgelehnt"
+    }
+
+    return (
+        <>
+            <div className={"flex items-center justify-center relative w-full"}>
+                <div className="h-1.5 bg-gray-500 absolute w-[95%] left-1"></div>
+                <div
+                    className={`h-2 z-10 ${progressColor} left-1 absolute`}
+                    style={{ width: `${((progress - 1) / 2) * 95}%` }}
+                ></div>
+                <div className="relative flex gap-8 justify-between items-center w-full">
+                    <div
+                        className={`rounded-full z-10 w-5 h-5 ${progress >= 1 ? progressColor : "bg-gray-500"}`}
+                    ></div>
+                    <div
+                        className={`rounded-full z-10 w-5 h-5 ${progress >= 2 ? progressColor : "bg-gray-500"}`}
+                    ></div>
+                    <div
+                        className={`rounded-full z-10 w-5 h-5 ${progress >= 3 ? progressColor : "bg-gray-500"}`}
+                    ></div>
+                </div>
+            </div>
+            <Text className={"self-center"}>
+                {translation[state]}
+            </Text>
+        </>
+    );
+}
 
 function SessionView() {
     const { sessionId } = useParams();
     const navigate = useNavigate();
-    const { self, fetchOrders, fetchSession, fetchUser, fetchSelf, fetchRestaurant, fetchMenu } =
-        useAPI();
+    const { fetchOrders, fetchSession, fetchProfile, fetchRestaurant, fetchMenu } = useAPI();
+    const { data: self } = useUser();
 
     const [session, setSession] = useState();
     const [restaurant, setRestaurant] = useState({});
@@ -21,61 +110,52 @@ function SessionView() {
 
     const [ownOrders, setOwnOrders] = useState([]);
 
+    const init = async () => {
+        const sessionResponse = await fetchSession(sessionId);
+        const sessionData = sessionResponse.data;
+        if (sessionData) {
+            setSession(sessionData);
+            setDeadline(new Date(sessionData.deadline));
+        } else {
+            navigate("/notfound");
+            return;
+        }
+
+        fetchProfile(sessionData.organizerId).then((response) => {
+            if (response.data) {
+                setOrganizer(response.data);
+            }
+        });
+        fetchRestaurant(sessionData.restaurantId).then((response) => {
+            if (response.data) {
+                setRestaurant(response.data);
+            }
+        });
+        fetchMenu(sessionData.restaurantId).then((menu_arr) => {
+            const menu_map = menu_arr.data?.reduce((menu_map, menu_item) => {
+                menu_map[menu_item.id] = menu_item;
+                return menu_map;
+            }, {});
+            setMenu(menu_map);
+        });
+    };
+
     useEffect(() => {
-        fetchSelf();
+        init();
     }, []);
 
     useEffect(() => {
-        if (self) {
-            fetchOrders({ sessionId: sessionId, profileId: self.id }, setOwnOrders);
-        }
+        if (!self) return;
+
+        fetchOrders(sessionId, self.id).then((response) => {
+            if (!response.data) return;
+
+            setOwnOrders(response.data);
+        });
     }, [self]);
 
-    useEffect(() => {
-        const fetch = async () => {
-            let session = await fetchSession(sessionId, setSession);
-            if (!session) {
-                navigate("/notfound");
-            } else {
-                setDeadline(new Date(session.deadline));
-            }
-        };
-        fetch();
-    }, [fetchSession, sessionId, navigate]);
-
-    useEffect(() => {
-        if (session) {
-            fetchUser(session.organizerId, setOrganizer);
-        }
-    }, [fetchUser, session]);
-
-    useEffect(() => {
-        if (session) {
-            fetchRestaurant(session.restaurantId, setRestaurant);
-        }
-    }, [fetchRestaurant, session]);
-
-    useEffect(() => {
-        if (session) {
-            fetchMenu(session.restaurantId, (menu_arr) => {
-                const menu_map = menu_arr?.reduce((menu_map, menu_item) => {
-                    menu_map[menu_item.id] = menu_item;
-                    return menu_map;
-                }, {});
-                setMenu(menu_map);
-            });
-        }
-    }, [fetchMenu, session]);
-
-    useEffect(() => {
-        const total = Object.values(order).reduce((acc, item) => {
-            return acc + item.quantity * item.price;
-        }, 0);
-        setTotalPrice(total);
-    }, [order]);
-
     const updateQuantity = (product, quantity) => {
-        if (quantity === 0) {
+        if (quantity <= 0) {
             const { [product.id]: _, ...rest } = order;
             setOrder(rest);
             return;
@@ -90,82 +170,42 @@ function SessionView() {
         }));
     };
 
-    const handleQuantityChangePlus = (product) => {
-        const newQuantity = Math.max((order[product.id]?.quantity || 0) + 1, 0);
-        updateQuantity(product, newQuantity);
-    };
-
-    const handleQuantityChangeMinus = (product) => {
-        const newQuantity = Math.max((order[product.id]?.quantity || 0) - 1, 0);
-        updateQuantity(product, newQuantity);
-    };
+    useEffect(() => {
+        setTotalPrice(
+            Object.values(order).reduce((acc, item) => acc + item.quantity * item.price, 0),
+        );
+    }, [order]);
 
     return (
-        <>
-            <div className={"flex flex-row justify-between items-center"}>
-                <PageHeader
-                    title={`Bestelle mit ${organizer.displayName} bei ${restaurant.displayName}`}
-                    description={`Offen bis ${deadline?.toLocaleDateString()} um ${deadline?.toLocaleTimeString()}`}
-                />
+        <Page
+            title={`Bestelle mit ${organizer.displayName} bei ${restaurant.displayName}`}
+            description={`Offen bis ${deadline?.toLocaleDateString()} um ${deadline?.toLocaleTimeString()}`}
+        >
+            <div className={"flex flex-row-reverse justify-between items-center"}>
                 {self?.id === session?.organizerId && (
                     <Button link={`/session/${sessionId}/manage`}>Verwalten</Button>
                 )}
             </div>
             <div className="flex flex-row gap-5 mt-10">
-                <div className="flex flex-col items-center">
-                    {Object.values(menu).map((product) => (
-                        <div
-                            key={product.id}
-                            className="flex justify-between items-center bg-white w-full p-4 mb-3 rounded-2xl border-primary border"
-                        >
-                            <div>
-                                <Text type="h5">{product.name}</Text>
-                                <Text type="p" clazzName={"mb-2"}>
-                                    {product.description}
-                                </Text>
-                                <Text type="p" clazzName="text-primary">
-                                    {(product.price / 100).toFixed(2)} €
-                                </Text>
-                            </div>
-                            <div className="flex items-center gap-4">
-                                <Text type="p">Anzahl:</Text>
-                                <input
-                                    type="text"
-                                    min="0"
-                                    className="w-8 text-black outline-none border-none"
-                                    value={order[product.id]?.quantity || "0"}
-                                    onChange={(e) =>
-                                        updateQuantity(product, parseInt(e.target.value))
-                                    }
-                                />
-                                <div className="flex flex-col gap-1">
-                                    <button
-                                        className="w-7 h-7 bg-primary rounded-full flex items-center justify-center"
-                                        onClick={() => handleQuantityChangePlus(product)}
-                                    >
-                                        +
-                                    </button>
-                                    <button
-                                        className="w-7 h-7 bg-primary rounded-full flex items-center justify-center"
-                                        onClick={() => handleQuantityChangeMinus(product)}
-                                    >
-                                        -
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    ))}
-                    <Text type="h2" bold clazzName="mt-10">
+                <div className="flex flex-col items-center gap-3">
+                    <div className={"flex flex-col gap-4"}>
+                        {Object.values(menu).map((product) => (
+                            <MenuItemCard
+                                key={product.id}
+                                name={product.name}
+                                description={product.description}
+                                price={product.price}
+                                quantity={order[product.id]?.quantity || 0}
+                                updateQuantity={(quantity) => updateQuantity(product, quantity)}
+                            />
+                        ))}
+                    </div>
+                    <Text type="h2" bold className="mt-10">
                         {order && Object.keys(order).length > 0
                             ? `Gesamtpreis: ${totalPrice.toFixed(2)} €`
                             : "Bitte wähle etwas aus!"}
                     </Text>
-                    <Button
-                        type="primary"
-                        disabled={totalPrice <= 0}
-                        clazzName="mt-10"
-                        onClick={() => console.log(order)}
-                    >
+                    <Button type="primary" disabled={totalPrice <= 0} className="mt-10">
                         <Link
                             to="/order"
                             state={{ order: order, sessionId: sessionId, payee: organizer.name }}
@@ -174,9 +214,10 @@ function SessionView() {
                         </Link>
                     </Button>
                 </div>
+                {/*Currently placed orders*/}
                 {ownOrders && ownOrders.length > 0 && (
                     <div className="flex flex-col items-center">
-                        <Text type={"h4"} clazzName={"mb-5"}>
+                        <Text type={"h4"} className={"mb-5"}>
                             Deine Bestellungen
                         </Text>
                         {ownOrders?.map((order) => (
@@ -191,7 +232,7 @@ function SessionView() {
                                         </Text>
                                     ))}
                                 </div>
-                                <Text clazzName="self-end border-t-4 border-primary">
+                                <Text className="self-end border-t-4 border-primary">
                                     {order?.items
                                         ?.map((item) => ({
                                             quantity: item.quantity,
@@ -201,40 +242,13 @@ function SessionView() {
                                         .toFixed(2)}
                                     €
                                 </Text>
-                                <div className={"flex items-center justify-center relative w-full"}>
-                                    <div className="h-1.5 bg-gray-500 absolute w-[95%]"></div>
-                                    <div
-                                        className={`h-2 z-10 ${order.state === "REJECTED" ? "bg-red-600" : "bg-primary"} left-1 absolute w-[${order.state === "PAYED" || order.state === "REJECTED" ? "95" : "50"}%]`}
-                                    ></div>
-                                    <div
-                                        className={
-                                            "relative flex gap-8 justify-between items-center w-full"
-                                        }
-                                    >
-                                        <div
-                                            className={`rounded-full w-5 h-5 ${order.state === "REJECTED" ? "bg-red-600" : "bg-primary"}`}
-                                        ></div>
-                                        <div
-                                            className={`rounded-full w-5 h-5 ${order.state === "REJECTED" ? "bg-red-600" : "bg-primary"}`}
-                                        ></div>
-                                        <div
-                                            className={`rounded-full w-5 h-5 ${order.state === "REJECTED" ? "bg-red-600" : order.state === "PAYED" ? "bg-primary" : "bg-gray-500"}`}
-                                        ></div>
-                                    </div>
-                                </div>
-                                <Text clazzName={"self-center"}>
-                                    {order.state === "PAYED"
-                                        ? "Bezahlt"
-                                        : order.state === "REJECTED"
-                                          ? "Abgelehnt"
-                                          : "Abgeschickt"}
-                                </Text>
+                                <ProgressBar state={order.state} />
                             </div>
                         ))}
                     </div>
                 )}
             </div>
-        </>
+        </Page>
     );
 }
 

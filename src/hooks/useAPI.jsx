@@ -24,7 +24,7 @@ const apiGet = async (input, init = {}) => {
 };
 
 const useApiContext = () => {
-    const fetchUser = async (userId, setter) => {
+    const fetchProfile = async (userId, setter) => {
         return await apiGet(`/api/v1/profiles/${userId}`, setter);
     };
 
@@ -67,7 +67,7 @@ const useApiContext = () => {
     };
 
     return {
-        fetchUser,
+        fetchProfile,
         fetchAllSessions,
         fetchSession,
         fetchRestaurant,

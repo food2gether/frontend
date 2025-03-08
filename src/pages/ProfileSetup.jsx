@@ -18,11 +18,11 @@ function ValidatedInput({ onChange, valid, placeholder, defaultValue }) {
                 defaultValue={defaultValue}
             />
             {valid ? (
-                <Text type={"h3"} clazzName={"text-green-600"}>
+                <Text type={"h3"} className={"text-green-600"}>
                     <FaCheck />
                 </Text>
             ) : (
-                <Text type={"h3"} clazzName={"text-red-600"}>
+                <Text type={"h3"} className={"text-red-600"}>
                     <RxCross2 />
                 </Text>
             )}
@@ -121,14 +121,14 @@ function ProfileSetup() {
 
             <Button
                 slide
-                clazzName={"self-center"}
+                className={"self-center"}
                 disabled={!(displayName && paypalMeValid && profilePictureUrlValid)}
                 onClick={handleFinish}
             >
                 Fertig
             </Button>
             {showError && (
-                <Text type={"p"} clazzName={"!text-red-500 w-1/2 text-center self-center"}>
+                <Text type={"p"} className={"!text-red-500 w-1/2 text-center self-center"}>
                     Es gab einen Fehler. Hast du vielleicht den PayPal.me-Namen eines anderen
                     eingetragen?
                 </Text>
