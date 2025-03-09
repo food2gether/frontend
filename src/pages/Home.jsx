@@ -60,7 +60,6 @@ function Home() {
             <div className="flex justify-between items-center mb-6">
                 <div className={"flex-row flex justify-around gap-4 items-center"}>
                     <Button
-                        tabIndex={0}
                         fill={filterActive}
                         border
                         onClick={() => setFilterActive(!filterActive)}
@@ -69,24 +68,22 @@ function Home() {
                         Aktive Sessions
                     </Button>
                     <Button
-                        tabIndex={1}
                         border
                         className="text-black"
                     >
                         Restaurant
                     </Button>
                 </div>
-                <Button arrow fill linkTo="/session/new" tabIndex={2}>
+                <Button arrow fill linkTo="/session/new">
                     Neue Session
                 </Button>
             </div>
             <div className="flex flex-col w-full">
-                {sessionDetails.map((sessionDetail, index) => (
+                {sessionDetails.map((sessionDetail) => (
                     <SessionBox
                         sessionLink={`/session/${sessionDetail.id}`}
                         title={`${sessionDetail.organizer.displayName} bei ${sessionDetail.restaurant.displayName}`}
                         description={`Bis ${toDateTimeString(sessionDetail.deadline)}`}
-                        tabIndex={index + 3}
                         key={sessionDetail.id}
                     />
                 ))}

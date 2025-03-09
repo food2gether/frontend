@@ -1,25 +1,14 @@
 import { useNavigate } from "react-router-dom";
 import { cloneElement, useEffect, useState } from "react";
 import { FaArrowRight } from "react-icons/fa6";
-import PropTypes, { object } from "prop-types";
+import PropTypes from "prop-types";
 
-function Button({
-    children,
-    linkTo,
-    linkOptions,
-    onClick,
-    checkDisabled,
-    className,
-    arrow,
-    tabIndex,
-    fill,
-    border,
-}) {
+function Button({ children, linkTo, linkOptions, onClick, checkDisabled, className, arrow, fill, border }) {
     const navigate = useNavigate();
     const [disabled, setDisabled] = useState(false);
 
     useEffect(() => {
-        setDisabled(checkDisabled?.())
+        setDisabled(checkDisabled?.());
     }, [checkDisabled]);
 
     if (fill === true) {
@@ -67,15 +56,8 @@ function Button({
     classNames += className;
 
     return (
-        <button
-            onClick={handleClick}
-            onKeyDown={handleClick}
-            tabIndex={tabIndex}
-            className={classNames}
-        >
-            <span className={"group-hover:-translate-y-1 transition-all duration-200"}>
-                {children}
-            </span>
+        <button onClick={handleClick} onKeyDown={handleClick} className={classNames}>
+            <span className={"group-hover:-translate-y-1 transition-all duration-200"}>{children}</span>
             {arrow
                 ? cloneElement(arrow, {
                       ...arrow.props,
@@ -94,9 +76,8 @@ Button.prototype = {
     checkDisabled: PropTypes.func,
     className: PropTypes.string,
     arrow: PropTypes.node,
-    tabIndex: PropTypes.number,
     fill: PropTypes.string,
     border: PropTypes.string,
-}
+};
 
 export default Button;

@@ -100,7 +100,7 @@ function ProfileEdit() {
                 />
             </div>
 
-            <Button fill arrow className={"self-center"} tabIndex={0} checkDisabled={() => !(displayName && paypalMeValid && profilePictureUrlValid)} onClick={handleFinish}>
+            <Button fill arrow className={"self-center"} checkDisabled={() => !(displayName && paypalMeValid && profilePictureUrlValid)} onClick={handleFinish}>
                 Fertig
             </Button>
             {showError && (

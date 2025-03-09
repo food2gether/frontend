@@ -1,18 +1,18 @@
 import React, { useEffect } from "react";
-import { useLocation, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { loggedIn } from "../hooks/useUser.jsx";
 import Page from "../components/Page.jsx";
 import Button from "../components/Button.jsx";
 
 function Login() {
     const [searchParams, _] = useSearchParams();
-    const location = useLocation();
+    const navigate = useNavigate();
 
     const redirectPath = searchParams.get("rd") || "/";
 
     useEffect(() => {
         if (loggedIn()) {
-            //navigate(redirectPath);
+            navigate(redirectPath);
         }
     }, []);
 
