@@ -2,23 +2,9 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import useAPI from "../hooks/useAPI.jsx";
 import Text from "../components/Text.jsx";
-import Button from "../components/Button.jsx";
 import useUser from "../hooks/useUser.jsx";
 import Page from "../components/Page.jsx";
-
-function ActionButton({ label, active, colorKey, onClick }) {
-    return (
-        <Button
-            arrow={""}
-            type={"tertiary"}
-            className={`${active ? `!bg-${colorKey}` : ""} border-2 !border-${colorKey}`}
-            childrenClassess={`${active && "!text-white"}`}
-            onClick={onClick}
-        >
-            {label}
-        </Button>
-    );
-}
+import Button from "../components/Button.jsx";
 
 function SessionManage() {
     const { sessionId } = useParams();
@@ -30,8 +16,7 @@ function SessionManage() {
     const [sessionOrders, setSessionOrders] = useState([]);
     const [users, setUsers] = useState({});
 
-    const { fetchProfile, fetchSession, fetchRestaurant, fetchOrders, fetchMenu, placeOrder } =
-        useAPI();
+    const { fetchProfile, fetchSession, fetchRestaurant, fetchOrders, fetchMenu, placeOrder } = useAPI();
     const { data: self } = useUser();
 
     // validate route
@@ -56,12 +41,8 @@ function SessionManage() {
     // fetch restaurant, orders and menu
     useEffect(() => {
         if (session) {
-            fetchRestaurant(session.restaurantId).then(
-                (response) => response.data && setRestaurant(response.data),
-            );
-            fetchOrders(session.id).then(
-                (response) => response.data && setSessionOrders(response.data),
-            );
+            fetchRestaurant(session.restaurantId).then((response) => response.data && setRestaurant(response.data));
+            fetchOrders(session.id).then((response) => response.data && setSessionOrders(response.data));
 
             fetchMenu(session.restaurantId).then((response) => {
                 const menu_map = response.data?.reduce((menu_map, menu_item) => {
@@ -117,28 +98,17 @@ function SessionManage() {
     };
 
     return (
-        <Page
-            title={`Verwalte bestellung bei ${restaurant?.displayName}`}
-            description="Hier kannst du die Bestellungen verwalten."
-        >
+        <Page title={`Verwalte bestellung bei ${restaurant?.displayName}`} description="Hier kannst du die Bestellungen verwalten.">
             {sessionOrders?.map((order) => (
-                <div
-                    className="bg-white rounded-lg p-4 mb-2 border border-primary w-full min-w-[500px] h-auto"
-                    key={order.id}
-                >
+                <div className="bg-white rounded-lg p-4 mb-2 border border-primary w-full min-w-[500px] h-auto" key={order.id}>
                     <Text type={"h4"} className={"mb-2"}>
                         {users[order.profileId]?.displayName}
                     </Text>
                     {order.items.map((item, index) => {
                         const menuItem = menu[item.menuItemId];
                         return (
-                            <div
-                                className="flex flex-row items-center justify-between"
-                                key={item.id}
-                            >
-                                <div
-                                    className={`flex flex-row justify-between w-full p-1 rounded ${index % 2 === 0 ? "bg-primary-light bg-opacity-50" : ""}`}
-                                >
+                            <div className="flex flex-row items-center justify-between" key={item.id}>
+                                <div className={`flex flex-row justify-between w-full p-1 rounded ${index % 2 === 0 ? "bg-primary-light bg-opacity-50" : ""}`}>
                                     <Text>{menuItem?.name}</Text>
                                     <Text>
                                         {item?.quantity}x {(menuItem?.price / 100).toFixed(2)}€
@@ -161,23 +131,15 @@ function SessionManage() {
                         </Text>
                     </div>
                     <div className={"flex flex-row gap-2 mt-2 justify-end"}>
-                        <ActionButton
-                            active={order.state === "PAYED"}
-                            colorKey="primary"
-                            label="Bezahlt"
-                            onClick={() => updateOrderState(order.id, "PAYED")}
-                        />
-                        <ActionButton
-                            active={order.state === "REJECTED"}
-                            colorKey="red-600"
-                            label="Ablehnen"
-                            onClick={() => updateOrderState(order.id, "REJECTED")}
-                        />
-                        <ActionButton
-                            colorKey="black"
-                            label="Zurücksetzen"
-                            onClick={() => updateOrderState(order.id, "OPEN")}
-                        />
+                        <Button border={"primary"} fill={order.state === "PAYED" && "primary"} onClick={() => updateOrderState(order.id, "PAYED")}>
+                            Bezahlt
+                        </Button>
+                        <Button border="red-600" fill={order.state === "REJECTED" && "red-600"} onClick={() => updateOrderState(order.id, "REJECTED")}>
+                            Ablehnen
+                        </Button>
+                        <Button border="black" onClick={() => updateOrderState(order.id, "OPEN")}>
+                            Zurücksetzen
+                        </Button>
                     </div>
                 </div>
             ))}

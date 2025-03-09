@@ -32,7 +32,7 @@ function Profile() {
     return (
         <Page title="Profil" description="Hier kannst du dein Profil sehen.">
             <div className={"flex flex-row items-center justify-end"}>
-                <Button link="/profile/edit" slide>
+                <Button linkTo="/profile/edit" fill arrow>
                     Profil bearbeiten
                 </Button>
             </div>
@@ -41,11 +41,7 @@ function Profile() {
                     <div>
                         <div className="w-[200px] h-[200px] flex items-center justify-center rounded-full mb-3 bg-primary border-4 border-primary">
                             {profile?.profilePictureUrl ? (
-                                <img
-                                    src={profile.profilePictureUrl}
-                                    alt="Profile Picture"
-                                    className="size-full rounded-full object-cover"
-                                />
+                                <img src={profile.profilePictureUrl} alt="Profile Picture" className="size-full rounded-full object-cover" />
                             ) : (
                                 <p className={"text-9xl font-bold"}>?</p>
                             )}

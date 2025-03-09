@@ -64,7 +64,7 @@ const useApiContext = () => {
         return await apiPut(`/api/v1/sessions/${sessionId}/orders`, order);
     };
 
-    const createSession = async (session) => {
+    const createOrUpdateSession = async (session) => {
         return await apiPut(`/api/v1/sessions/`, session);
     };
 
@@ -81,7 +81,7 @@ const useApiContext = () => {
         fetchMenu,
         fetchOrders,
         placeOrder,
-        createSession,
+        createOrUpdateSession,
         createOrUpdateProfile,
     };
 };
