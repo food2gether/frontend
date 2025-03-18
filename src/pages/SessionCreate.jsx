@@ -4,7 +4,7 @@ import useAPI from "../hooks/useAPI.jsx";
 import { useNavigate } from "react-router-dom";
 import Page from "../components/Page.jsx";
 import useUser from "../hooks/useUser.jsx";
-import { toInputDateTimeString } from "../util.js";
+import { toInputDateTimeString } from "../helper/dates.js";
 import Button from "../components/Button.jsx";
 
 function SessionNew() {

@@ -4,7 +4,7 @@ import Text from "../components/Text";
 import { LOADING_USER, useAPI } from "../hooks/useAPI";
 import useUser from "../hooks/useUser.jsx";
 import Page from "../components/Page.jsx";
-import { toDateTimeString, toInputDateTimeString } from "../util.js";
+import { toInputDateTimeString } from "../helper/dates.js";
 import Button from "../components/Button.jsx";
 
 function MenuItemCard({ name, description, price, quantity, updateQuantity }) {
@@ -170,7 +170,7 @@ function SessionView() {
     };
 
     return (
-        <Page title={`Bestelle mit ${organizer.displayName} bei ${restaurant.displayName}`} description={`Offen bis ${deadline && toDateTimeString(deadline)}`}>
+        <Page title={`Bestelle mit ${organizer.displayName} bei ${restaurant.displayName}`} description={`Offen bis ${deadline && deadline.toLocaleString()}`}>
             {self?.id === session?.organizerId && (
                 <div className={"flex flex-row justify-between items-center"}>
                     <input

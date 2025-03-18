@@ -17,7 +17,7 @@ function Payment() {
         <Page title="Bestellung abgeschlossen" className="w-full h-full flex flex-col items-center justify-center gap-10 mt-10">
             <Text type="h1">Das macht dann {parseFloat(moneyToPay).toFixed(2)}€</Text>
             <a href={paypalLink} target="_blank" rel="noreferrer">
-                <QRCode value={paypalLink} level={"M"} />
+                <QRCode value={paypalLink} level={"M"} className="size-[200px]"/>
             </a>
             <Text type="p" className="max-w-[400px]" center>
                 Klicke oder Scanne den QR-Code, um zu bezahlen.

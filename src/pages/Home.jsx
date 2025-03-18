@@ -7,7 +7,6 @@ import Text from "../components/Text";
 // Hooks
 import { useAPI } from "../hooks/useAPI";
 import Page from "../components/Page.jsx";
-import { toDateTimeString } from "../util.js";
 import Button from "../components/Button.jsx";
 
 export const PATH = "/";
@@ -59,18 +58,10 @@ function Home() {
         <Page title="Home" description="Hier kannst du die alle registrierten Sessions sehen.">
             <div className="flex justify-between items-center mb-6">
                 <div className={"flex-row flex justify-around gap-4 items-center"}>
-                    <Button
-                        fill={filterActive}
-                        border
-                        onClick={() => setFilterActive(!filterActive)}
-                        className={filterActive ? "text-white" : "text-black"}
-                    >
+                    <Button fill={filterActive} border onClick={() => setFilterActive(!filterActive)} className={filterActive ? "text-white" : "text-black"}>
                         Aktive Sessions
                     </Button>
-                    <Button
-                        border
-                        className="text-black"
-                    >
+                    <Button border className="text-black">
                         Restaurant
                     </Button>
                 </div>
@@ -83,7 +74,7 @@ function Home() {
                     <SessionBox
                         sessionLink={`/session/${sessionDetail.id}`}
                         title={`${sessionDetail.organizer.displayName} bei ${sessionDetail.restaurant.displayName}`}
-                        description={`Bis ${toDateTimeString(sessionDetail.deadline)}`}
+                        description={`Bis ${sessionDetail.deadline.toLocaleString()}`}
                         key={sessionDetail.id}
                     />
                 ))}
