@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import Text from "../components/Text";
-import { LOADING_USER, useAPI } from "../hooks/useAPI";
-import useUser from "../hooks/useUser.jsx";
-import Page from "../components/Page.jsx";
-import { toInputDateTimeString } from "../helper/dates.js";
-import Button from "../components/Button.jsx";
+import Text from "../../components/Text.jsx";
+import { LOADING_USER, useAPI } from "../../hooks/useAPI.jsx";
+import useUser from "../../hooks/useUser.jsx";
+import Page from "../../components/Page.jsx";
+import { toInputDateTimeString } from "../../helper/dates.js";
+import Button from "../../components/Button.jsx";
 
 function MenuItemCard({ name, description, price, quantity, updateQuantity }) {
     return (

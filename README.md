@@ -15,4 +15,4 @@
 - Friends
 - Login
 - Register
-- Profile
+- ProfileView

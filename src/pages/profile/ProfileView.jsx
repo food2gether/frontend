@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 
 // Components
-import Text from "../components/Text";
+import Text from "../../components/Text.jsx";
 
 // Hooks
-import useAPI from "../hooks/useAPI";
+import useAPI from "../../hooks/useAPI.jsx";
 import { useParams } from "react-router-dom";
-import Page from "../components/Page.jsx";
-import Button from "../components/Button.jsx";
+import Page from "../../components/Page.jsx";
+import Button from "../../components/Button.jsx";
 
 function ProfileProperty({ label, value }) {
     return value ? (
@@ -18,7 +18,7 @@ function ProfileProperty({ label, value }) {
     ) : null;
 }
 
-function Profile() {
+function ProfileView() {
     const { id } = useParams();
     const [profile, setProfile] = useState();
 
@@ -41,7 +41,7 @@ function Profile() {
                     <div>
                         <div className="w-[200px] h-[200px] flex items-center justify-center rounded-full mb-3 bg-primary border-4 border-primary">
                             {profile?.profilePictureUrl ? (
-                                <img src={profile.profilePictureUrl} alt="Profile Picture" className="size-full rounded-full object-cover" />
+                                <img src={profile.profilePictureUrl} alt="ProfileView Picture" className="size-full rounded-full object-cover" />
                             ) : (
                                 <p className={"text-9xl font-bold"}>?</p>
                             )}
@@ -60,4 +60,4 @@ function Profile() {
     );
 }
 
-export default Profile;
+export default ProfileView;

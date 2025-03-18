@@ -1,11 +1,11 @@
-import Text from "../components/Text.jsx";
+import Text from "../../components/Text.jsx";
 import React, { useEffect, useState } from "react";
-import useAPI from "../hooks/useAPI.jsx";
+import useAPI from "../../hooks/useAPI.jsx";
 import { useNavigate } from "react-router-dom";
-import Page from "../components/Page.jsx";
-import useUser from "../hooks/useUser.jsx";
-import { toInputDateTimeString } from "../helper/dates.js";
-import Button from "../components/Button.jsx";
+import Page from "../../components/Page.jsx";
+import useUser from "../../hooks/useUser.jsx";
+import { toInputDateTimeString } from "../../helper/dates.js";
+import Button from "../../components/Button.jsx";
 
 function SessionNew() {
     const [restaurants, setRestaurants] = useState([]);

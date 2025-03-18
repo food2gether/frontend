@@ -1,12 +1,12 @@
 import { useNavigate, useSearchParams } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import { FaCheck } from "react-icons/fa6";
-import Text from "../components/Text.jsx";
+import Text from "../../components/Text.jsx";
 import { RxCross2 } from "react-icons/rx";
-import useAPI from "../hooks/useAPI.jsx";
-import Page from "../components/Page.jsx";
-import useUser from "../hooks/useUser.jsx";
-import Button from "../components/Button.jsx";
+import useAPI from "../../hooks/useAPI.jsx";
+import Page from "../../components/Page.jsx";
+import useUser from "../../hooks/useUser.jsx";
+import Button from "../../components/Button.jsx";
 
 function ValidatedInput({ onChange, valid, placeholder, defaultValue }) {
     return (

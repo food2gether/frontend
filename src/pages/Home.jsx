@@ -1,15 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-// Components
 import Text from "../components/Text";
 
-// Hooks
 import { useAPI } from "../hooks/useAPI";
 import Page from "../components/Page.jsx";
 import Button from "../components/Button.jsx";
-
-export const PATH = "/";
 
 function SessionBox({ sessionLink, title, description, tabIndex }) {
     return (
