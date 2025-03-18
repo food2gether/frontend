@@ -1,5 +1,5 @@
 import { test, expect } from "vitest";
-import { toGMT, toInputDateTimeString } from "./dates.js";
+import { toGMT, toInputDateTimeString } from "../helper/dates.js";
 
 test("Convert local Date to GMT date", () => {
     const localDate = new Date("2020-01-01T12:00:00"); // Local date

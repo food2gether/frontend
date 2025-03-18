@@ -17,7 +17,7 @@ function Order() {
     const { order, payee, sessionId } = location.state;
     const moneyToPay = Object.values(order).reduce((acc, item) => acc + item.price * item.quantity, 0);
 
-    const [deadline, setDeadline] = useState();
+    const [deadline, setDeadline] = useState<Date | undefined>undefined;
 
     useEffect(() => {
         fetchSession(sessionId).then((response) => {

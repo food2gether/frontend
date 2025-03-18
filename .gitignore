@@ -8,6 +8,7 @@ logs
 .idea
 
 node_modules
+coverage
 bower_components
 
 *.sublime*
