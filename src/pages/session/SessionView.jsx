@@ -6,19 +6,17 @@ import useUser from "../../hooks/useUser.jsx";
 import Page from "../../components/Page.jsx";
 import { toInputDateTimeString } from "../../helper/dates.js";
 import Button from "../../components/Button.jsx";
+import { Box, BoxDescriptor } from "../../components/Box.jsx";
+import ProgressBar from "../../components/ProgressBar.jsx";
 
 function MenuItemCard({ name, description, price, quantity, updateQuantity }) {
     return (
-        <div className="flex justify-between items-center bg-white w-full p-4 rounded-2xl border-primary border gap-4">
-            <div>
-                <Text type="h5">{name}</Text>
-                <Text type="p" className={"mb-2"}>
-                    {description}
-                </Text>
+        <Box title={name} description={description}>
+            <BoxDescriptor title={name} description={description}>
                 <Text type="p" className="text-primary">
                     {(price / 100).toFixed(2)} €
                 </Text>
-            </div>
+            </BoxDescriptor>
             <div className="flex items-center gap-4">
                 <Text type="p">Anzahl:</Text>
                 <input type="text" min="0" className="w-8 text-black outline-none border-none" value={quantity || 0} onChange={(e) => updateQuantity(parseInt(e.target.value))} />
@@ -31,13 +29,12 @@ function MenuItemCard({ name, description, price, quantity, updateQuantity }) {
                     </button>
                 </div>
             </div>
-        </div>
+        </Box>
     );
 }
 
-function ProgressBar({ state }) {
+function DeliveryProgressBar({ state }) {
     let progress = 1;
-    let progressColor = state === "REJECTED" ? "bg-red-600" : "bg-primary";
     switch (state) {
         case "OPEN":
         case "SUBMITTED":
@@ -58,16 +55,8 @@ function ProgressBar({ state }) {
 
     return (
         <>
-            <div className={"flex items-center justify-center relative w-full"}>
-                <div className="h-1.5 bg-gray-500 absolute w-[95%] left-1"></div>
-                <div className={`h-2 z-10 ${progressColor} left-1 absolute`} style={{ width: `${((progress - 1) / 2) * 95}%` }}></div>
-                <div className="relative flex gap-8 justify-between items-center w-full">
-                    <div className={`rounded-full z-10 w-5 h-5 ${progress >= 1 ? progressColor : "bg-gray-500"}`}></div>
-                    <div className={`rounded-full z-10 w-5 h-5 ${progress >= 2 ? progressColor : "bg-gray-500"}`}></div>
-                    <div className={`rounded-full z-10 w-5 h-5 ${progress >= 3 ? progressColor : "bg-gray-500"}`}></div>
-                </div>
-            </div>
-            <Text className={"self-center"}>{translation[state]}</Text>
+            <ProgressBar progress={progress} total={3} className={state === "REJECTED" ? "bg-red-600" : "bg-primary"} />
+            <Text className={"w-full text-center"}>{translation[state]}</Text>
         </>
     );
 }
@@ -242,7 +231,7 @@ function SessionView() {
                                         .toFixed(2)}
                                     €
                                 </Text>
-                                <ProgressBar state={order.state} />
+                                <DeliveryProgressBar state={order.state} />
                             </div>
                         ))}
                     </div>

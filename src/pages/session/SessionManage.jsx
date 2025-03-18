@@ -5,6 +5,7 @@ import Text from "../../components/Text.jsx";
 import useUser from "../../hooks/useUser.jsx";
 import Page from "../../components/Page.jsx";
 import Button from "../../components/Button.jsx";
+import { Box, BoxDescriptor } from "../../components/Box.jsx";
 
 function SessionManage() {
     const { sessionId } = useParams();
@@ -100,10 +101,8 @@ function SessionManage() {
     return (
         <Page title={`Verwalte bestellung bei ${restaurant?.displayName}`} description="Hier kannst du die Bestellungen verwalten.">
             {sessionOrders?.map((order) => (
-                <div className="bg-white rounded-lg p-4 mb-2 border border-primary w-full min-w-[500px] h-auto" key={order.id}>
-                    <Text type={"h4"} className={"mb-2"}>
-                        {users[order.profileId]?.displayName}
-                    </Text>
+                <Box key={order.id}>
+                    <BoxDescriptor title={users[order.profileId]?.displayName} />
                     {order.items.map((item, index) => {
                         const menuItem = menu[item.menuItemId];
                         return (
@@ -141,7 +140,7 @@ function SessionManage() {
                             Zurücksetzen
                         </Button>
                     </div>
-                </div>
+                </Box>
             ))}
         </Page>
     );
