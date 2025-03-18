@@ -68,16 +68,16 @@ function Button({ children, linkTo, linkOptions, onClick, checkDisabled, classNa
     );
 }
 
-Button.prototype = {
-    children: PropTypes.node,
+Button.propTypes = {
+    children: PropTypes.node.isRequired,
     linkTo: PropTypes.string,
     linkOptions: PropTypes.object,
     onClick: PropTypes.func,
     checkDisabled: PropTypes.func,
     className: PropTypes.string,
-    arrow: PropTypes.node,
-    fill: PropTypes.string,
-    border: PropTypes.string,
+    arrow: PropTypes.oneOfType([PropTypes.bool, PropTypes.node]),
+    fill: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
+    border: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
 };
 
 export default Button;
