@@ -34,8 +34,12 @@ export default {
         "w-[95%]",
         "!bg-primary",
         "!bg-red-600",
-        "!border-primary",
-        "!border-red-600",
-        "!border-black",
+        "border-2",
+        "pointer-events-none",
+        "cursor-not-allowed",
+        "opacity-50",
+        "group-hover:-translate-y-1",
+        "border-black",
+        "border-red-600"
     ],
 };

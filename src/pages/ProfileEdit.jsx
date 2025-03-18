@@ -1,5 +1,4 @@
 import { useNavigate, useSearchParams } from "react-router-dom";
-import Button from "../components/Button.jsx";
 import React, { useEffect, useState } from "react";
 import { FaCheck } from "react-icons/fa6";
 import Text from "../components/Text.jsx";
@@ -7,6 +6,7 @@ import { RxCross2 } from "react-icons/rx";
 import useAPI from "../hooks/useAPI.jsx";
 import Page from "../components/Page.jsx";
 import useUser from "../hooks/useUser.jsx";
+import Button from "../components/Button.jsx";
 
 function ValidatedInput({ onChange, valid, placeholder, defaultValue }) {
     return (
@@ -88,24 +88,10 @@ function ProfileEdit() {
     };
 
     return (
-        <Page
-            title={"Profil Setup"}
-            description={"Bitte richte erst dein Profil ein, bevor du weiter gehst."}
-            className={"w-full flex flex-col gap-6"}
-        >
+        <Page title={"Profil Setup"} description={"Bitte richte erst dein Profil ein, bevor du weiter gehst."} className={"w-full flex flex-col gap-6"}>
             <div className={"flex flex-col gap-4"}>
-                <ValidatedInput
-                    placeholder="Anzeige-Name"
-                    valid={displayName?.length >= 3}
-                    onChange={handleDisplayNameChange}
-                    defaultValue={self?.displayName}
-                />
-                <ValidatedInput
-                    placeholder="Paypal.me-Name"
-                    valid={paypalMeValid}
-                    onChange={handlePaypalMeChange}
-                    defaultValue={self?.name}
-                />
+                <ValidatedInput placeholder="Anzeige-Name" valid={displayName?.length >= 3} onChange={handleDisplayNameChange} defaultValue={self?.displayName} />
+                <ValidatedInput placeholder="Paypal.me-Name" valid={paypalMeValid} onChange={handlePaypalMeChange} defaultValue={self?.name} />
                 <ValidatedInput
                     placeholder="Profilbild-URL (optional)"
                     valid={profilePictureUrlValid}
@@ -114,18 +100,12 @@ function ProfileEdit() {
                 />
             </div>
 
-            <Button
-                slide
-                className={"self-center"}
-                disabled={!(displayName && paypalMeValid && profilePictureUrlValid)}
-                onClick={handleFinish}
-            >
+            <Button fill arrow className={"self-center"} checkDisabled={() => !(displayName && paypalMeValid && profilePictureUrlValid)} onClick={handleFinish}>
                 Fertig
             </Button>
             {showError && (
                 <Text type={"p"} className={"!text-red-500 w-1/2 text-center self-center"}>
-                    Es gab einen Fehler. Hast du vielleicht den PayPal.me-Namen eines anderen
-                    eingetragen?
+                    Es gab einen Fehler. Hast du vielleicht den PayPal.me-Namen eines anderen eingetragen?
                 </Text>
             )}
         </Page>

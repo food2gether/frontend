@@ -1,0 +1,20 @@
+// Poppins Font Import
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+/*----------------------------------------------------*/
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    height: calc(100dvh - 80px);
+    background: white;
+    color: white;
+    font-family: "Poppins", sans-serif;
+}
+
+#root {
+    height: 100%;
+    overflow: visible;
+}
