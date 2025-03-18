@@ -11,6 +11,7 @@ function Navbar() {
 
     const navItems = [
         { name: "Home", to: "/" },
+        { name: "Restaurants", to: "/restaurants" },
         { name: "Profil", to: "/profile/me" },
     ];
 
