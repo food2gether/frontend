@@ -1,31 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-
-import Text from "../components/Text";
+import { useEffect, useState } from "react";
 
 import { useAPI } from "../hooks/useAPI";
 import Page from "../components/Page.jsx";
 import Button from "../components/Button.jsx";
-
-function SessionBox({ sessionLink, title, description, tabIndex }) {
-    return (
-        <Link to={sessionLink} tabIndex={tabIndex} className="mb-4">
-            <div className="rounded-lg p-4 mb-2 border border-primary cursor-pointer">
-                <div className={"flex flex-row items-center justify-between"}>
-                    <div>
-                        <Text type={"h3"} bold>
-                            {title}
-                        </Text>
-                        <Text>{description}</Text>
-                    </div>
-                    <Button arrow fill>
-                        ansehen
-                    </Button>
-                </div>
-            </div>
-        </Link>
-    );
-}
+import { VisitableBox } from "../components/Box.jsx";
 
 function Home() {
     const { fetchAllSessions, fetchProfile, fetchRestaurant } = useAPI();
@@ -65,10 +43,10 @@ function Home() {
                     Neue Session
                 </Button>
             </div>
-            <div className="flex flex-col w-full">
+            <div className="flex flex-col w-full gap-4">
                 {sessionDetails.map((sessionDetail) => (
-                    <SessionBox
-                        sessionLink={`/session/${sessionDetail.id}`}
+                    <VisitableBox
+                        to={`/session/${sessionDetail.id}`}
                         title={`${sessionDetail.organizer.displayName} bei ${sessionDetail.restaurant.displayName}`}
                         description={`Bis ${sessionDetail.deadline.toLocaleString()}`}
                         key={sessionDetail.id}
