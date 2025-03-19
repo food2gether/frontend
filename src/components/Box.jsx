@@ -3,9 +3,9 @@ import { Link } from "react-router-dom";
 import Button from "./Button.jsx";
 import React from "react";
 
-function BoxDescriptor({ title, description, className, children }) {
+function BoxDescriptor({ title, description, key, className, children }) {
     return (
-        <div className={className}>
+        <div className={className} key={key}>
             <Text type="h3">{title}</Text>
             <Text type="p" className={"mb-2"}>
                 {description}
@@ -15,22 +15,22 @@ function BoxDescriptor({ title, description, className, children }) {
     );
 }
 
-function Box({ children, className }) {
-    return <div className={`flex flex-row items-center justify-between rounded-lg border border-primary w-full p-4 ${className || ""}`}>{children}</div>;
+function Box({ children, key, className }) {
+    return <div key={key} className={`flex flex-row items-center justify-between rounded-lg border border-primary w-full p-4 ${className || ""}`}>{children}</div>;
 }
 
-function TDBox({ title, description, children, className }) {
+function TDBox({ title, description, children, key, className }) {
     return (
-        <Box className={className}>
+        <Box className={className} key={key}>
             <BoxDescriptor title={title} description={description} />
             {children}
         </Box>
     );
 }
 
-function LinkBox({ title, description, to, children, className }) {
+function LinkBox({ title, description, to, children, key, className }) {
     return (
-        <Link to={to}>
+        <Link to={to} key={key}>
             <TDBox title={title} description={description} className={className}>
                 {children}
             </TDBox>
@@ -38,9 +38,9 @@ function LinkBox({ title, description, to, children, className }) {
     );
 }
 
-function VisitableBox({ title, description, to, className }) {
+function VisitableBox({ title, description, to, key, className }) {
     return (
-        <LinkBox title={title} description={description} to={to} className={className}>
+        <LinkBox key={key} title={title} description={description} to={to} className={className}>
             <Button arrow fill>
                 ansehen
             </Button>
