@@ -4,6 +4,7 @@ import { useAPI } from "../hooks/useAPI";
 import Page from "../components/Page.jsx";
 import Button from "../components/Button.jsx";
 import { VisitableBox } from "../components/Box.jsx";
+import ToolBar, { ToggleFilter } from "../components/ToolBar.jsx";
 
 function Home() {
     const { fetchAllSessions, fetchProfile, fetchRestaurant } = useAPI();
@@ -31,17 +32,14 @@ function Home() {
     return (
         <Page title="Home" description="Hier kannst du die alle registrierten Sessions sehen.">
             <div className="flex justify-between items-center mb-6">
-                <div className={"flex-row flex justify-around gap-4 items-center"}>
-                    <Button fill={filterActive} border onClick={() => setFilterActive(!filterActive)} className={filterActive ? "text-white" : "text-black"}>
-                        Aktive Sessions
+                <ToolBar>
+                    <ToggleFilter filterActive={filterActive} setFilterActive={setFilterActive}>
+                        Alle Sessions
+                    </ToggleFilter>
+                    <Button arrow fill linkTo="/session/new">
+                        Neue Session
                     </Button>
-                    <Button border className="text-black">
-                        Restaurant
-                    </Button>
-                </div>
-                <Button arrow fill linkTo="/session/new">
-                    Neue Session
-                </Button>
+                </ToolBar>
             </div>
             <div className="flex flex-col w-full gap-4">
                 {sessionDetails.map((sessionDetail) => (
