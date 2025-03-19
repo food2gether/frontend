@@ -33,9 +33,7 @@ const useApiContext = () => {
     };
 
     const fetchAllSessions = async (orderable = undefined) => {
-        return await apiGet(
-            `/api/v1/sessions${orderable !== undefined ? `?orderable=${orderable}` : ""}`,
-        );
+        return await apiGet(`/api/v1/sessions${orderable !== undefined ? `?orderable=${orderable}` : ""}`);
     };
 
     const fetchSession = async (sessionId) => {
@@ -55,9 +53,7 @@ const useApiContext = () => {
     };
 
     const fetchOrders = async (sessionId, profileId) => {
-        return await apiGet(
-            `/api/v1/sessions/${sessionId}/orders${profileId !== undefined ? `?profile_id=${profileId}` : ""}`,
-        );
+        return await apiGet(`/api/v1/sessions/${sessionId}/orders${profileId !== undefined ? `?profile_id=${profileId}` : ""}`);
     };
 
     const placeOrder = async (sessionId, order) => {

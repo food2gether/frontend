@@ -16,7 +16,11 @@ function BoxDescriptor({ title, description, key, className, children }) {
 }
 
 function Box({ children, key, className }) {
-    return <div key={key} className={`flex flex-row items-center justify-between rounded-lg border border-primary w-full p-4 ${className || ""}`}>{children}</div>;
+    return (
+        <div key={key} className={`flex flex-row items-center justify-between rounded-lg border border-primary w-full p-4 ${className || ""}`}>
+            {children}
+        </div>
+    );
 }
 
 function TDBox({ title, description, children, key, className }) {
