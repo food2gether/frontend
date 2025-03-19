@@ -26,7 +26,7 @@ function SessionManage() {
             if (session.data) {
                 setSession(session.data);
             } else {
-                navigate("/notfound");
+                navigate("/404");
             }
         });
     }, [fetchSession, sessionId, navigate]);
@@ -34,8 +34,7 @@ function SessionManage() {
     // protected route
     useEffect(() => {
         if (self && session && self.id !== session.organizerId) {
-            window.alert("Du bist nicht berechtigt diesen SessionView zu verwalten");
-            navigate("/notfound");
+            navigate("/404");
         }
     }, [self, session]);
 

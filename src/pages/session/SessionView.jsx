@@ -86,7 +86,7 @@ function SessionView() {
             setSession(sessionData);
             setDeadline(new Date(sessionData.deadline + "Z"));
         } else {
-            navigate("/notfound");
+            navigate("/404");
             return;
         }
 
