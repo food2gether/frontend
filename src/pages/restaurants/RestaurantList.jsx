@@ -19,7 +19,9 @@ function RestaurantList() {
     return (
         <Page title="Restaurants" description="Hier findest du alle Restaurants, die du in einer Session verwenden kannst.">
             <div className="flex justify-end items-center mb-6">
-                <Button arrow fill linkTo="/restaurant/edit">Neues Restaurant</Button>
+                <Button arrow fill linkTo="/restaurant/edit">
+                    Neues Restaurant
+                </Button>
             </div>
             {restaurants.map((restaurant) => (
                 <VisitableBox

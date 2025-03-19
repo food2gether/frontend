@@ -1,7 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import useAPI from "../../hooks/useAPI.jsx";
-import Text from "../../components/Text.jsx";
 import useUser from "../../hooks/useUser.jsx";
 import Page from "../../components/Page.jsx";
 import Button from "../../components/Button.jsx";

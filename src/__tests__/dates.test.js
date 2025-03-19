@@ -1,4 +1,4 @@
-import { test, expect } from "vitest";
+import { expect, test } from "vitest";
 import { toGMT, toInputDateTimeString } from "../helper/dates.js";
 
 test("Convert local Date to GMT date", () => {
@@ -18,7 +18,7 @@ test("Convert GMT Date to GMT date", () => {
     const convertedDate = toGMT(gmtDate);
 
     expect(convertedDate.getTime()).toBe(gmtDate.getTime());
-})
+});
 
 test("Convert Date to input string", () => {
     const date = new Date("2020-01-01T12:00:00");
@@ -26,4 +26,4 @@ test("Convert Date to input string", () => {
     const dateString = toInputDateTimeString(date);
 
     expect(dateString).toBe("2020-01-01T12:00");
-})
+});

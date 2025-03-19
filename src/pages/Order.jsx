@@ -32,7 +32,7 @@ function Order() {
     useEffect(() => {
         const orderDto = {
             profileId: self.id,
-            items: orderItems
+            items: orderItems,
         };
         setOrderDto(orderDto);
     }, [self]);
