@@ -3,6 +3,7 @@ import useAPI from "../../hooks/useAPI.jsx";
 import { useEffect, useState } from "react";
 import { VisitableBox } from "../../components/Box.jsx";
 import Button from "../../components/Button.jsx";
+import ToolBar from "../../components/ToolBar.jsx";
 
 function RestaurantList() {
     const { fetchAllRestaurants } = useAPI();
@@ -18,11 +19,11 @@ function RestaurantList() {
 
     return (
         <Page title="Restaurants" description="Hier findest du alle Restaurants, die du in einer Session verwenden kannst.">
-            <div className="flex justify-end items-center mb-6">
+            <ToolBar>
                 <Button arrow fill linkTo="/restaurant/edit">
                     Neues Restaurant
                 </Button>
-            </div>
+            </ToolBar>
             {restaurants.map((restaurant) => (
                 <VisitableBox
                     to={`/restaurant/${restaurant.id}`}

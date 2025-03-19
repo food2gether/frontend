@@ -9,6 +9,7 @@ import Button from "../../components/Button.jsx";
 import { Box, BoxDescriptor } from "../../components/Box.jsx";
 import ProgressBar from "../../components/ProgressBar.jsx";
 import Input from "../../components/Input.jsx";
+import ToolBar from "../../components/ToolBar.jsx";
 
 function MenuItemCard({ name, description, price, quantity, updateQuantity }) {
     return (
@@ -158,7 +159,7 @@ function SessionView() {
     return (
         <Page title={`Bestelle mit ${organizer.displayName} bei ${restaurant.displayName}`} description={`Offen bis ${deadline && deadline.toLocaleString()}`}>
             {self?.id === session?.organizerId && (
-                <div className={"flex flex-row justify-between items-center"}>
+                <ToolBar>
                     <Input
                         type={"datetime-local"}
                         defaultValue={deadline ? toInputDateTimeString(deadline) : undefined}
@@ -168,7 +169,7 @@ function SessionView() {
                     <Button linkTo={`/session/${sessionId}/manage`} fill arrow>
                         Verwalten
                     </Button>
-                </div>
+                </ToolBar>
             )}
             <div className="flex flex-row gap-5 mt-10">
                 <div className="flex flex-col items-center gap-10">

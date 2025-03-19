@@ -15,7 +15,7 @@ function Text({ children, type, bold, center, light, className }) {
     ${light ? "text-white" : "text-black"}
     ${styles[type]}`;
 
-    return <p className={`${textClass}${className}`}>{children}</p>;
+    return <p className={`${textClass} ${className || ""}`}>{children}</p>;
 }
 
 export default Text;

@@ -49,15 +49,11 @@ function Button({ children, linkTo, linkOptions, onClick, checkDisabled, classNa
         classNames += "pointer-events-none cursor-not-allowed opacity-50 ";
     }
 
-    if (!arrow) {
-        classNames += "group-hover:-translate-y-1 ";
-    }
-
     classNames += className;
 
     return (
         <button onClick={handleClick} onKeyDown={handleClick} className={classNames}>
-            <span className={"group-hover:-translate-y-1 transition-all duration-200"}>{children}</span>
+            <span className={`${arrow ? "" : "group-hover:-translate-y-0.5"} transition-all duration-200`}>{children}</span>
             {arrow
                 ? cloneElement(arrow, {
                       ...arrow.props,

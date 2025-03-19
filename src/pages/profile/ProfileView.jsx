@@ -8,6 +8,7 @@ import useAPI from "../../hooks/useAPI.jsx";
 import { useParams } from "react-router-dom";
 import Page from "../../components/Page.jsx";
 import Button from "../../components/Button.jsx";
+import ToolBar from "../../components/ToolBar.jsx";
 
 function ProfileProperty({ label, value }) {
     return value ? (
@@ -31,11 +32,11 @@ function ProfileView() {
 
     return (
         <Page title="Profil" description="Hier kannst du dein Profil sehen.">
-            <div className={"flex flex-row items-center justify-end"}>
+            <ToolBar>
                 <Button linkTo="/profile/edit" fill arrow>
                     Profil bearbeiten
                 </Button>
-            </div>
+            </ToolBar>
             <div className="flex flex-row">
                 <div className="w-1/3">
                     <div>
