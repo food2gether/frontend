@@ -8,6 +8,7 @@ import { toInputDateTimeString } from "../../helper/dates.js";
 import Button from "../../components/Button.jsx";
 import { Box, BoxDescriptor } from "../../components/Box.jsx";
 import ProgressBar from "../../components/ProgressBar.jsx";
+import Input from "../../components/Input.jsx";
 
 function MenuItemCard({ name, description, price, quantity, updateQuantity }) {
     return (
@@ -129,7 +130,7 @@ function SessionView() {
         }
         setQuantityByMenuItemId((prev) => ({
             ...prev,
-            [product.id]: quantity
+            [product.id]: quantity,
         }));
     };
 
@@ -158,11 +159,11 @@ function SessionView() {
         <Page title={`Bestelle mit ${organizer.displayName} bei ${restaurant.displayName}`} description={`Offen bis ${deadline && deadline.toLocaleString()}`}>
             {self?.id === session?.organizerId && (
                 <div className={"flex flex-row justify-between items-center"}>
-                    <input
-                        type="datetime-local"
-                        className={"border border-primary py-[5px] px-[10px] rounded-xl text-black text-[20px]" + `${deadlineValid ? "" : " border-red-500"}`}
+                    <Input
+                        type={"datetime-local"}
                         defaultValue={deadline ? toInputDateTimeString(deadline) : undefined}
                         onChange={(e) => updateDeadline(e.target.value)}
+                        valid={deadlineValid}
                     />
                     <Button linkTo={`/session/${sessionId}/manage`} fill arrow>
                         Verwalten

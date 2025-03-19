@@ -6,6 +6,7 @@ import Page from "../../components/Page.jsx";
 import useUser from "../../hooks/useUser.jsx";
 import { toInputDateTimeString } from "../../helper/dates.js";
 import Button from "../../components/Button.jsx";
+import Input from "../../components/Input.jsx";
 
 function SessionNew() {
     const [restaurants, setRestaurants] = useState([]);
@@ -57,12 +58,11 @@ function SessionNew() {
 
                 <div className="w-1/3">
                     <Text type="p">Deadline</Text>
-                    <input
+                    <Input
                         type="datetime-local"
-                        className="border border-gray-300 px-5 py-[10px] rounded-xl mt-1 text-black w-full text-lg"
                         defaultValue={toInputDateTimeString(deadline)}
-                        min={toInputDateTimeString(new Date())}
                         onChange={(e) => setDeadline(new Date(e.target.value))}
+                        valid={deadline > new Date()}
                     />
                 </div>
             </div>
