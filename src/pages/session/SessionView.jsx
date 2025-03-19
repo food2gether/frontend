@@ -72,7 +72,7 @@ function SessionView() {
     const [deadline, setDeadline] = useState();
     const [organizer, setOrganizer] = useState({ ...LOADING_USER });
     const [menu, setMenu] = useState({});
-    const [order, setOrder] = useState({});
+    const [quantityByMenuItemId, setQuantityByMenuItemId] = useState({});
     const [totalPrice, setTotalPrice] = useState(0);
 
     const [ownOrders, setOwnOrders] = useState([]);
@@ -123,23 +123,19 @@ function SessionView() {
 
     const updateQuantity = (product, quantity) => {
         if (quantity <= 0) {
-            const { [product.id]: _, ...rest } = order;
-            setOrder(rest);
+            const { [product.id]: _, ...rest } = quantityByMenuItemId;
+            setQuantityByMenuItemId(rest);
             return;
         }
-        setOrder((prev) => ({
+        setQuantityByMenuItemId((prev) => ({
             ...prev,
-            [product.id]: {
-                ...product,
-                quantity: quantity,
-                price: (product.price / 100).toFixed(2),
-            },
+            [product.id]: quantity
         }));
     };
 
     useEffect(() => {
-        setTotalPrice(Object.values(order).reduce((acc, item) => acc + item.quantity * item.price, 0));
-    }, [order]);
+        setTotalPrice(Object.entries(quantityByMenuItemId).reduce((acc, [menuItemId, quantity]) => acc + quantity * menu[menuItemId].price, 0));
+    }, [quantityByMenuItemId]);
 
     const [deadlineValid, setDeadlineValid] = useState(true);
     const updateDeadline = (value) => {
@@ -182,19 +178,20 @@ function SessionView() {
                                 name={product.name}
                                 description={product.description}
                                 price={product.price}
-                                quantity={order[product.id]?.quantity || 0}
+                                quantity={quantityByMenuItemId[product.id] || 0}
                                 updateQuantity={(quantity) => updateQuantity(product, quantity)}
                             />
                         ))}
                     </div>
                     <Text type="h2" bold>
-                        {order && Object.keys(order).length > 0 ? `Gesamtpreis: ${totalPrice.toFixed(2)} €` : "Bitte wähle etwas aus!"}
+                        {quantityByMenuItemId && Object.keys(quantityByMenuItemId).length > 0 ? `Gesamtpreis: ${(totalPrice / 100).toFixed(2)} €` : "Bitte wähle etwas aus!"}
                     </Text>
                     <Button
                         linkTo="/order"
                         linkOptions={{
                             state: {
-                                order: order,
+                                orderItems: Object.entries(quantityByMenuItemId).map(([orderItem, quantity]) => ({ menuItemId: parseInt(orderItem.id), quantity })),
+                                menu: menu,
                                 sessionId: sessionId,
                                 payee: organizer.name,
                             },
