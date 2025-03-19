@@ -1,35 +1,11 @@
 import { useNavigate, useSearchParams } from "react-router-dom";
 import React, { useEffect, useState } from "react";
-import { FaCheck } from "react-icons/fa6";
 import Text from "../../components/Text.jsx";
-import { RxCross2 } from "react-icons/rx";
 import useAPI from "../../hooks/useAPI.jsx";
 import Page from "../../components/Page.jsx";
 import useUser from "../../hooks/useUser.jsx";
 import Button from "../../components/Button.jsx";
-
-function ValidatedInput({ onChange, valid, placeholder, defaultValue }) {
-    return (
-        <div className={"w-full flex flex-row items-center gap-3"}>
-            <input
-                type="text"
-                placeholder={placeholder}
-                className="border border-gray-300 px-5 py-[10px] rounded-xl mt-1 text-black text-lg w-1/3"
-                onChange={(event) => onChange(event.target.value)}
-                defaultValue={defaultValue}
-            />
-            {valid ? (
-                <Text type={"h3"} className={"text-green-600"}>
-                    <FaCheck />
-                </Text>
-            ) : (
-                <Text type={"h3"} className={"text-red-600"}>
-                    <RxCross2 />
-                </Text>
-            )}
-        </div>
-    );
-}
+import Input from "../../components/Input.jsx";
 
 function ProfileEdit() {
     const [searchParams, _] = useSearchParams();
@@ -68,7 +44,7 @@ function ProfileEdit() {
     };
 
     const handleFinish = () => {
-        if (displayName && paypalMeValid && profilePictureUrlValid) {
+        if (displayName?.length >= 3 && paypalMeValid && profilePictureUrlValid) {
             const dto = {
                 displayName,
                 name: paypalMe,
@@ -90,13 +66,20 @@ function ProfileEdit() {
     return (
         <Page title={"Profil Setup"} description={"Bitte richte erst dein Profil ein, bevor du weiter gehst."} className={"w-full flex flex-col gap-6"}>
             <div className={"flex flex-col gap-4"}>
-                <ValidatedInput placeholder="Anzeige-Name" valid={displayName?.length >= 3} onChange={handleDisplayNameChange} defaultValue={self?.displayName} />
-                <ValidatedInput placeholder="Paypal.me-Name" valid={paypalMeValid} onChange={handlePaypalMeChange} defaultValue={self?.name} />
-                <ValidatedInput
+                <Input
+                    type="text"
+                    placeholder="Anzeige-Name"
+                    onChange={(event) => handleDisplayNameChange(event.target.value)}
+                    defaultValue={self?.displayName}
+                    valid={displayName?.length >= 3}
+                />
+                <Input type="text" placeholder="Paypal.me-Name" onChange={(event) => handlePaypalMeChange(event.target.value)} defaultValue={self?.name} valid={paypalMeValid} />
+                <Input
+                    type="text"
                     placeholder="Profilbild-URL (optional)"
-                    valid={profilePictureUrlValid}
-                    onChange={handleProfilePictureUrlChange}
+                    onChange={(event) => handleProfilePictureUrlChange(event.target.value)}
                     defaultValue={self?.profilePictureUrl}
+                    valid={profilePictureUrlValid}
                 />
             </div>
 
