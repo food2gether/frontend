@@ -98,7 +98,7 @@ function SessionManage() {
     };
 
     return (
-        <Page title={`Verwalte bestellung bei ${restaurant?.displayName}`} description="Hier kannst du die Bestellungen verwalten.">
+        <Page ready={!!restaurant} title={`Verwalte Bestellungen bei ${restaurant?.displayName}`} description="Hier kannst du die Bestellungen verwalten.">
             {sessionOrders?.map((order) => (
                 <Box key={order.id}>
                     <BoxDescriptor title={users[order.profileId]?.displayName} />

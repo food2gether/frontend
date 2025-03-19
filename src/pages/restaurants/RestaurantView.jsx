@@ -33,9 +33,9 @@ function RestaurantView() {
     }, []);
 
     return (
-        <Page title={`Restaurant ${restaurant?.name || id}`} description={restaurant ? `${restaurant.address.street}, ${restaurant.address.postalCode} ${restaurant.address.city}, ${restaurant.address.country}` : ""}>
+        <Page ready={!!restaurant} title={`Restaurant ${restaurant?.displayName || id}`} description={`${restaurant?.address.street}, ${restaurant?.address.postalCode} ${restaurant?.address.city}, ${restaurant?.address.country}`}>
             <ToolBar>
-                <Button arrow fill>
+                <Button fill arrow>
                     Bearbeiten
                 </Button>
             </ToolBar>

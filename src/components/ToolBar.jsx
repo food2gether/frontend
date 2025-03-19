@@ -1,4 +1,5 @@
 import Button from "./Button.jsx";
+import { Children } from "react";
 
 function ToggleFilter({ filterActive, setFilterActive, children }) {
     return (
@@ -9,7 +10,7 @@ function ToggleFilter({ filterActive, setFilterActive, children }) {
 }
 
 function ToolBar({ children }) {
-    return <div className={`flex ${children.length === 1 ? "justify-end" : "justify-between"} items-center mb-6`}>{children}</div>;
+    return <div className={`flex ${Children.toArray(children).length === 1 ? "justify-end" : "justify-between"} items-center mb-6`}>{children}</div>;
 }
 
 export default ToolBar;

@@ -31,7 +31,7 @@ function ProfileView() {
     }, []);
 
     return (
-        <Page title="Profil" description="Hier kannst du dein Profil sehen.">
+        <Page ready={!!profile} title="Profil" description="Hier kannst du dein Profil sehen.">
             <ToolBar>
                 <Button linkTo="/profile/edit" fill arrow>
                     Profil bearbeiten
