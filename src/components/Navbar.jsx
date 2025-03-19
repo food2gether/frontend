@@ -24,7 +24,7 @@ function Navbar() {
 
     return (
         <nav className="h-[80px] flex items-center justify-center fixed w-full top-0 bg-primary" style={{ zIndex: 999 }}>
-            <div className={`flex items-center ${loggedIn() ? "justify-between" : "justify-center"} gap-10 px-4 container-nav`}>
+            <div className={`flex items-center ${loggedIn() ? "justify-between" : "justify-center"} gap-10 px-4`}>
                 <Link reloadDocument to="/">
                     <Text type={"h2"} bold light>
                         Food
