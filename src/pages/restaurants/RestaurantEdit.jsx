@@ -6,7 +6,11 @@ function RestaurantEdit() {
 
     const id = searchParams.get("id");
 
-    return <Page title={id ? `Bearbeite Restaurant ${id}` : "Erstelle ein neues Restaurant"} description="Hier kannst du alles bzgl. des Restaurants einstellen."></Page>;
+    return (
+        <Page title={id ? `Bearbeite Restaurant ${id}` : "Erstelle ein neues Restaurant"} description="Hier kannst du alles bzgl. des Restaurants einstellen.">
+
+        </Page>
+    );
 }
 
 export default RestaurantEdit;
