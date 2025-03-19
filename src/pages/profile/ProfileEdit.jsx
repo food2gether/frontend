@@ -14,6 +14,7 @@ function ProfileEdit() {
     const { data: self } = useUser();
 
     const [displayName, setDisplayName] = useState("");
+    const [displayNameValid, setDisplayNameValid] = useState(false);
     const [paypalMe, setPaypalMe] = useState("");
     const [paypalMeValid, setPaypalMeValid] = useState(false);
     const [profilePictureUrl, setProfilePictureUrl] = useState("");
@@ -30,12 +31,13 @@ function ProfileEdit() {
 
     const handleDisplayNameChange = (val) => {
         setDisplayName(val);
+        setDisplayNameValid(!!val && val.length >= 3)
     };
 
     const handlePaypalMeChange = (val) => {
         setPaypalMe(val);
         // TODO validate
-        setPaypalMeValid(val);
+        setPaypalMeValid(!!val);
     };
 
     const handleProfilePictureUrlChange = (val) => {
@@ -72,18 +74,27 @@ function ProfileEdit() {
                     onChange={(event) => handleDisplayNameChange(event.target.value)}
                     defaultValue={self?.displayName}
                     valid={displayName?.length >= 3}
+                    className="w-1/3"
                 />
-                <Input type="text" placeholder="Paypal.me-Name" onChange={(event) => handlePaypalMeChange(event.target.value)} defaultValue={self?.name} valid={paypalMeValid} />
+                <Input
+                    type="text"
+                    placeholder="Paypal.me-Name"
+                    onChange={(event) => handlePaypalMeChange(event.target.value)}
+                    defaultValue={self?.name}
+                    valid={paypalMeValid}
+                    className="w-1/3"
+                />
                 <Input
                     type="text"
                     placeholder="Profilbild-URL (optional)"
                     onChange={(event) => handleProfilePictureUrlChange(event.target.value)}
                     defaultValue={self?.profilePictureUrl}
                     valid={profilePictureUrlValid}
+                    className="w-1/3"
                 />
             </div>
 
-            <Button fill arrow className={"self-center"} checkDisabled={() => !(displayName && paypalMeValid && profilePictureUrlValid)} onClick={handleFinish}>
+            <Button fill arrow className={"self-center"} checkDisabled={() => !(displayNameValid && paypalMeValid && profilePictureUrlValid)} onClick={handleFinish}>
                 Fertig
             </Button>
             {showError && (

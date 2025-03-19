@@ -31,16 +31,14 @@ function Home() {
 
     return (
         <Page title="Home" description="Hier kannst du die alle registrierten Sessions sehen.">
-            <div className="flex justify-between items-center mb-6">
-                <ToolBar>
-                    <ToggleFilter filterActive={filterActive} setFilterActive={setFilterActive}>
-                        Alle Sessions
-                    </ToggleFilter>
-                    <Button arrow fill linkTo="/session/new">
-                        Neue Session
-                    </Button>
-                </ToolBar>
-            </div>
+            <ToolBar>
+                <ToggleFilter filterActive={filterActive} setFilterActive={setFilterActive}>
+                    Alle Sessions
+                </ToggleFilter>
+                <Button arrow fill linkTo="/session/new">
+                    Neue Session
+                </Button>
+            </ToolBar>
             <div className="flex flex-col w-full gap-4">
                 {sessionDetails.map((sessionDetail) => (
                     <VisitableBox
