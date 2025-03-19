@@ -20,15 +20,15 @@ function RestaurantList() {
     return (
         <Page title="Restaurants" description="Hier findest du alle Restaurants, die du in einer Session verwenden kannst.">
             <ToolBar>
-                <Button arrow fill linkTo="/restaurant/edit">
+                <Button arrow fill linkTo="/restaurants/edit">
                     Neues Restaurant
                 </Button>
             </ToolBar>
             {restaurants.map((restaurant) => (
                 <VisitableBox
-                    to={`/restaurant/${restaurant.id}`}
+                    to={`/restaurants/${restaurant.id}`}
                     key={restaurant.id}
-                    title={restaurant.name}
+                    title={restaurant.displayName}
                     description={`${restaurant.address.street}, ${restaurant.address.postalCode} ${restaurant.address.city}, ${restaurant.address.country}`}
                 />
             ))}

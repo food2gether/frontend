@@ -1,7 +1,11 @@
 import Text from "./Text.jsx";
 
-function Page({ title, description, className, children }) {
-    return (
+const loadingPage = (
+    <Page title={"Loading..."} description={"Please stand by until the page loaded."} />
+)
+
+function Page({ ready = true, title, description, className, children }) {
+    return ready ? (
         <>
             <div>
                 <Text type="h2">{title}</Text>
@@ -15,7 +19,7 @@ function Page({ title, description, className, children }) {
             </div>
             <div className={className}>{children}</div>
         </>
-    );
+    ) : loadingPage;
 }
 
 export default Page;

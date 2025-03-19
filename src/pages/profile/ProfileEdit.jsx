@@ -66,7 +66,7 @@ function ProfileEdit() {
     };
 
     return (
-        <Page title={"Profil Setup"} description={"Bitte richte erst dein Profil ein, bevor du weiter gehst."} className={"w-full flex flex-col gap-6"}>
+        <Page title={"Profil Setup"} className={"w-full flex flex-col gap-6"}>
             <div className={"flex flex-col gap-4"}>
                 <Input
                     type="text"
