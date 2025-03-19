@@ -6,6 +6,7 @@ import useUser from "../../hooks/useUser.jsx";
 import Page from "../../components/Page.jsx";
 import Button from "../../components/Button.jsx";
 import { Box, BoxDescriptor } from "../../components/Box.jsx";
+import OrderOverview from "../../components/OrderOverview.jsx";
 
 function SessionManage() {
     const { sessionId } = useParams();
@@ -103,32 +104,7 @@ function SessionManage() {
             {sessionOrders?.map((order) => (
                 <Box key={order.id}>
                     <BoxDescriptor title={users[order.profileId]?.displayName} />
-                    {order.items.map((item, index) => {
-                        const menuItem = menu[item.menuItemId];
-                        return (
-                            <div className="flex flex-row items-center justify-between" key={item.id}>
-                                <div className={`flex flex-row justify-between w-full p-1 rounded ${index % 2 === 0 ? "bg-primary-light bg-opacity-50" : ""}`}>
-                                    <Text>{menuItem?.name}</Text>
-                                    <Text>
-                                        {item?.quantity}x {(menuItem?.price / 100).toFixed(2)}€
-                                    </Text>
-                                </div>
-                            </div>
-                        );
-                    })}
-                    <div className={`flex flex-row justify-between w-full items-end`}>
-                        <Text bold className={"pl-1"}>
-                            Gesamt
-                        </Text>
-                        <Text className={"border-t-4 mt-2 border-primary"}>
-                            {order.items
-                                .reduce((prev, curr) => {
-                                    const menuItem = menu[curr.menuItemId];
-                                    return prev + (curr?.quantity * menuItem?.price) / 100;
-                                }, 0)
-                                .toFixed(2)}
-                        </Text>
-                    </div>
+                    <OrderOverview orderItems={order.items} menu={menu} />
                     <div className={"flex flex-row gap-2 mt-2 justify-end"}>
                         <Button border={"primary"} fill={order.state === "PAYED" && "primary"} onClick={() => updateOrderState(order.id, "PAYED")}>
                             Bezahlt
