@@ -12,10 +12,10 @@ function RestaurantList() {
     useEffect(() => {
         fetchAllRestaurants().then((response) => {
             if (response.data) {
-                setRestaurants(response);
+                setRestaurants(response.data);
             }
         });
-    });
+    }, []);
 
     return (
         <Page title="Restaurants" description="Hier findest du alle Restaurants, die du in einer Session verwenden kannst.">
