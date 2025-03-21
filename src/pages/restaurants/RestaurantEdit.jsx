@@ -20,6 +20,7 @@ function RestaurantEdit() {
     const [restaurant, setRestaurant] = useState();
 
     const [menu, setMenu] = useState({});
+    const [menuValid, setMenuValid] = useState(true);
 
     const addressStreetRef = useRef();
     const addressPostalCodeRef = useRef();
@@ -83,16 +84,22 @@ function RestaurantEdit() {
     };
 
     const saveRestaurant = () => {
-        if (restaurant?.displayName?.length > 0 &&
+        if (
+            restaurant?.displayName?.length > 0 &&
             restaurant?.address?.street?.length > 0 &&
             parseInt(restaurant?.address?.postalCode) > 0 &&
             restaurant?.address?.city?.length > 0 &&
-            restaurant?.address?.country?.length > 0) {
+            restaurant?.address?.country?.length > 0
+        ) {
             createOrUpdateRestaurant(restaurant).then((response) => {
                 if (response.data) {
-                    navigate("/restaurants/edit?id=" + response.data.id);
+                    if (id) {
+                        navigate(`/restaurants/${id}`);
+                    } else {
+                        navigate("/restaurants/edit?id=" + response.data.id);
+                    }
                 }
-            })
+            });
         }
     };
 
@@ -101,6 +108,30 @@ function RestaurantEdit() {
         // anything else will be quite messy, unmaintainable and possibly not performant
         setMenuMapped([]);
         fetchMenuWithId();
+    };
+
+    useEffect(() => {
+        setMenuValid(checkMenuValid());
+    }, [menu]);
+
+    const checkMenuValid = () => {
+        // description is optional
+        return Object.values(menu).every((item) => item.name && !isNaN(item.price) && parseFloat(item.price) > 0);
+    };
+
+    const saveMenu = () => {
+        if (!checkMenuValid()) return;
+
+        const dto = Object.values(menu).map((item) => ({
+            ...item,
+            restaurantId: id,
+            price: Math.round(parseFloat(item.price) * 100)
+        }));
+        updateMenu(id, dto).then((response) => {
+            if (response.data) {
+                navigate(`/restaurants/${id}`);
+            }
+        })
     };
 
     return (
@@ -122,13 +153,12 @@ function RestaurantEdit() {
                             arrow
                             onClick={saveRestaurant}
                             checkDisabled={() => {
-                                const enabled = (
+                                const enabled =
                                     restaurant?.displayName?.length > 0 &&
                                     restaurant?.address?.street?.length > 0 &&
                                     parseInt(restaurant?.address?.postalCode) > 0 &&
                                     restaurant?.address?.city?.length > 0 &&
-                                    restaurant?.address?.country?.length > 0
-                                );
+                                    restaurant?.address?.country?.length > 0;
                                 return !enabled;
                             }}
                         >
@@ -196,39 +226,70 @@ function RestaurantEdit() {
                             <Button border onClick={resetMenu}>
                                 Zurücksetzen
                             </Button>
-                            <Button fill arrow>
+                            <Button fill arrow checkDisabled={() => !menuValid} onClick={saveMenu}>
                                 Speichern
                             </Button>
                         </div>
                     </ToolBar>
                     <div className="flex flex-col gap-4 max-h-[calc(100vh-400px)] overflow-y-auto">
-                        {Object.entries(menu).length > 0 ? Object.entries(menu).map(([id, menuItem]) => (
-                            <Box className="gap-4" key={id}>
-                                <Button
-                                    fill={"red-600"}
-                                    className="!p-2"
-                                    onClick={() => {
-                                        const newMenu = { ...menu };
-                                        delete newMenu[id];
-                                        setMenu(newMenu);
-                                    }}
-                                >
-                                    <FaTrashCan />
-                                </Button>
-                                <div className="flex-grow">
-                                    <Text type="h3">
-                                        <Input type="text" placeholder={"Name des Gerichtes"} className="w-2/6" defaultValue={menuItem.name} />
-                                    </Text>
-                                    <Text type="p" className={"mb-2"}>
-                                        <Input type={"text"} placeholder={"Beschreibung"} className={"w-3/4"} defaultValue={menuItem.description} />
-                                    </Text>
-                                </div>
-                                <div className="flex flex-row gap-2">
-                                    <Input type="text" placeholder={0.0} className={"w-16 text-center"} defaultValue={(menuItem?.price / 100).toFixed(2)} /> <Text>EUR</Text>
-                                </div>
-                            </Box>
-                        )) : (
-                            <Text type={"p"} className="w-full text-center italic">Das Menü ist derzeit leer.</Text>
+                        {Object.entries(menu).length > 0 ? (
+                            Object.entries(menu).map(([id, menuItem]) => (
+                                <Box className="gap-4" key={id}>
+                                    <Button
+                                        fill={"red-600"}
+                                        className="!p-2"
+                                        onClick={() => {
+                                            const newMenu = { ...menu };
+                                            delete newMenu[id];
+                                            setMenu(newMenu);
+                                        }}
+                                    >
+                                        <FaTrashCan />
+                                    </Button>
+                                    <div className="flex-grow">
+                                        <Text type="h3">
+                                            <Input
+                                                type="text"
+                                                placeholder={"Name des Gerichtes"}
+                                                className="w-2/6"
+                                                valid={menuItem.name?.length > 0}
+                                                defaultValue={menuItem.name}
+                                                onChange={(e) => {
+                                                    setMenu({ ...menu, [id]: { ...menuItem, name: e.target.value } });
+                                                }}
+                                            />
+                                        </Text>
+                                        <Text type="p" className={"mb-2"}>
+                                            <Input
+                                                type={"text"}
+                                                placeholder={"Beschreibung"}
+                                                className={"w-3/4"}
+                                                defaultValue={menuItem.description}
+                                                onChange={(e) => {
+                                                    setMenu({ ...menu, [id]: { ...menuItem, description: e.target.value } });
+                                                }}
+                                            />
+                                        </Text>
+                                    </div>
+                                    <div className="flex flex-row gap-2">
+                                        <Input
+                                            type="text"
+                                            placeholder={0.0}
+                                            className={"w-16 text-center"}
+                                            valid={!isNaN(menuItem.price) && parseFloat(menuItem.price) > 0}
+                                            defaultValue={(menuItem.price / 100).toFixed(2)}
+                                            onChange={(e) => {
+                                                setMenu({ ...menu, [id]: { ...menuItem, price: e.target.value } });
+                                            }}
+                                        />{" "}
+                                        <Text>EUR</Text>
+                                    </div>
+                                </Box>
+                            ))
+                        ) : (
+                            <Text type={"p"} className="w-full text-center italic">
+                                Das Menü ist derzeit leer.
+                            </Text>
                         )}
                     </div>
                 </div>
