@@ -14,8 +14,8 @@ let tempId = 0;
 function RestaurantEdit() {
     const navigate = useNavigate();
     const [searchParams, setSearchParams] = useSearchParams();
-    const id = searchParams.get("id");
-    const { fetchRestaurant, fetchMenu } = useAPI();
+    const [id, setId] = useState(searchParams.get("id"));
+    const { fetchRestaurant, createOrUpdateRestaurant, fetchMenu, updateMenu } = useAPI();
 
     const [restaurant, setRestaurant] = useState();
 
@@ -82,6 +82,10 @@ function RestaurantEdit() {
         });
     };
 
+    const saveRestaurant = () => {
+
+    };
+
     const resetMenu = () => {
         // workaround to not deal with refs inside the loop
         // anything else will be quite messy, unmaintainable and possibly not performant
@@ -103,13 +107,23 @@ function RestaurantEdit() {
                         <Button border onClick={resetRestaurant}>
                             Zurücksetzen
                         </Button>
-                        <Button fill arrow>
+                        <Button fill arrow onClick={saveRestaurant}>
                             Speichern
                         </Button>
                     </div>
                 </ToolBar>
                 <Box>
                     <div className="flex flex-col gap-4 w-full">
+                        {!id && (
+                            <Input
+                                inputRef={addressStreetRef}
+                                type="text"
+                                placeholder="Name"
+                                valid={restaurant?.displayName?.length > 0}
+                                defaultValue={restaurant?.displayName}
+                                onChange={(e) => updateRestaurant({ displayName: e.target.value })}
+                            />
+                        )}
                         <Input
                             inputRef={addressStreetRef}
                             type="text"
@@ -143,50 +157,52 @@ function RestaurantEdit() {
                     </div>
                 </Box>
             </div>
-            <div>
-                <ToolBar>
-                    <Text type="h3">Menü</Text>
-                    <div className="flex flex-row gap-4">
-                        <Button fill onClick={() => setMenu({ ...menu, ["tmp" + tempId++]: { name: "", description: "", price: 0 } })}>
-                            Neuer Eintrag
-                        </Button>
-                        <Button border onClick={resetMenu}>
-                            Zurücksetzen
-                        </Button>
-                        <Button fill arrow>
-                            Speichern
-                        </Button>
-                    </div>
-                </ToolBar>
-                <div className="flex flex-col gap-4 max-h-[calc(100vh-400px)] overflow-y-auto">
-                    {Object.entries(menu).map(([id, menuItem]) => (
-                        <Box className="gap-4" key={id}>
-                            <Button
-                                fill={"red-600"}
-                                className="!p-2"
-                                onClick={() => {
-                                    const newMenu = { ...menu };
-                                    delete newMenu[id];
-                                    setMenu(newMenu);
-                                }}
-                            >
-                                <FaTrashCan />
+            {!!id && (
+                <div>
+                    <ToolBar>
+                        <Text type="h3">Menü</Text>
+                        <div className="flex flex-row gap-4">
+                            <Button fill onClick={() => setMenu({ ...menu, ["tmp" + tempId++]: { name: "", description: "", price: 0 } })}>
+                                Neuer Eintrag
                             </Button>
-                            <div className="flex-grow">
-                                <Text type="h3">
-                                    <Input type="text" placeholder={"Name des Gerichtes"} className="w-2/6" defaultValue={menuItem.name} />
-                                </Text>
-                                <Text type="p" className={"mb-2"}>
-                                    <Input type={"text"} placeholder={"Beschreibung"} className={"w-3/4"} defaultValue={menuItem.description} />
-                                </Text>
-                            </div>
-                            <div className="flex flex-row gap-2">
-                                <Input type="text" placeholder={0.0} className={"w-16 text-center"} defaultValue={(menuItem?.price / 100).toFixed(2)} /> <Text>EUR</Text>
-                            </div>
-                        </Box>
-                    ))}
+                            <Button border onClick={resetMenu}>
+                                Zurücksetzen
+                            </Button>
+                            <Button fill arrow>
+                                Speichern
+                            </Button>
+                        </div>
+                    </ToolBar>
+                    <div className="flex flex-col gap-4 max-h-[calc(100vh-400px)] overflow-y-auto">
+                        {Object.entries(menu).map(([id, menuItem]) => (
+                            <Box className="gap-4" key={id}>
+                                <Button
+                                    fill={"red-600"}
+                                    className="!p-2"
+                                    onClick={() => {
+                                        const newMenu = { ...menu };
+                                        delete newMenu[id];
+                                        setMenu(newMenu);
+                                    }}
+                                >
+                                    <FaTrashCan />
+                                </Button>
+                                <div className="flex-grow">
+                                    <Text type="h3">
+                                        <Input type="text" placeholder={"Name des Gerichtes"} className="w-2/6" defaultValue={menuItem.name} />
+                                    </Text>
+                                    <Text type="p" className={"mb-2"}>
+                                        <Input type={"text"} placeholder={"Beschreibung"} className={"w-3/4"} defaultValue={menuItem.description} />
+                                    </Text>
+                                </div>
+                                <div className="flex flex-row gap-2">
+                                    <Input type="text" placeholder={0.0} className={"w-16 text-center"} defaultValue={(menuItem?.price / 100).toFixed(2)} /> <Text>EUR</Text>
+                                </div>
+                            </Box>
+                        ))}
+                    </div>
                 </div>
-            </div>
+            )}
         </Page>
     );
 }

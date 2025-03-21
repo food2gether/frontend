@@ -68,6 +68,14 @@ const useApiContext = () => {
         return await apiPut(`/api/v1/profiles/`, dto);
     };
 
+    const createOrUpdateRestaurant = async (dto) => {
+        return await apiPut(`/api/v1/restaurants/`, dto);
+    };
+
+    const updateMenu = async (restaurantId, dto) => {
+        return await apiPut(`/api/v1/restaurants/${restaurantId}/`, dto);
+    };
+
     return {
         fetchProfile,
         fetchAllSessions,
