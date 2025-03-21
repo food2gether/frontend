@@ -42,7 +42,7 @@ function ProfileView() {
                     <div>
                         <div className="w-[200px] h-[200px] flex items-center justify-center rounded-full mb-3 bg-primary border-4 border-primary">
                             {profile?.profilePictureUrl ? (
-                                <img src={profile.profilePictureUrl} alt="ProfileView Picture" className="size-full rounded-full object-cover" />
+                                <img src={profile.profilePictureUrl} alt="Profile Picture" className="size-full rounded-full object-cover" />
                             ) : (
                                 <p className={"text-9xl font-bold"}>?</p>
                             )}
