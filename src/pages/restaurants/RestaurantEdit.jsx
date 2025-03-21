@@ -1,7 +1,7 @@
 import Page from "../../components/Page.jsx";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import useAPI from "../../hooks/useAPI.jsx";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Text from "../../components/Text.jsx";
 import Input from "../../components/Input.jsx";
 import { Box } from "../../components/Box.jsx";
@@ -18,32 +18,65 @@ function RestaurantEdit() {
     const { fetchRestaurant, fetchMenu } = useAPI();
 
     const [restaurant, setRestaurant] = useState();
-    const [restaurantChanged, setRestaurantChanged] = useState(false);
 
     const [menu, setMenu] = useState([]);
-    const [menuChanged, setMenuChanged] = useState(false);
 
-    useEffect(() => {
-        if (!id) return;
+    const restaurantNameRef = useRef();
+    const addressStreetRef = useRef();
+    const addressPostalCodeRef = useRef();
+    const addressCityRef = useRef();
+    const addressCountryRef = useRef();
 
-        fetchRestaurant(id).then((response) => {
+    const fetchRestaurantWithId = () => {
+        if (!id) {
+            setRestaurant({});
+            return;
+        }
+
+        return fetchRestaurant(id).then((response) => {
             if (response.data) {
                 setRestaurant(response.data);
             } else {
                 return navigate("/404");
             }
         });
+    };
 
-        fetchMenu(restaurant.id).then((response) => {
+    const fetchMenuWithId = () => {
+        if (!id) {
+            setMenu([]);
+            return;
+        }
+
+        return fetchMenu(id).then((response) => {
             if (response.data) {
                 setMenu(response.data);
+                return response.data;
             }
         });
+    };
+
+    useEffect(() => {
+        fetchRestaurantWithId();
+        fetchMenuWithId();
     }, []);
 
     const updateRestaurant = (patch) => {
         setRestaurant({ ...restaurant, ...patch });
-        setRestaurantChanged(true);
+    };
+
+    // TODO
+    const resetRestaurant = () => {
+        fetchRestaurantWithId().then((restaurant) => {
+            if (!restaurant) {
+                return;
+            }
+            restaurantNameRef.current.value = restaurant.displayName;
+            addressStreetRef.current.value = restaurant.address.street;
+            addressPostalCodeRef.current.value = restaurant.address.postalCode;
+            addressCityRef.current.value = restaurant.address.city;
+            addressCountryRef.current.value = restaurant.address.country;
+        });
     };
 
     return (
@@ -57,7 +90,7 @@ function RestaurantEdit() {
                 <ToolBar>
                     <Text type="h3">Restaurant</Text>
                     <div className="flex flex-row gap-4">
-                        <Button border>Zurücksetzen</Button>
+                        <Button border onClick={resetRestaurant}>Zurücksetzen</Button>
                         <Button fill arrow>
                             Speichern
                         </Button>
@@ -65,31 +98,41 @@ function RestaurantEdit() {
                 </ToolBar>
                 <Box>
                     <div className="flex flex-col gap-4 w-full">
-                        <Input type="text" placeholder="Name" value={restaurant?.displayName} onChange={(e) => updateRestaurant({ displayName: e.target.value })} />
                         <Input
+                            inputRef={restaurantNameRef}
+                            type="text"
+                            placeholder="Name"
+                            defaultValue={restaurant?.displayName}
+                            onChange={(e) => updateRestaurant({ displayName: e.target.value })}
+                        />
+                        <Input
+                            inputRef={addressStreetRef}
                             type="text"
                             placeholder="Straße"
-                            value={restaurant?.address.street}
+                            defaultValue={restaurant?.address.street}
                             onChange={(e) => updateRestaurant({ address: { ...restaurant.address, street: e.target.value } })}
                         />
                         <div className="flex flex-row gap-2">
                             <Input
+                                inputRef={addressPostalCodeRef}
                                 type="text"
                                 placeholder="Postleitzahl"
-                                value={restaurant?.address.postalCode}
+                                defaultValue={restaurant?.address.postalCode}
                                 onChange={(e) => updateRestaurant({ address: { ...restaurant.address, postalCode: e.target.value } })}
                             />
                             <Input
+                                inputRef={addressCityRef}
                                 type="text"
                                 placeholder="Stadt"
-                                value={restaurant?.address.city}
+                                defaultValue={restaurant?.address.city}
                                 onChange={(e) => updateRestaurant({ address: { ...restaurant.address, city: e.target.value } })}
                             />
                         </div>
                         <Input
+                            inputRef={addressCountryRef}
                             type="text"
                             placeholder="Land"
-                            value={restaurant?.address.country || "Deutschland"}
+                            defaultValue={id ? restaurant?.address.country : "Deutschland"}
                             onChange={(e) => updateRestaurant({ address: { ...restaurant.address, country: e.target.value } })}
                         />
                     </div>
@@ -103,28 +146,36 @@ function RestaurantEdit() {
                             Neuer Eintrag
                         </Button>
                         <Button border>Zurücksetzen</Button>
-                        <Button fill arrow>Speichern</Button>
+                        <Button fill arrow>
+                            Speichern
+                        </Button>
                     </div>
                 </ToolBar>
                 <div className="flex flex-col gap-4 max-h-[calc(100vh-400px)] overflow-y-auto">
-                    {menu.map((menuItem) => (
-                        <Box className="gap-4" key={menuItem.tempId ? "tmp" + menuItem.tempId : menuItem.id}>
-                            <Button fill={"red-600"} className="!p-2" onClick={() => setMenu(menu.filter((item) => item.tempId !== menuItem.tempId || item.id !== menuItem.id))}>
-                                <FaTrashCan />
-                            </Button>
-                            <div className="flex-grow">
-                                <Text type="h3">
-                                    <Input type="text" placeholder={"Name des Gerichtes"} className="w-2/6" />
-                                </Text>
-                                <Text type="p" className={"mb-2"}>
-                                    <Input type={"text"} placeholder={"Beschreibung"} className={"w-3/4"} />
-                                </Text>
-                            </div>
-                            <div className="flex flex-row gap-2">
-                                <Input type="text" placeholder={0.0} className={"w-10"} /> <Text>EUR</Text>
-                            </div>
-                        </Box>
-                    ))}
+                    {menu.map((menuItem) => {
+                        return (
+                            <Box className="gap-4" key={menuItem.id === undefined ? "tmp" + menuItem.tempId : menuItem.id}>
+                                <Button
+                                    fill={"red-600"}
+                                    className="!p-2"
+                                    onClick={() => setMenu(menu.filter((item) => item.tempId !== menuItem.tempId || item.id !== menuItem.id))}
+                                >
+                                    <FaTrashCan />
+                                </Button>
+                                <div className="flex-grow">
+                                    <Text type="h3">
+                                        <Input type="text" placeholder={"Name des Gerichtes"} className="w-2/6" defaultValue={menuItem.name} />
+                                    </Text>
+                                    <Text type="p" className={"mb-2"}>
+                                        <Input type={"text"} placeholder={"Beschreibung"} className={"w-3/4"} defaultValue={menuItem.description} />
+                                    </Text>
+                                </div>
+                                <div className="flex flex-row gap-2">
+                                    <Input type="text" placeholder={0.0} className={"w-16 text-center"} defaultValue={(menuItem?.price / 100).toFixed(2)} /> <Text>EUR</Text>
+                                </div>
+                            </Box>
+                        );
+                    })}
                 </div>
             </div>
         </Page>
