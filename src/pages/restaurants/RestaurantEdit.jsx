@@ -13,19 +13,23 @@ let tempId = 0;
 
 function RestaurantEdit() {
     const navigate = useNavigate();
-    const [searchParams, _] = useSearchParams();
+    const [searchParams, setSearchParams] = useSearchParams();
     const id = searchParams.get("id");
     const { fetchRestaurant, fetchMenu } = useAPI();
 
     const [restaurant, setRestaurant] = useState();
 
-    const [menu, setMenu] = useState([]);
+    const [menu, setMenu] = useState({});
 
-    const restaurantNameRef = useRef();
     const addressStreetRef = useRef();
     const addressPostalCodeRef = useRef();
     const addressCityRef = useRef();
     const addressCountryRef = useRef();
+
+    const setMenuMapped = (menu) => {
+        const manuAsMap = menu.reduce((acc, cur) => ({ ...acc, [cur.id]: cur }), {});
+        setMenu(manuAsMap);
+    };
 
     const fetchRestaurantWithId = () => {
         if (!id) {
@@ -36,6 +40,7 @@ function RestaurantEdit() {
         return fetchRestaurant(id).then((response) => {
             if (response.data) {
                 setRestaurant(response.data);
+                return response.data;
             } else {
                 return navigate("/404");
             }
@@ -44,13 +49,13 @@ function RestaurantEdit() {
 
     const fetchMenuWithId = () => {
         if (!id) {
-            setMenu([]);
+            setMenuMapped([]);
             return;
         }
 
         return fetchMenu(id).then((response) => {
             if (response.data) {
-                setMenu(response.data);
+                setMenuMapped(response.data);
                 return response.data;
             }
         });
@@ -65,18 +70,23 @@ function RestaurantEdit() {
         setRestaurant({ ...restaurant, ...patch });
     };
 
-    // TODO
     const resetRestaurant = () => {
         fetchRestaurantWithId().then((restaurant) => {
             if (!restaurant) {
                 return;
             }
-            restaurantNameRef.current.value = restaurant.displayName;
             addressStreetRef.current.value = restaurant.address.street;
             addressPostalCodeRef.current.value = restaurant.address.postalCode;
             addressCityRef.current.value = restaurant.address.city;
             addressCountryRef.current.value = restaurant.address.country;
         });
+    };
+
+    const resetMenu = () => {
+        // workaround to not deal with refs inside the loop
+        // anything else will be quite messy, unmaintainable and possibly not performant
+        setMenuMapped([]);
+        fetchMenuWithId();
     };
 
     return (
@@ -88,9 +98,11 @@ function RestaurantEdit() {
         >
             <div>
                 <ToolBar>
-                    <Text type="h3">Restaurant</Text>
+                    <Text type="h3">Adresse</Text>
                     <div className="flex flex-row gap-4">
-                        <Button border onClick={resetRestaurant}>Zurücksetzen</Button>
+                        <Button border onClick={resetRestaurant}>
+                            Zurücksetzen
+                        </Button>
                         <Button fill arrow>
                             Speichern
                         </Button>
@@ -98,13 +110,6 @@ function RestaurantEdit() {
                 </ToolBar>
                 <Box>
                     <div className="flex flex-col gap-4 w-full">
-                        <Input
-                            inputRef={restaurantNameRef}
-                            type="text"
-                            placeholder="Name"
-                            defaultValue={restaurant?.displayName}
-                            onChange={(e) => updateRestaurant({ displayName: e.target.value })}
-                        />
                         <Input
                             inputRef={addressStreetRef}
                             type="text"
@@ -142,40 +147,44 @@ function RestaurantEdit() {
                 <ToolBar>
                     <Text type="h3">Menü</Text>
                     <div className="flex flex-row gap-4">
-                        <Button fill onClick={() => setMenu([...menu, { tempId: tempId++, name: "", description: "", price: 0 }])}>
+                        <Button fill onClick={() => setMenu({ ...menu, ["tmp" + tempId++]: { name: "", description: "", price: 0 } })}>
                             Neuer Eintrag
                         </Button>
-                        <Button border>Zurücksetzen</Button>
+                        <Button border onClick={resetMenu}>
+                            Zurücksetzen
+                        </Button>
                         <Button fill arrow>
                             Speichern
                         </Button>
                     </div>
                 </ToolBar>
                 <div className="flex flex-col gap-4 max-h-[calc(100vh-400px)] overflow-y-auto">
-                    {menu.map((menuItem) => {
-                        return (
-                            <Box className="gap-4" key={menuItem.id === undefined ? "tmp" + menuItem.tempId : menuItem.id}>
-                                <Button
-                                    fill={"red-600"}
-                                    className="!p-2"
-                                    onClick={() => setMenu(menu.filter((item) => item.tempId !== menuItem.tempId || item.id !== menuItem.id))}
-                                >
-                                    <FaTrashCan />
-                                </Button>
-                                <div className="flex-grow">
-                                    <Text type="h3">
-                                        <Input type="text" placeholder={"Name des Gerichtes"} className="w-2/6" defaultValue={menuItem.name} />
-                                    </Text>
-                                    <Text type="p" className={"mb-2"}>
-                                        <Input type={"text"} placeholder={"Beschreibung"} className={"w-3/4"} defaultValue={menuItem.description} />
-                                    </Text>
-                                </div>
-                                <div className="flex flex-row gap-2">
-                                    <Input type="text" placeholder={0.0} className={"w-16 text-center"} defaultValue={(menuItem?.price / 100).toFixed(2)} /> <Text>EUR</Text>
-                                </div>
-                            </Box>
-                        );
-                    })}
+                    {Object.entries(menu).map(([id, menuItem]) => (
+                        <Box className="gap-4" key={id}>
+                            <Button
+                                fill={"red-600"}
+                                className="!p-2"
+                                onClick={() => {
+                                    const newMenu = { ...menu };
+                                    delete newMenu[id];
+                                    setMenu(newMenu);
+                                }}
+                            >
+                                <FaTrashCan />
+                            </Button>
+                            <div className="flex-grow">
+                                <Text type="h3">
+                                    <Input type="text" placeholder={"Name des Gerichtes"} className="w-2/6" defaultValue={menuItem.name} />
+                                </Text>
+                                <Text type="p" className={"mb-2"}>
+                                    <Input type={"text"} placeholder={"Beschreibung"} className={"w-3/4"} defaultValue={menuItem.description} />
+                                </Text>
+                            </div>
+                            <div className="flex flex-row gap-2">
+                                <Input type="text" placeholder={0.0} className={"w-16 text-center"} defaultValue={(menuItem?.price / 100).toFixed(2)} /> <Text>EUR</Text>
+                            </div>
+                        </Box>
+                    ))}
                 </div>
             </div>
         </Page>
