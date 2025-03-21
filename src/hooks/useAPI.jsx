@@ -87,6 +87,8 @@ const useApiContext = () => {
         placeOrder,
         createOrUpdateSession,
         createOrUpdateProfile,
+        createOrUpdateRestaurant,
+        updateMenu,
     };
 };
 

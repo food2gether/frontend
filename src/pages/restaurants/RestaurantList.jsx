@@ -24,14 +24,16 @@ function RestaurantList() {
                     Neues Restaurant
                 </Button>
             </ToolBar>
-            {restaurants.map((restaurant) => (
-                <VisitableBox
-                    to={`/restaurants/${restaurant.id}`}
-                    key={restaurant.id}
-                    title={restaurant.displayName}
-                    description={`${restaurant.address.street}, ${restaurant.address.postalCode} ${restaurant.address.city}, ${restaurant.address.country}`}
-                />
-            ))}
+            <div className="flex flex-col gap-4">
+                {restaurants.map((restaurant) => (
+                    <VisitableBox
+                        to={`/restaurants/${restaurant.id}`}
+                        key={restaurant.id}
+                        title={restaurant.displayName}
+                        description={`${restaurant.address.street}, ${restaurant.address.postalCode} ${restaurant.address.city}, ${restaurant.address.country}`}
+                    />
+                ))}
+            </div>
         </Page>
     );
 }
