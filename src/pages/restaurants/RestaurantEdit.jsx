@@ -13,8 +13,8 @@ let tempId = 0;
 
 function RestaurantEdit() {
     const navigate = useNavigate();
-    const [searchParams, setSearchParams] = useSearchParams();
-    const [id, setId] = useState(searchParams.get("id"));
+    const [searchParams, rest] = useSearchParams();
+    const id = searchParams.get("id");
     const { fetchRestaurant, createOrUpdateRestaurant, fetchMenu, updateMenu } = useAPI();
 
     const [restaurant, setRestaurant] = useState();
@@ -83,7 +83,17 @@ function RestaurantEdit() {
     };
 
     const saveRestaurant = () => {
-
+        if (restaurant?.displayName?.length > 0 &&
+            restaurant?.address?.street?.length > 0 &&
+            parseInt(restaurant?.address?.postalCode) > 0 &&
+            restaurant?.address?.city?.length > 0 &&
+            restaurant?.address?.country?.length > 0) {
+            createOrUpdateRestaurant(restaurant).then((response) => {
+                if (response.data) {
+                    navigate("/restaurants/edit?id=" + response.data.id);
+                }
+            })
+        }
     };
 
     const resetMenu = () => {
@@ -107,7 +117,21 @@ function RestaurantEdit() {
                         <Button border onClick={resetRestaurant}>
                             Zurücksetzen
                         </Button>
-                        <Button fill arrow onClick={saveRestaurant}>
+                        <Button
+                            fill
+                            arrow
+                            onClick={saveRestaurant}
+                            checkDisabled={() => {
+                                const enabled = (
+                                    restaurant?.displayName?.length > 0 &&
+                                    restaurant?.address?.street?.length > 0 &&
+                                    parseInt(restaurant?.address?.postalCode) > 0 &&
+                                    restaurant?.address?.city?.length > 0 &&
+                                    restaurant?.address?.country?.length > 0
+                                );
+                                return !enabled;
+                            }}
+                        >
                             Speichern
                         </Button>
                     </div>
@@ -128,7 +152,8 @@ function RestaurantEdit() {
                             inputRef={addressStreetRef}
                             type="text"
                             placeholder="Straße"
-                            defaultValue={restaurant?.address.street}
+                            valid={restaurant?.address?.street?.length > 0}
+                            defaultValue={restaurant?.address?.street}
                             onChange={(e) => updateRestaurant({ address: { ...restaurant.address, street: e.target.value } })}
                         />
                         <div className="flex flex-row gap-2">
@@ -136,14 +161,16 @@ function RestaurantEdit() {
                                 inputRef={addressPostalCodeRef}
                                 type="text"
                                 placeholder="Postleitzahl"
-                                defaultValue={restaurant?.address.postalCode}
+                                valid={parseInt(restaurant?.address?.postalCode) > 0}
+                                defaultValue={restaurant?.address?.postalCode}
                                 onChange={(e) => updateRestaurant({ address: { ...restaurant.address, postalCode: e.target.value } })}
                             />
                             <Input
                                 inputRef={addressCityRef}
                                 type="text"
                                 placeholder="Stadt"
-                                defaultValue={restaurant?.address.city}
+                                valid={restaurant?.address?.city?.length > 0}
+                                defaultValue={restaurant?.address?.city}
                                 onChange={(e) => updateRestaurant({ address: { ...restaurant.address, city: e.target.value } })}
                             />
                         </div>
@@ -151,7 +178,8 @@ function RestaurantEdit() {
                             inputRef={addressCountryRef}
                             type="text"
                             placeholder="Land"
-                            defaultValue={id ? restaurant?.address.country : "Deutschland"}
+                            valid={restaurant?.address?.country?.length > 0}
+                            defaultValue={restaurant?.address?.country}
                             onChange={(e) => updateRestaurant({ address: { ...restaurant.address, country: e.target.value } })}
                         />
                     </div>
@@ -174,7 +202,7 @@ function RestaurantEdit() {
                         </div>
                     </ToolBar>
                     <div className="flex flex-col gap-4 max-h-[calc(100vh-400px)] overflow-y-auto">
-                        {Object.entries(menu).map(([id, menuItem]) => (
+                        {Object.entries(menu).length > 0 ? Object.entries(menu).map(([id, menuItem]) => (
                             <Box className="gap-4" key={id}>
                                 <Button
                                     fill={"red-600"}
@@ -199,7 +227,9 @@ function RestaurantEdit() {
                                     <Input type="text" placeholder={0.0} className={"w-16 text-center"} defaultValue={(menuItem?.price / 100).toFixed(2)} /> <Text>EUR</Text>
                                 </div>
                             </Box>
-                        ))}
+                        )) : (
+                            <Text type={"p"} className="w-full text-center italic">Das Menü ist derzeit leer.</Text>
+                        )}
                     </div>
                 </div>
             )}

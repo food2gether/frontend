@@ -44,11 +44,13 @@ function RestaurantView() {
                 </Button>
             </ToolBar>
             <div className="flex flex-col gap-4">
-                {menu.map((menuItem) => (
+                {menu.length > 0 ? menu.map((menuItem) => (
                     <TDBox key={menuItem.id} title={menuItem.name} description={menuItem.description}>
                         <Text className={"text-primary"}>{(menuItem.price / 100).toFixed(2)} EUR</Text>
                     </TDBox>
-                ))}
+                )) : (
+                    <Text type={"p"} className="w-full text-center italic">Das Menü ist derzeit leer.</Text>
+                )}
             </div>
         </Page>
     );
