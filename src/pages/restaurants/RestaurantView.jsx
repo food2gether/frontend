@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import ToolBar from "../../components/ToolBar.jsx";
 import Button from "../../components/Button.jsx";
 import useAPI from "../../hooks/useAPI.jsx";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { TDBox } from "../../components/Box.jsx";
 import Text from "../../components/Text.jsx";
 
@@ -39,13 +39,13 @@ function RestaurantView() {
             description={`${restaurant?.address.street}, ${restaurant?.address.postalCode} ${restaurant?.address.city}, ${restaurant?.address.country}`}
         >
             <ToolBar>
-                <Button fill arrow>
+                <Button fill arrow linkTo={`/restaurants/edit?id=${id}`}>
                     Bearbeiten
                 </Button>
             </ToolBar>
             <div className="flex flex-col gap-4">
                 {menu.map((menuItem) => (
-                    <TDBox title={menuItem.name} key={menuItem.id} description={menuItem.description}>
+                    <TDBox key={menuItem.id} title={menuItem.name} description={menuItem.description}>
                         <Text className={"text-primary"}>{(menuItem.price / 100).toFixed(2)} EUR</Text>
                     </TDBox>
                 ))}
