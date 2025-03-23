@@ -3,21 +3,20 @@ import { Link } from "react-router-dom";
 import Button from "./Button.jsx";
 import React from "react";
 
-function BoxDescriptor({ title, description, className, children }) {
+function BoxDescriptor({ title, description, className }) {
     return (
         <div className={className}>
             <Text type="h3">{title}</Text>
             <Text type="p" className={"mb-2"}>
                 {description}
             </Text>
-            <div>{children}</div>
         </div>
     );
 }
 
 function Box({ children, className }) {
     return (
-        <div className={`flex flex-row items-center justify-between rounded-lg border border-primary w-full p-4 ${className || ""}`}>
+        <div className={`rounded-lg border border-primary w-full p-4 ${className || ""}`}>
             {children}
         </div>
     );
@@ -25,7 +24,7 @@ function Box({ children, className }) {
 
 function TDBox({ title, description, children, className }) {
     return (
-        <Box className={className}>
+        <Box className={"flex flex-row justify-between items-center gap-4 w-full " + className}>
             <BoxDescriptor title={title} description={description} />
             {children}
         </Box>

@@ -13,12 +13,13 @@ import ToolBar from "../../components/ToolBar.jsx";
 
 function MenuItemCard({ name, description, price, quantity, updateQuantity }) {
     return (
-        <Box title={name} description={description}>
-            <BoxDescriptor title={name} description={description}>
+        <Box title={name} description={description} className="flex flex-row justify-between gap-32">
+            <div>
+                <BoxDescriptor title={name} description={description}/>
                 <Text type="p" className="text-primary">
                     {(price / 100).toFixed(2)} €
                 </Text>
-            </BoxDescriptor>
+            </div>
             <div className="flex items-center gap-4">
                 <Text type="p">Anzahl:</Text>
                 <input type="text" min="0" className="w-8 text-black outline-hidden border-none" value={quantity || 0} onChange={(e) => updateQuantity(parseInt(e.target.value))} />
@@ -157,7 +158,7 @@ function SessionView() {
     };
 
     return (
-        <Page title={`Bestelle mit ${organizer.displayName} bei ${restaurant.displayName}`} description={`Offen bis ${deadline && deadline.toLocaleString()}`}>
+        <Page title={`Bestelle mit ${organizer.displayName} bei ${restaurant.displayName}`} description={`Offen bis ${deadline && deadline.toLocaleString("de-DE")}`}>
             {self?.id === session?.organizerId && (
                 <ToolBar>
                     <Input

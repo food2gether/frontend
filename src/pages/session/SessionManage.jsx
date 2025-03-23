@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { Fragment, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import useAPI from "../../hooks/useAPI.jsx";
 import useUser from "../../hooks/useUser.jsx";
 import Page from "../../components/Page.jsx";
@@ -98,10 +98,15 @@ function SessionManage() {
     };
 
     return (
-        <Page ready={!!restaurant} title={`Verwalte Bestellungen bei ${restaurant?.displayName}`} description="Hier kannst du die Bestellungen verwalten." className="flex flex-col gap-4">
+        <Page
+            ready={!!restaurant}
+            title={`Verwalte Bestellungen bei ${restaurant?.displayName}`}
+            description="Hier kannst du die Bestellungen verwalten."
+            className="flex flex-col gap-4"
+        >
             {sessionOrders?.map((order) => (
-                <Box key={order.id} className="!flex-col">
-                    <BoxDescriptor title={users[order.profileId]?.displayName} className="self-start" />
+                <Box key={order.id} className="flex flex-col">
+                    <BoxDescriptor title={users[order.profileId]?.displayName}/>
                     <OrderOverview orderItems={order.items} menu={menu} />
                     <div className={"flex flex-row gap-2 mt-2 self-end"}>
                         <Button border={"primary"} fill={order.state === "PAYED" && "primary"} onClick={() => updateOrderState(order.id, "PAYED")}>
