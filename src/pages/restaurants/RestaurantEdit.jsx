@@ -144,7 +144,7 @@ function RestaurantEdit() {
         >
             <div>
                 <ToolBar>
-                    <Text type="h3">Adresse</Text>
+                    <Text type="h3">Anschrift</Text>
                     <div className="flex flex-row gap-4">
                         <Button border onClick={resetRestaurant}>
                             Zurücksetzen
@@ -167,8 +167,7 @@ function RestaurantEdit() {
                         </Button>
                     </div>
                 </ToolBar>
-                <Box>
-                    <div className="flex flex-col gap-4 w-full">
+                <Box className="flex flex-col gap-4 w-full">
                         {!id && (
                             <Input
                                 inputRef={addressStreetRef}
@@ -213,7 +212,6 @@ function RestaurantEdit() {
                             defaultValue={restaurant?.address?.country}
                             onChange={(e) => updateRestaurant({ address: { ...restaurant.address, country: e.target.value } })}
                         />
-                    </div>
                 </Box>
             </div>
             {!!id && (
@@ -235,7 +233,7 @@ function RestaurantEdit() {
                     <div className="flex flex-col gap-4 max-h-[calc(100vh-400px)] overflow-y-auto">
                         {Object.entries(menu).length > 0 ? (
                             Object.entries(menu).map(([id, menuItem]) => (
-                                <Box className="gap-4" key={id}>
+                                <Box className="flex flex-row items-center gap-4" key={id}>
                                     <Button
                                         fill={"red-600"}
                                         className="!p-2"
@@ -282,13 +280,14 @@ function RestaurantEdit() {
                                             onChange={(e) => {
                                                 setMenu({ ...menu, [id]: { ...menuItem, price: e.target.value } });
                                             }}
+                                            onBlur={(e) => e.target.value = parseFloat(e.target.value).toFixed(2)}
                                         />{" "}
                                         <Text>EUR</Text>
                                     </div>
                                 </Box>
                             ))
                         ) : (
-                            <Text type={"p"} className="w-full text-center italic">
+                            <Text type={"p"} center className="w-full italic">
                                 Das Menü ist derzeit leer.
                             </Text>
                         )}
