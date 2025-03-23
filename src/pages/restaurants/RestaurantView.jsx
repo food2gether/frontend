@@ -51,7 +51,7 @@ function RestaurantView() {
                         </TDBox>
                     ))
                 ) : (
-                    <Text type={"p"} className="w-full text-center italic">
+                    <Text type={"p"} center className="w-full italic">
                         Das Menü ist derzeit leer.
                     </Text>
                 )}

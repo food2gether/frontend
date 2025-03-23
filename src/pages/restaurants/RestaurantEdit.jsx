@@ -28,7 +28,7 @@ function RestaurantEdit() {
     const addressCountryRef = useRef();
 
     const setMenuMapped = (menu) => {
-        const manuAsMap = menu.reduce((acc, cur) => ({ ...acc, [cur.id]: cur }), {});
+        const manuAsMap = menu.reduce((acc, cur) => ({ ...acc, [cur.id]: { ...cur, price: cur.price / 100 } }), {});
         setMenu(manuAsMap);
     };
 
@@ -106,7 +106,7 @@ function RestaurantEdit() {
     const resetMenu = () => {
         // workaround to not deal with refs inside the loop
         // anything else will be quite messy, unmaintainable and possibly not performant
-        setMenuMapped([]);
+        setMenu({});
         fetchMenuWithId();
     };
 
@@ -122,7 +122,6 @@ function RestaurantEdit() {
     const saveMenu = () => {
         if (!checkMenuValid()) return;
 
-        // TODO 405: method not allowed
         const dto = Object.values(menu).map((item) => ({
             ...item,
             restaurantId: id,
@@ -273,10 +272,10 @@ function RestaurantEdit() {
                                     <div className="flex flex-row gap-2">
                                         <Input
                                             type="text"
-                                            placeholder={0.0}
+                                            placeholder={"0.00"}
                                             className={"w-16 text-center"}
                                             valid={!isNaN(menuItem.price) && parseFloat(menuItem.price) > 0}
-                                            defaultValue={(menuItem.price / 100).toFixed(2)}
+                                            defaultValue={menuItem.price?.toFixed?.(2)}
                                             onChange={(e) => {
                                                 setMenu({ ...menu, [id]: { ...menuItem, price: e.target.value } });
                                             }}
