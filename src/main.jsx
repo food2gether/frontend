@@ -27,7 +27,7 @@ const App = () => {
                 <UserProvider>
                     <ScrollToTop />
                     <Navbar />
-                    <div className={"container mt-[80px]"}>
+                    <div className={"container mt-[80px] pb-5"}>
                         <Routes>
                             <Route path="/" element={<Home />} />
                             <Route path="/order" element={<Order />} />

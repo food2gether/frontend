@@ -34,7 +34,7 @@ function Button({ children, linkTo, linkOptions, onClick, checkDisabled, classNa
         }
     };
 
-    let classNames = "px-2.5 py-1.5 cursor pointer text-sm group inline-flex items-center gap-2 transition-all duration-200 rounded-xl ";
+    let classNames = "px-2.5 py-1.5 cursor-pointer text-sm group inline-flex items-center gap-2 transition-all duration-200 rounded-xl ";
     if (fill) {
         classNames += `bg-${fill} ${arrow ? "" : `hover:bg-${fill}/80 text-white `} `;
     } else {

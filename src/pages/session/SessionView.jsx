@@ -10,12 +10,13 @@ import { Box, BoxDescriptor } from "../../components/Box.jsx";
 import ProgressBar from "../../components/ProgressBar.jsx";
 import Input from "../../components/Input.jsx";
 import ToolBar from "../../components/ToolBar.jsx";
+import OrderOverview from "../../components/OrderOverview.jsx";
 
 function MenuItemCard({ name, description, price, quantity, updateQuantity }) {
     return (
         <Box title={name} description={description} className="flex flex-row justify-between gap-32">
             <div>
-                <BoxDescriptor title={name} description={description}/>
+                <BoxDescriptor title={name} description={description} />
                 <Text type="p" className="text-primary">
                     {(price / 100).toFixed(2)} €
                 </Text>
@@ -59,7 +60,7 @@ function DeliveryProgressBar({ state }) {
     return (
         <>
             <ProgressBar progress={progress} total={3} className={state === "REJECTED" ? "bg-red-600" : "bg-primary"} />
-            <Text className={"w-full text-center"}>{translation[state]}</Text>
+            <Text center className={"w-full"}>{translation[state]}</Text>
         </>
     );
 }
@@ -187,7 +188,11 @@ function SessionView() {
                         ))}
                     </div>
                     <Text type="h2" bold>
-                        {quantityByMenuItemId && Object.keys(quantityByMenuItemId).length > 0 ? `Gesamtpreis: ${(totalPrice / 100).toFixed(2)} €` : "Bitte wähle etwas aus!"}
+                        {deadline < new Date()
+                            ? "Die Zeit ist leider schon abgelaufen."
+                            : quantityByMenuItemId && Object.keys(quantityByMenuItemId).length > 0
+                              ? `Gesamtpreis: ${(totalPrice / 100).toFixed(2)} €`
+                              : "Bitte wähle etwas aus!"}
                     </Text>
                     <Button
                         linkTo="/order"
@@ -208,29 +213,13 @@ function SessionView() {
                 </div>
                 {/*Currently placed orders*/}
                 {ownOrders && ownOrders.length > 0 && (
-                    <div className="flex flex-col items-center">
-                        <Text type={"h4"} className={"mb-5"}>
+                    <div className="flex flex-col items-center gap-3">
+                        <Text type={"h4"}>
                             Deine Bestellungen
                         </Text>
                         {ownOrders?.map((order) => (
-                            <div key={order.id} className="flex flex-col justify-between bg-white w-full p-4 mb-3 rounded-2xl border-primary border">
-                                <div className="flex flex-col">
-                                    {order?.items?.map((item) => (
-                                        <Text key={item.id}>
-                                            {item.quantity}x {menu[item.menuItemId]?.name}
-                                        </Text>
-                                    ))}
-                                </div>
-                                <Text className="self-end border-t-4 border-primary">
-                                    {order?.items
-                                        ?.map((item) => ({
-                                            quantity: item.quantity,
-                                            price: menu[item.menuItemId]?.price / 100,
-                                        }))
-                                        .reduce((a, b) => a + b.price * b.quantity, 0)
-                                        .toFixed(2)}
-                                    €
-                                </Text>
+                            <div key={order.id} className="flex flex-col justify-between items-center bg-white w-full p-4 rounded-2xl border-primary border">
+                                <OrderOverview orderItems={order?.items} menu={menu} light/>
                                 <DeliveryProgressBar state={order.state} />
                             </div>
                         ))}
