@@ -73,7 +73,7 @@ const useApiContext = () => {
     };
 
     const updateMenu = async (restaurantId, dto) => {
-        return await apiPut(`/api/v1/restaurants/${restaurantId}/`, dto);
+        return await apiPut(`/api/v1/restaurants/${restaurantId}/menu`, dto);
     };
 
     return {
