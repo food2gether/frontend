@@ -21,7 +21,7 @@ function Navbar() {
     }, [location]);
 
     return (
-        <nav className="h-[80px] flex items-center justify-center fixed w-full top-0 bg-primary" style={{ zIndex: 999 }}>
+        <div className="h-[80px] flex items-center justify-center fixed w-full top-0 bg-primary z-[1000]">
             <div className={`flex items-center w-[70%] ${loggedIn() ? "justify-between" : "justify-center"} gap-10`}>
                 <Link reloadDocument to="/">
                     <Text type={"h2"} bold light>
@@ -53,7 +53,7 @@ function Navbar() {
                     </>
                 )}
             </div>
-        </nav>
+        </div>
     );
 }
 

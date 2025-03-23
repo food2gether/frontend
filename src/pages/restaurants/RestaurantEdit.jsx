@@ -122,6 +122,7 @@ function RestaurantEdit() {
     const saveMenu = () => {
         if (!checkMenuValid()) return;
 
+        // TODO 405: method not allowed
         const dto = Object.values(menu).map((item) => ({
             ...item,
             restaurantId: id,
@@ -246,7 +247,7 @@ function RestaurantEdit() {
                                     >
                                         <FaTrashCan />
                                     </Button>
-                                    <div className="flex-grow">
+                                    <div className="grow">
                                         <Text type="h3">
                                             <Input
                                                 type="text"
