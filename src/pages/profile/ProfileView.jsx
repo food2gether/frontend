@@ -32,11 +32,13 @@ function ProfileView() {
 
     return (
         <Page ready={!!profile} title="Profil" description="Hier kannst du dein Profil sehen.">
-            <ToolBar>
-                <Button linkTo="/profile/edit" fill arrow>
-                    Profil bearbeiten
-                </Button>
-            </ToolBar>
+            {id === "me" && (
+                <ToolBar>
+                    <Button linkTo="/profile/edit" fill arrow>
+                        Profil bearbeiten
+                    </Button>
+                </ToolBar>
+            )}
             <div className="flex flex-row">
                 <div className="w-1/3">
                     <div>
