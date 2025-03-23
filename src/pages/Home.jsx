@@ -33,7 +33,7 @@ function Home() {
         <Page title="Home" description="Hier kannst du die alle registrierten Sessions sehen.">
             <ToolBar>
                 <ToggleFilter filterActive={filterActive} setFilterActive={setFilterActive}>
-                    Alle Sessions
+                    {filterActive ? "Alle Sessions" : "Aktive Sessions"}
                 </ToggleFilter>
                 <Button arrow fill linkTo="/session/new">
                     Neue Session
