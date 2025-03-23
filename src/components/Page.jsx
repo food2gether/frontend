@@ -7,7 +7,7 @@ const loadingPage = (
 function Page({ ready = true, title, description, className, children }) {
     return ready ? (
         <>
-            <div>
+            <div className="mb-5">
                 <Text type="h2">{title}</Text>
                 <div className="bg-primary h-1 w-10"></div>
                 {description && (
@@ -15,7 +15,6 @@ function Page({ ready = true, title, description, className, children }) {
                         {description}
                     </Text>
                 )}
-                <div className="mb-5"></div>
             </div>
             <div className={className}>{children}</div>
         </>
