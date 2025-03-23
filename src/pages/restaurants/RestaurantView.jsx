@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import ToolBar from "../../components/ToolBar.jsx";
 import Button from "../../components/Button.jsx";
 import useAPI from "../../hooks/useAPI.jsx";
-import { Fragment, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { TDBox } from "../../components/Box.jsx";
 import Text from "../../components/Text.jsx";
 
@@ -44,12 +44,16 @@ function RestaurantView() {
                 </Button>
             </ToolBar>
             <div className="flex flex-col gap-4">
-                {menu.length > 0 ? menu.map((menuItem) => (
-                    <TDBox key={menuItem.id} title={menuItem.name} description={menuItem.description}>
-                        <Text className={"text-primary"}>{(menuItem.price / 100).toFixed(2)} EUR</Text>
-                    </TDBox>
-                )) : (
-                    <Text type={"p"} className="w-full text-center italic">Das Menü ist derzeit leer.</Text>
+                {menu.length > 0 ? (
+                    menu.map((menuItem) => (
+                        <TDBox key={menuItem.id} title={menuItem.name} description={menuItem.description}>
+                            <Text className={"text-primary"}>{(menuItem.price / 100).toFixed(2)} EUR</Text>
+                        </TDBox>
+                    ))
+                ) : (
+                    <Text type={"p"} className="w-full text-center italic">
+                        Das Menü ist derzeit leer.
+                    </Text>
                 )}
             </div>
         </Page>

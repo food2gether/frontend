@@ -1,8 +1,7 @@
 // Tailwind CSS
-@use "tailwindcss/base";
-@use "tailwindcss/components";
-@use "tailwindcss/utilities";
+@import "tailwindcss";
+@import "scss/theme.css";
 
 // Custom styles
-@use "scss/global";
-@use "scss/breakpoints";
+@import "scss/global";
+@import "scss/breakpoints";

@@ -36,13 +36,13 @@ function Button({ children, linkTo, linkOptions, onClick, checkDisabled, classNa
 
     let classNames = "px-2.5 py-1.5 cursor pointer text-sm group inline-flex items-center gap-2 transition-all duration-200 rounded-xl ";
     if (fill) {
-        classNames += `bg-${fill} ${arrow ? "" : "hover:bg-opacity-80 text-white "} `;
+        classNames += `bg-${fill} ${arrow ? "" : `hover:bg-${fill}/80 text-white `} `;
     } else {
         classNames += "text-black ";
     }
 
     if (border) {
-        classNames += `border-2 border-${border} border-opacity-100 hover:border-opacity-80 `;
+        classNames += `border-2 border-${border} hover:border-${border}/80 `;
     }
 
     if (disabled) {

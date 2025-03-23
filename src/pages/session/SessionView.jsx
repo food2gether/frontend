@@ -21,7 +21,7 @@ function MenuItemCard({ name, description, price, quantity, updateQuantity }) {
             </BoxDescriptor>
             <div className="flex items-center gap-4">
                 <Text type="p">Anzahl:</Text>
-                <input type="text" min="0" className="w-8 text-black outline-none border-none" value={quantity || 0} onChange={(e) => updateQuantity(parseInt(e.target.value))} />
+                <input type="text" min="0" className="w-8 text-black outline-hidden border-none" value={quantity || 0} onChange={(e) => updateQuantity(parseInt(e.target.value))} />
                 <div className="flex flex-col gap-1">
                     <button className="w-7 h-7 bg-primary rounded-full flex items-center justify-center" onClick={() => updateQuantity(quantity + 1)}>
                         +
@@ -192,7 +192,7 @@ function SessionView() {
                         linkTo="/order"
                         linkOptions={{
                             state: {
-                                orderItems: Object.entries(quantityByMenuItemId).map(([orderItem, quantity]) => ({ menuItemId: parseInt(orderItem.id), quantity })),
+                                orderItems: Object.entries(quantityByMenuItemId).map(([orderItemId, quantity]) => ({ menuItemId: parseInt(orderItemId), quantity })),
                                 menu: menu,
                                 sessionId: sessionId,
                                 payee: organizer.name,

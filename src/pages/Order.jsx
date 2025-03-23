@@ -15,7 +15,7 @@ function Order() {
     const [orderDto, setOrderDto] = useState({});
     const location = useLocation();
     const { orderItems, payee, sessionId, menu } = location.state;
-    const moneyToPay = orderItems.reduce((acc, item) => acc + menu[item.menuItemId] * item.quantity, 0);
+    const moneyToPay = orderItems.reduce((acc, item) => acc + menu[item.menuItemId].price * item.quantity / 100, 0);
 
     const [deadline, setDeadline] = useState(new Date(0));
 

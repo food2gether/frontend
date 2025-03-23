@@ -98,12 +98,12 @@ function SessionManage() {
     };
 
     return (
-        <Page ready={!!restaurant} title={`Verwalte Bestellungen bei ${restaurant?.displayName}`} description="Hier kannst du die Bestellungen verwalten.">
+        <Page ready={!!restaurant} title={`Verwalte Bestellungen bei ${restaurant?.displayName}`} description="Hier kannst du die Bestellungen verwalten." className="flex flex-col gap-4">
             {sessionOrders?.map((order) => (
-                <Box key={order.id}>
+                <Box key={order.id} className="flex-col !items-start">
                     <BoxDescriptor title={users[order.profileId]?.displayName} />
                     <OrderOverview orderItems={order.items} menu={menu} />
-                    <div className={"flex flex-row gap-2 mt-2 justify-end"}>
+                    <div className={"flex flex-row gap-2 mt-2 justify-end w-full"}>
                         <Button border={"primary"} fill={order.state === "PAYED" && "primary"} onClick={() => updateOrderState(order.id, "PAYED")}>
                             Bezahlt
                         </Button>
