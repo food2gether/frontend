@@ -8,7 +8,7 @@ import Button from "../../components/Button.jsx";
 import Input from "../../components/Input.jsx";
 
 function ProfileEdit() {
-    const [searchParams, _] = useSearchParams();
+    const [searchParams, ] = useSearchParams();
     const navigate = useNavigate();
     const { createOrUpdateProfile } = useAPI();
     const { data: self } = useUser();
@@ -43,6 +43,7 @@ function ProfileEdit() {
     const handleProfilePictureUrlChange = (val) => {
         setProfilePictureUrl(val);
         // TODO validate
+        setProfilePictureUrlValid(!val || val.startsWith("http"));
     };
 
     const handleFinish = () => {

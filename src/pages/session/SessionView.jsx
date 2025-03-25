@@ -11,6 +11,7 @@ import ProgressBar from "../../components/ProgressBar.jsx";
 import Input from "../../components/Input.jsx";
 import ToolBar from "../../components/ToolBar.jsx";
 import OrderOverview from "../../components/OrderOverview.jsx";
+import PropTypes from "prop-types";
 
 function MenuItemCard({ name, description, price, quantity, updateQuantity }) {
     return (
@@ -35,6 +36,14 @@ function MenuItemCard({ name, description, price, quantity, updateQuantity }) {
             </div>
         </Box>
     );
+}
+
+MenuItemCard.propTypes = {
+    name: PropTypes.string.isRequired,
+    description: PropTypes.string,
+    price: PropTypes.number.isRequired,
+    quantity: PropTypes.number.isRequired,
+    updateQuantity: PropTypes.func.isRequired,
 }
 
 function DeliveryProgressBar({ state }) {
@@ -63,6 +72,10 @@ function DeliveryProgressBar({ state }) {
             <Text center className={"w-full"}>{translation[state]}</Text>
         </>
     );
+}
+
+DeliveryProgressBar.propTypes = {
+    state: PropTypes.string.isRequired,
 }
 
 function SessionView() {
@@ -126,15 +139,17 @@ function SessionView() {
     }, [self]);
 
     const updateQuantity = (product, quantity) => {
-        if (quantity <= 0) {
-            const { [product.id]: _, ...rest } = quantityByMenuItemId;
-            setQuantityByMenuItemId(rest);
-            return;
-        }
-        setQuantityByMenuItemId((prev) => ({
-            ...prev,
-            [product.id]: quantity,
-        }));
+        setQuantityByMenuItemId((prev) => {
+            const copy = { ...prev };
+
+            if (quantity > 0) {
+                copy[product.id] = quantity;
+            } else {
+                delete copy[product.id];
+            }
+
+            return copy;
+        })
     };
 
     useEffect(() => {
@@ -158,8 +173,20 @@ function SessionView() {
         });
     };
 
+    const getStatusMessage = (totalPrice) => {
+        if (deadline < new Date()) {
+            return "Die Zeit ist leider schon abgelaufen.";
+        }
+
+        if (totalPrice > 0) {
+            return `Gesamtpreis: ${(totalPrice / 100).toFixed(2)} EUR`;
+        }
+
+        return "Bitte wähle etwas aus!";
+    }
+
     return (
-        <Page title={`Bestelle mit ${organizer.displayName} bei ${restaurant.displayName}`} description={`Offen bis ${deadline && deadline.toLocaleString("de-DE")}`}>
+        <Page title={`Bestelle mit ${organizer.displayName} bei ${restaurant.displayName}`} description={`Offen bis ${deadline?.toLocaleString("de-DE")}`}>
             {self?.id === session?.organizerId && (
                 <ToolBar>
                     <Input
@@ -188,11 +215,7 @@ function SessionView() {
                         ))}
                     </div>
                     <Text type="h2" bold>
-                        {deadline < new Date()
-                            ? "Die Zeit ist leider schon abgelaufen."
-                            : quantityByMenuItemId && Object.keys(quantityByMenuItemId).length > 0
-                              ? `Gesamtpreis: ${(totalPrice / 100).toFixed(2)} €`
-                              : "Bitte wähle etwas aus!"}
+                        {getStatusMessage(quantityByMenuItemId)}
                     </Text>
                     <Button
                         linkTo="/order"

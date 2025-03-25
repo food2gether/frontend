@@ -9,6 +9,7 @@ import { useParams } from "react-router-dom";
 import Page from "../../components/Page.jsx";
 import Button from "../../components/Button.jsx";
 import ToolBar from "../../components/ToolBar.jsx";
+import PropTypes from "prop-types";
 
 function ProfileProperty({ label, value }) {
     return value ? (
@@ -17,6 +18,11 @@ function ProfileProperty({ label, value }) {
             {value}
         </Text>
     ) : null;
+}
+
+ProfileProperty.propTypes = {
+    label: PropTypes.string.isRequired,
+    value: PropTypes.string,
 }
 
 function ProfileView() {
@@ -44,7 +50,7 @@ function ProfileView() {
                     <div>
                         <div className="w-[200px] h-[200px] flex items-center justify-center rounded-full mb-3 bg-primary border-4 border-primary">
                             {profile?.profilePictureUrl ? (
-                                <img src={profile.profilePictureUrl} alt="Profile Picture" className="size-full rounded-full object-cover" />
+                                <img src={profile.profilePictureUrl} alt="Profile" className="size-full rounded-full object-cover" />
                             ) : (
                                 <p className={"text-9xl font-bold"}>?</p>
                             )}
