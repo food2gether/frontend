@@ -35,7 +35,7 @@ function Navbar() {
                     <>
                         <ul className="hidden md:flex items-center gap-10">
                             {navItems.map((item, index) => (
-                                <Link reloadDocument key={item.name} to={item.to} className={activeTab && "border-b-2 border-white"}>
+                                <Link reloadDocument key={item.name} to={item.to} className={!!activeTab && "border-b-2 border-white"}>
                                     <Text type={"p"} light>
                                         {item.name}
                                     </Text>
