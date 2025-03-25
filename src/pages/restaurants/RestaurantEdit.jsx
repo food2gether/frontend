@@ -13,7 +13,7 @@ let tempId = 0;
 
 function RestaurantEdit() {
     const navigate = useNavigate();
-    const [searchParams, rest] = useSearchParams();
+    const [searchParams, ] = useSearchParams();
     const id = searchParams.get("id");
     const { fetchRestaurant, createOrUpdateRestaurant, fetchMenu, updateMenu } = useAPI();
 
@@ -183,7 +183,7 @@ function RestaurantEdit() {
                             placeholder="Straße"
                             valid={restaurant?.address?.street?.length > 0}
                             defaultValue={restaurant?.address?.street}
-                            onChange={(e) => updateRestaurant({ address: { ...restaurant.address, street: e.target.value } })}
+                            onChange={(e) => updateRestaurant({ address: { ...restaurant?.address, street: e.target.value } })}
                         />
                         <div className="flex flex-row gap-2">
                             <Input
@@ -192,7 +192,7 @@ function RestaurantEdit() {
                                 placeholder="Postleitzahl"
                                 valid={parseInt(restaurant?.address?.postalCode) > 0}
                                 defaultValue={restaurant?.address?.postalCode}
-                                onChange={(e) => updateRestaurant({ address: { ...restaurant.address, postalCode: e.target.value } })}
+                                onChange={(e) => updateRestaurant({ address: { ...restaurant?.address, postalCode: e.target.value } })}
                             />
                             <Input
                                 inputRef={addressCityRef}
@@ -200,7 +200,7 @@ function RestaurantEdit() {
                                 placeholder="Stadt"
                                 valid={restaurant?.address?.city?.length > 0}
                                 defaultValue={restaurant?.address?.city}
-                                onChange={(e) => updateRestaurant({ address: { ...restaurant.address, city: e.target.value } })}
+                                onChange={(e) => updateRestaurant({ address: { ...restaurant?.address, city: e.target.value } })}
                             />
                         </div>
                         <Input
