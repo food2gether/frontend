@@ -11,10 +11,6 @@ function Button({ children, linkTo, linkOptions, onClick, checkDisabled, classNa
         setDisabled(checkDisabled?.());
     }, [checkDisabled]);
 
-    if (border === true) {
-        border = "primary";
-    }
-
     if (arrow === true) {
         arrow = <FaArrowRight />;
     }
@@ -31,7 +27,7 @@ function Button({ children, linkTo, linkOptions, onClick, checkDisabled, classNa
 
     let classNames = "px-2.5 py-1.5 cursor-pointer text-sm group inline-flex items-center gap-2 transition-all duration-200 rounded-xl ";
     if (fill) {
-        classNames += `bg-primary text-white ${arrow ? "" : `hover:bg-primary/80 `} `;
+        classNames += `bg-primary text-white ${arrow ? "" : "hover:bg-primary/80 "} `;
     } else {
         classNames += "text-black ";
     }

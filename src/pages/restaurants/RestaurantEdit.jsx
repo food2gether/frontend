@@ -209,7 +209,7 @@ function RestaurantEdit() {
                             placeholder="Land"
                             valid={restaurant?.address?.country?.length > 0}
                             defaultValue={restaurant?.address?.country}
-                            onChange={(e) => updateRestaurant({ address: { ...restaurant.address, country: e.target.value } })}
+                            onChange={(e) => updateRestaurant({ address: { ...restaurant?.address, country: e.target.value } })}
                         />
                 </Box>
             </div>

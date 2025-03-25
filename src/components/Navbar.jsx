@@ -35,13 +35,11 @@ function Navbar() {
                     <>
                         <ul className="hidden md:flex items-center gap-10">
                             {navItems.map((item, index) => (
-                                <button onClick={() => setActiveTab(index)} className={` ${activeTab === index ? "border-b-2 bg-red-500" : "bg-green-500"}"`} key={index}>
-                                    <Link reloadDocument key={item.name} to={item.to}>
-                                        <Text type={"p"} light>
-                                            {item.name}
-                                        </Text>
-                                    </Link>
-                                </button>
+                                <Link reloadDocument key={item.name} to={item.to} className={activeTab && "border-b-2 border-white"}>
+                                    <Text type={"p"} light>
+                                        {item.name}
+                                    </Text>
+                                </Link>
                             ))}
 
                             <Link reloadDocument to={"/oauth2/sign_out"} className="bg-white px-5 py-2 rounded-xl">
