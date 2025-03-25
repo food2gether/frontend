@@ -1,4 +1,5 @@
 import Text from "./Text.jsx";
+import PropTypes from "prop-types";
 
 const loadingPage = (
     <Page title={"Loading..."} description={"Please stand by until the page loaded."} />
@@ -19,6 +20,14 @@ function Page({ ready = true, title, description, className, children }) {
             <div className={className}>{children}</div>
         </>
     ) : loadingPage;
+}
+
+Page.propTypes = {
+    ready: PropTypes.bool,
+    title: PropTypes.string.isRequired,
+    description: PropTypes.string,
+    className: PropTypes.string,
+    children: PropTypes.node,
 }
 
 export default Page;

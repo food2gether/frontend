@@ -234,8 +234,7 @@ function RestaurantEdit() {
                             Object.entries(menu).map(([id, menuItem]) => (
                                 <Box className="flex flex-row items-center gap-4" key={id}>
                                     <Button
-                                        fill={"red-600"}
-                                        className="!p-2"
+                                        className="!p-2 bg-red-600 hover:bg-red-600/80"
                                         onClick={() => {
                                             const newMenu = { ...menu };
                                             delete newMenu[id];

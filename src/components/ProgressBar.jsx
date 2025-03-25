@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 function ProgressBar({ progress, total, className }) {
     const progressLineLengthCalc = "100% - 5 * var(--spacing)";
@@ -15,6 +16,12 @@ function ProgressBar({ progress, total, className }) {
             </div>
         </div>
     );
+}
+
+ProgressBar.propTypes = {
+    progress: PropTypes.number.isRequired,
+    total: PropTypes.number.isRequired,
+    className: PropTypes.string,
 }
 
 export default ProgressBar;

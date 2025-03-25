@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 function Input({ type, inputRef, placeholder, defaultValue, onChange, onBlur, valid = true, inline, className }) {
     return (
@@ -13,5 +14,20 @@ function Input({ type, inputRef, placeholder, defaultValue, onChange, onBlur, va
         />
     );
 }
+
+Input.propTypes = {
+    type: PropTypes.string.isRequired,
+    inputRef: PropTypes.oneOfType([
+        PropTypes.func,
+        PropTypes.shape({ current: PropTypes.instanceOf(Element) })
+    ]),
+    placeholder: PropTypes.string,
+    defaultValue: PropTypes.string,
+    onChange: PropTypes.func,
+    onBlur: PropTypes.func,
+    valid: PropTypes.bool,
+    inline: PropTypes.bool,
+    className: PropTypes.string
+};
 
 export default Input;
