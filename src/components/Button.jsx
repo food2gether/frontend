@@ -11,11 +11,6 @@ function Button({ children, linkTo, linkOptions, onClick, checkDisabled, classNa
         setDisabled(checkDisabled?.());
     }, [checkDisabled]);
 
-    if (fill === true) {
-        fill = "primary";
-        className += " text-white";
-    }
-
     if (border === true) {
         border = "primary";
     }
@@ -36,13 +31,9 @@ function Button({ children, linkTo, linkOptions, onClick, checkDisabled, classNa
 
     let classNames = "px-2.5 py-1.5 cursor-pointer text-sm group inline-flex items-center gap-2 transition-all duration-200 rounded-xl ";
     if (fill) {
-        classNames += `bg-${fill} ${arrow ? "" : `hover:bg-${fill}/80 text-white `} `;
+        classNames += `bg-primary text-white ${arrow ? "" : `hover:bg-primary/80 `} `;
     } else {
         classNames += "text-black ";
-    }
-
-    if (border) {
-        classNames += `border-2 border-${border} hover:border-${border}/80 `;
     }
 
     if (disabled) {
@@ -72,8 +63,8 @@ Button.propTypes = {
     checkDisabled: PropTypes.func,
     className: PropTypes.string,
     arrow: PropTypes.oneOfType([PropTypes.bool, PropTypes.node]),
-    fill: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
-    border: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
+    fill: PropTypes.bool,
+    border: PropTypes.bool,
 };
 
 export default Button;

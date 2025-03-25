@@ -2,6 +2,7 @@ import Text from "./Text.jsx";
 import { Link } from "react-router-dom";
 import Button from "./Button.jsx";
 import React from "react";
+import PropTypes from "prop-types";
 
 function BoxDescriptor({ title, description, className }) {
     return (
@@ -14,6 +15,12 @@ function BoxDescriptor({ title, description, className }) {
     );
 }
 
+BoxDescriptor.propTypes = {
+    title: PropTypes.string.isRequired,
+    description: PropTypes.string,
+    className: PropTypes.string
+};
+
 function Box({ children, className }) {
     return (
         <div className={`rounded-lg border border-primary w-full p-4 ${className || ""}`}>
@@ -21,6 +28,11 @@ function Box({ children, className }) {
         </div>
     );
 }
+
+Box.propTypes = {
+    children: PropTypes.node.isRequired,
+    className: PropTypes.string
+};
 
 function TDBox({ title, description, children, className }) {
     return (
@@ -30,6 +42,13 @@ function TDBox({ title, description, children, className }) {
         </Box>
     );
 }
+
+TDBox.propTypes = {
+    title: PropTypes.string.isRequired,
+    description: PropTypes.string,
+    children: PropTypes.node.isRequired,
+    className: PropTypes.string
+};
 
 function LinkBox({ title, description, to, children, className }) {
     return (
@@ -41,6 +60,14 @@ function LinkBox({ title, description, to, children, className }) {
     );
 }
 
+LinkBox.propTypes = {
+    title: PropTypes.string.isRequired,
+    description: PropTypes.string,
+    to: PropTypes.string.isRequired,
+    children: PropTypes.node.isRequired,
+    className: PropTypes.string
+};
+
 function VisitableBox({ title, description, to, className }) {
     return (
         <LinkBox title={title} description={description} to={to} className={className}>
@@ -50,5 +77,12 @@ function VisitableBox({ title, description, to, className }) {
         </LinkBox>
     );
 }
+
+VisitableBox.propTypes = {
+    title: PropTypes.string.isRequired,
+    description: PropTypes.string,
+    to: PropTypes.string.isRequired,
+    className: PropTypes.string
+};
 
 export { BoxDescriptor, Box, TDBox, LinkBox, VisitableBox };

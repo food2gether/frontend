@@ -1,4 +1,5 @@
 import Text from "./Text.jsx";
+import PropTypes from "prop-types";
 
 function OrderDisplay({ name, quantity, price, light, className }) {
     return light ? (
@@ -13,6 +14,14 @@ function OrderDisplay({ name, quantity, price, light, className }) {
             <div className={`p-2 ${className} rounded-r-lg`}>{price} EUR</div>
         </>
     );
+}
+
+OrderDisplay.propTypes = {
+    name: PropTypes.string.isRequired,
+    quantity: PropTypes.number.isRequired,
+    price: PropTypes.string.isRequired,
+    light: PropTypes.bool,
+    className: PropTypes.string,
 }
 
 function OrderOverview({ orderItems, menu, light }) {
@@ -38,6 +47,12 @@ function OrderOverview({ orderItems, menu, light }) {
             </div>
         </div>
     );
+}
+
+OrderOverview.propTypes = {
+    orderItems: PropTypes.array.isRequired,
+    menu: PropTypes.object.isRequired,
+    light: PropTypes.bool,
 }
 
 export default OrderOverview;

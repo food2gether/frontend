@@ -109,13 +109,13 @@ function SessionManage() {
                     <BoxDescriptor title={users[order.profileId]?.displayName}/>
                     <OrderOverview orderItems={order.items} menu={menu} />
                     <div className={"flex flex-row gap-2 mt-2 self-end"}>
-                        <Button border={"primary"} fill={order.state === "PAYED" && "primary"} onClick={() => updateOrderState(order.id, "PAYED")}>
+                        <Button className={order.state === "PAYED" ? "bg-primary hover:bg-primary/80" : "border-primary"} onClick={() => updateOrderState(order.id, "PAYED")}>
                             Bezahlt
                         </Button>
-                        <Button border="red-600" fill={order.state === "REJECTED" && "red-600"} onClick={() => updateOrderState(order.id, "REJECTED")}>
+                        <Button className={order.state === "REJECTED" ? "bg-red-600 hover:bg-red-600/80" : "border-red-600"} onClick={() => updateOrderState(order.id, "REJECTED")}>
                             Ablehnen
                         </Button>
-                        <Button border="black" onClick={() => updateOrderState(order.id, "OPEN")}>
+                        <Button className={"border-black"} onClick={() => updateOrderState(order.id, "OPEN")}>
                             Zurücksetzen
                         </Button>
                     </div>
