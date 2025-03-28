@@ -1,0 +1,8 @@
+@import "tailwindcss";
+@import "scss/theme.css";
+
+@import "scss/global.css";
+
+body {
+    @apply text-black;
+}
