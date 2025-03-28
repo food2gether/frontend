@@ -1,7 +1,7 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter as Router, Navigate, Route, Routes } from "react-router-dom";
-import "./style.scss";
+import "./style.css";
 import Navbar from "./components/Navbar.jsx";
 import ScrollToTop from "./components/ScrollToTop.jsx";
 import Home from "./pages/Home.jsx";
@@ -19,6 +19,7 @@ import { UserProvider } from "./hooks/useUser.jsx";
 import RestaurantView from "./pages/restaurants/RestaurantView.jsx";
 import RestaurantEdit from "./pages/restaurants/RestaurantEdit.jsx";
 import RestaurantList from "./pages/restaurants/RestaurantList.jsx";
+import Footer from "./components/Footer.jsx";
 
 const App = () => {
     return (
@@ -27,7 +28,7 @@ const App = () => {
                 <UserProvider>
                     <ScrollToTop />
                     <Navbar />
-                    <div className={"container mt-[80px] pb-5"}>
+                    <div className={"relative max-w-[1200px] mx-auto pt-32 pb-5 w-[70%]"}>
                         <Routes>
                             <Route path="/" element={<Home />} />
                             <Route path="/order" element={<Order />} />
@@ -49,6 +50,7 @@ const App = () => {
                             <Route path="*" element={<NotFound />} />
                         </Routes>
                     </div>
+                    <Footer />
                 </UserProvider>
             </APIProvider>
         </Router>

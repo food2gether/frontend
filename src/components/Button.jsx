@@ -32,6 +32,10 @@ function Button({ children, linkTo, linkOptions, onClick, checkDisabled, classNa
         classNames += "text-black ";
     }
 
+    if (border) {
+        classNames += `border-2 border-primary ${arrow ? "" : "hover:border-primary/80 "} `;
+    }
+
     if (disabled) {
         classNames += "pointer-events-none cursor-not-allowed opacity-50 ";
     }

@@ -7,10 +7,10 @@ const styles = {
     h3: "text-xl font-bold",
     h4: "text-lg font-bold",
     h5: "text-base font-bold",
-    base: "text-base",
+    p: "text-base",
 };
 
-function Text({ children, type, bold, center, light, className }) {
+function Text({ children, type="p", bold, center, light, className }) {
     const textClass = `
     ${bold ? "font-bold" : ""}
     ${center ? "text-center" : "text-left"}
@@ -22,7 +22,7 @@ function Text({ children, type, bold, center, light, className }) {
 
 Text.propTypes = {
     children: PropTypes.node.isRequired,
-    type: PropTypes.oneOf(["h0", "h1", "h2", "h3", "h4", "h5", "base"]),
+    type: PropTypes.oneOf(["h0", "h1", "h2", "h3", "h4", "h5", "p"]),
     bold: PropTypes.bool,
     center: PropTypes.bool,
     light: PropTypes.bool,
