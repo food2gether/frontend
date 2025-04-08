@@ -36,13 +36,11 @@ function ProfileEdit() {
 
     const handlePaypalMeChange = (val) => {
         setPaypalMe(val);
-        // TODO validate
         setPaypalMeValid(!!val);
     };
 
     const handleProfilePictureUrlChange = (val) => {
         setProfilePictureUrl(val);
-        // TODO validate
         setProfilePictureUrlValid(!val || val.startsWith("http"));
     };
 
