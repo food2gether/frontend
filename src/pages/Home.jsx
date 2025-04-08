@@ -40,7 +40,7 @@ function Home() {
                 </Button>
             </ToolBar>
             <div className="flex flex-col w-full gap-4">
-                {sessionDetails.map((sessionDetail) => (
+                {sessionDetails.sort((a, b) => {b.deadline - a.deadline}).map((sessionDetail) => (
                     <VisitableBox
                         to={`/session/${sessionDetail.id}`}
                         title={`${sessionDetail.organizer.displayName} bei ${sessionDetail.restaurant.displayName}`}

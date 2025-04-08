@@ -231,7 +231,7 @@ function RestaurantEdit() {
                     </ToolBar>
                     <div className="flex flex-col gap-4 max-h-[calc(100vh-400px)] overflow-y-auto">
                         {Object.entries(menu).length > 0 ? (
-                            Object.entries(menu).map(([id, menuItem]) => (
+                            Object.entries(menu).sort(([, aMenuItem], [, bMenuItem]) => aMenuItem.name.localeCompare(bMenuItem.name)).map(([id, menuItem]) => (
                                 <Box className="flex flex-row items-center gap-4" key={id}>
                                     <Button
                                         className="!p-2 bg-red-600 hover:bg-red-600/80"
@@ -251,7 +251,7 @@ function RestaurantEdit() {
                                                 className="w-2/6"
                                                 valid={menuItem.name?.length > 0}
                                                 defaultValue={menuItem.name}
-                                                onChange={(e) => {
+                                                onBlur={(e) => {
                                                     setMenu({ ...menu, [id]: { ...menuItem, name: e.target.value } });
                                                 }}
                                             />

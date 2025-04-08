@@ -48,7 +48,7 @@ function SessionNew() {
                         <option value={-1} disabled>
                             Bitte wählen
                         </option>
-                        {restaurants.map((restaurant) => (
+                        {restaurants.sort((a, b) => a.displayName.localeCompare(b.displayName)).map((restaurant) => (
                             <option key={restaurant.id} value={restaurant.id}>
                                 {restaurant.displayName}
                             </option>

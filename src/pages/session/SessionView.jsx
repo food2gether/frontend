@@ -203,7 +203,7 @@ function SessionView() {
             <div className="flex flex-row gap-5 mt-10">
                 <div className="flex flex-col items-center gap-10">
                     <div className={"flex flex-col gap-4"}>
-                        {Object.values(menu).map((product) => (
+                        {Object.values(menu).sort((a, b) => a.name.localeCompare(b.name)).map((product) => (
                             <MenuItemCard
                                 key={product.id}
                                 name={product.name}

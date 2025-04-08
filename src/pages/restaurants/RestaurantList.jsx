@@ -25,7 +25,7 @@ function RestaurantList() {
                 </Button>
             </ToolBar>
             <div className="flex flex-col gap-4">
-                {restaurants.map((restaurant) => (
+                {restaurants.sort((a, b) => a.displayName.localeCompare(b.displayName)).map((restaurant) => (
                     <VisitableBox
                         to={`/restaurants/${restaurant.id}`}
                         key={restaurant.id}
