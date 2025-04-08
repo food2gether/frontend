@@ -45,7 +45,7 @@ function RestaurantView() {
             </ToolBar>
             <div className="flex flex-col gap-4">
                 {menu.length > 0 ? (
-                    menu.map((menuItem) => (
+                    menu.sort((a, b) => a.name.localeCompare(b.name)).map((menuItem) => (
                         <TDBox key={menuItem.id} title={menuItem.name} description={menuItem.description}>
                             <Text className={"text-primary"}>{(menuItem.price / 100).toFixed(2)} EUR</Text>
                         </TDBox>

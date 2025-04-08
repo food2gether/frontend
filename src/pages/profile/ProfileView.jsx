@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
 
-// Components
 import Text from "../../components/Text.jsx";
 
-// Hooks
 import useAPI from "../../hooks/useAPI.jsx";
 import { useParams } from "react-router-dom";
 import Page from "../../components/Page.jsx";
