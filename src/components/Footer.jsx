@@ -1,5 +1,6 @@
 import { FaDesktop, FaDiscord, FaGithub, FaLinkedin } from "react-icons/fa";
 import Text from "./Text.jsx";
+import PropTypes from "prop-types";
 
 function Credits({ title, credits }) {
     return (
@@ -16,6 +17,16 @@ function Credits({ title, credits }) {
             </div>
         </div>
     );
+}
+
+Credits.propTypes = {
+    title: PropTypes.string.isRequired,
+    credits: PropTypes.arrayOf(
+        PropTypes.shape({
+            link: PropTypes.string.isRequired,
+            icon: PropTypes.element.isRequired,
+        })
+    ).isRequired,
 }
 
 function Footer() {

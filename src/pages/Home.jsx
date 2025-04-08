@@ -25,7 +25,9 @@ function Home() {
                     deadline: deadline,
                 };
             });
-            Promise.all(detailPromises).then(setSessionDetails);
+            Promise.all(detailPromises).then((details) => setSessionDetails(
+                details.toSorted((a, b) => b.deadline - a.deadline)
+            ));
         });
     }, [filterActive]);
 
@@ -40,7 +42,7 @@ function Home() {
                 </Button>
             </ToolBar>
             <div className="flex flex-col w-full gap-4">
-                {sessionDetails.sort((a, b) => {b.deadline - a.deadline}).map((sessionDetail) => (
+                {sessionDetails.map((sessionDetail) => (
                     <VisitableBox
                         to={`/session/${sessionDetail.id}`}
                         title={`${sessionDetail.organizer.displayName} bei ${sessionDetail.restaurant.displayName}`}

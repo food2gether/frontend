@@ -12,7 +12,7 @@ function RestaurantList() {
     useEffect(() => {
         fetchAllRestaurants().then((response) => {
             if (response.data) {
-                setRestaurants(response.data);
+                setRestaurants(response.data.toSorted((a, b) => a.displayName.localeCompare(b.displayName)));
             }
         });
     }, []);
@@ -25,7 +25,7 @@ function RestaurantList() {
                 </Button>
             </ToolBar>
             <div className="flex flex-col gap-4">
-                {restaurants.sort((a, b) => a.displayName.localeCompare(b.displayName)).map((restaurant) => (
+                {restaurants.map((restaurant) => (
                     <VisitableBox
                         to={`/restaurants/${restaurant.id}`}
                         key={restaurant.id}
