@@ -18,7 +18,7 @@ function SessionNew() {
 
     useEffect(() => {
         fetchAllRestaurants().then((response) => {
-            setRestaurants(response.data);
+            setRestaurants(response.data.toSorted((a, b) => a.displayName.localeCompare(b.displayName)));
         });
     }, []);
 
@@ -48,7 +48,7 @@ function SessionNew() {
                         <option value={-1} disabled>
                             Bitte wählen
                         </option>
-                        {restaurants.sort((a, b) => a.displayName.localeCompare(b.displayName)).map((restaurant) => (
+                        {restaurants.map((restaurant) => (
                             <option key={restaurant.id} value={restaurant.id}>
                                 {restaurant.displayName}
                             </option>
