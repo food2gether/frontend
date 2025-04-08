@@ -1,6 +1,7 @@
 import js from "@eslint/js";
 import react from "eslint-plugin-react";
 import babelParser from "@babel/eslint-parser";
+import globals from "globals";
 
 export default [
     js.configs.recommended,
@@ -23,4 +24,14 @@ export default [
             "react/react-in-jsx-scope": "off",
         },
     },
+    {
+        files: [
+            "*.config.js",
+        ],
+        languageOptions: {
+            globals: {
+                ...globals.node
+            }
+        }
+    }
 ];
