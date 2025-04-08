@@ -11,6 +11,10 @@ function Home() {
     const [sessionDetails, setSessionDetails] = useState([]);
     const [filterActive, setFilterActive] = useState(true);
 
+    const setSessionDetailsSorted = (details) => {
+        setSessionDetails(details.toSorted((a, b) => b.deadline - a.deadline));
+    }
+
     useEffect(() => {
         fetchAllSessions(filterActive ? true : undefined).then((response) => {
             const detailPromises = response.data?.map(async (session) => {
@@ -25,9 +29,7 @@ function Home() {
                     deadline: deadline,
                 };
             });
-            Promise.all(detailPromises).then((details) => setSessionDetails(
-                details.toSorted((a, b) => b.deadline - a.deadline)
-            ));
+            Promise.all(detailPromises).then(setSessionDetailsSorted);
         });
     }, [filterActive]);
 
