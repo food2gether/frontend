@@ -25,7 +25,7 @@ function Page({ ready = true, title, description, className, children }) {
 Page.propTypes = {
     ready: PropTypes.bool,
     title: PropTypes.string.isRequired,
-    description: PropTypes.string,
+    description: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
     className: PropTypes.string,
     children: PropTypes.node,
 }

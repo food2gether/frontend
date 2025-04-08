@@ -20,6 +20,7 @@ import RestaurantView from "./pages/restaurants/RestaurantView.jsx";
 import RestaurantEdit from "./pages/restaurants/RestaurantEdit.jsx";
 import RestaurantList from "./pages/restaurants/RestaurantList.jsx";
 import Footer from "./components/Footer.jsx";
+import SessionOverview from "./pages/session/SessionOverview.jsx";
 
 const App = () => {
     return (
@@ -28,7 +29,7 @@ const App = () => {
                 <UserProvider>
                     <ScrollToTop />
                     <Navbar />
-                    <div className={"relative max-w-[1200px] mx-auto pt-32 pb-5 w-[70%]"}>
+                    <div className={"relative max-w-[1200px] print:max-w-full mx-auto pt-32 pb-5 w-[70%] print:w-full"}>
                         <Routes>
                             <Route path="/" element={<Home />} />
                             <Route path="/order" element={<Order />} />
@@ -42,6 +43,7 @@ const App = () => {
                             <Route path="/session/new" element={<SessionNew />} />
                             <Route path="/session/:sessionId" element={<SessionView />} />
                             <Route path="/session/:sessionId/manage" element={<SessionManage />} />
+                            <Route path="/session/:sessionId/overview" element={<SessionOverview />} />
 
                             <Route path="/restaurants" element={<RestaurantList />} />
                             <Route path="/restaurants/edit" element={<RestaurantEdit />} />

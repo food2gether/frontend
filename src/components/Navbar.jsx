@@ -21,8 +21,8 @@ function Navbar() {
     }, [location]);
 
     return (
-        <div className="h-[80px] flex items-center justify-center fixed w-full top-0 bg-primary z-[1000]">
-            <div className={`flex items-center ${loggedIn() ? "justify-between" : "justify-center"} gap-10 w-[70%]`}>
+        <div className="h-[80px] flex items-center justify-center fixed w-full top-0 bg-primary z-[1000] print:bg-none">
+            <div className={`flex items-center ${loggedIn() ? "justify-between print:flex-col" : "justify-center"} gap-10 w-[70%]`}>
                 <Link reloadDocument to="/">
                     <Text type={"h2"} bold light>
                         Food
@@ -33,7 +33,7 @@ function Navbar() {
 
                 {loggedIn() && (
                     <>
-                        <ul className="hidden md:flex items-center gap-10">
+                        <ul className="flex items-center gap-10 print:hidden">
                             {navItems.map((item, index) => (
                                 <Link reloadDocument key={item.name} to={item.to} className={activeTab === index ? "border-b-2 border-white" : undefined}>
                                     <Text type={"p"} light>

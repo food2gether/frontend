@@ -6,6 +6,7 @@ import Page from "../../components/Page.jsx";
 import Button from "../../components/Button.jsx";
 import { Box, BoxDescriptor } from "../../components/Box.jsx";
 import OrderOverview from "../../components/OrderOverview.jsx";
+import ToolBar from "../../components/ToolBar.jsx";
 
 function SessionManage() {
     const { sessionId } = useParams();
@@ -104,6 +105,11 @@ function SessionManage() {
             description="Hier kannst du die Bestellungen verwalten."
             className="flex flex-col gap-4"
         >
+            <ToolBar>
+                <Button linkTo={`/session/${sessionId}/overview`} fill arrow>
+                    Übersicht
+                </Button>
+            </ToolBar>
             {sessionOrders?.map((order) => (
                 <Box key={order.id} className="flex flex-col">
                     <BoxDescriptor title={users[order.profileId]?.displayName}/>

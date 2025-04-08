@@ -17,7 +17,7 @@ ToggleFilter.propTypes = {
 }
 
 function ToolBar({ className, children }) {
-    return <div className={`flex ${Children.toArray(children).length === 1 ? "justify-end" : "justify-between"} items-center mb-6 ${className || ""}`}>{children}</div>;
+    return <div className={`flex ${Children.toArray(children).length === 1 ? "justify-end" : "justify-between"} items-center mb-6 print:hidden ${className || ""}`}>{children}</div>;
 }
 
 ToolBar.propTypes = {

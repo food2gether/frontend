@@ -31,7 +31,7 @@ Credits.propTypes = {
 
 function Footer() {
     return (
-        <footer className="w-full mx-auto border-t-6 border-primary-dark flex flex-row justify-center gap-16 py-5 px-16 bg-primary">
+        <footer className="w-full mx-auto border-t-6 border-primary-dark flex flex-row justify-center gap-16 py-5 px-16 bg-primary print:hidden">
             <Credits
                 title="Food2Gether"
                 credits={[

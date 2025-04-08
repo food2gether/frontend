@@ -6,7 +6,7 @@ function ProgressBar({ progress, total, className }) {
 
     return (
         <div className={"flex items-center justify-center relative w-full"}>
-            <div className="h-1 absolute left-2.5 bg-gray-500" style={{ width: `calc(${progressLineLengthCalc}` }}></div>
+            <div className="h-1 absolute left-2.5 bg-gray-500" style={{ width: `calc(${progressLineLengthCalc})` }}></div>
             <div className={`h-1.5 absolute left-2.5 z-10 ${className}`} style={{ width: `calc((${progressLineLengthCalc}) * ${(progress - 1) / (total - 1)})` }}></div>
 
             <div className="relative flex gap-8 justify-between items-center w-full">
